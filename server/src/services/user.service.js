@@ -67,7 +67,6 @@ class UserService {
         if (!findUser) {
             throw new Unauthorized("Thông tin tài khoản mật khẩu không chính xác");
         }
-
         const result = await bcrypt.compare(password, findUser.password);
         if (!result) {
             throw new Unauthorized("Thông tin tài khoản mật khẩu không chính xác");

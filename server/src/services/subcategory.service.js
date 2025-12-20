@@ -36,7 +36,7 @@ class SubcategoryService {
         if (!name || !description || !categoryId) {
             throw new BadRequest("Thiếu thông tin")
         }
-        if (Array.isArray(images) || images.length <= 0) {
+        if (!Array.isArray(images) || images.length <= 0) {
             throw new BadRequest("Phải có ít nhất 1 ảnh")
         }
         const slug = toSlug(name);
@@ -91,7 +91,7 @@ class SubcategoryService {
         await cloudinary.uploader.destroy(publicId);
         return url
     }
-    async updateSubCate(id, name, description, categoryId) {
+    async updateSubCate(id, name, description, categoryId, images) {
         const findSub = await subcategoryModel.findById(id);
         if (!findSub) {
             throw new NotFound("Không tìm thấy Subcategory")
@@ -102,13 +102,25 @@ class SubcategoryService {
                 throw new NotFound("Không tìm thấy Category")
             }
         }
+        if (!Array.isArray(images) || images.length === 0) {
+            throw new BadRequest("Phải có ít nhất 1 ảnh")
+        }
         const newSlug = name ? toSlug(name) : findSub.slug;
+        const newImg = [...images, ...findSub.images]
+        const p = [];
+        newImg.forEach((item) => {
+            if (!p.some((img) => img.url === item.url)) {
+                p.push(item)
+            }
+        })
+        console.log(">>> p", p)
         const updatedSub = await subcategoryModel.findByIdAndUpdate(
             id,
             {
                 name,
                 slug: newSlug,
                 categoryId,
+                images: p,
                 description,
             },
             { new: true }

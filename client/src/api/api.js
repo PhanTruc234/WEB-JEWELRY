@@ -20,6 +20,8 @@ export const API_GET_SUBCATE = "/api/subcategory"
 export const API_CREATE_SUBCATE = "/api/subcategory"
 export const API_EDIT_SUBCATE = "/api/subcategory"
 export const API_DELETE_SUBCATE = "/api/subcategory"
+export const API_UPLOAD_IMG_SUBCATE = "/api/subcategory/upload"
+export const API_DELETE_IMG_SUBCATE_TEM = "/api/subcategory/delete-img-tem"
 
 export const API_GET_PRODUCT = "/api/product"
 export const API_GET_PRODUCT_BY_ID = "/api/product"

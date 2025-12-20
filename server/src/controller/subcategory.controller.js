@@ -57,9 +57,9 @@ class SubcategoryController extends BaseController {
     updateSubCate = async (req, res) => {
         try {
             const { id } = req.params;
-            const { name, description, categoryId } = req.body;
+            const { name, description, categoryId, images } = req.body;
 
-            const data = await subcategoryService.updateSubCate(id, name, description, categoryId);
+            const data = await subcategoryService.updateSubCate(id, name, description, categoryId, images);
             return this.ok(res, data, "Cập nhật Subcategory thành công");
         } catch (err) {
             return this.handleErr(res, err);

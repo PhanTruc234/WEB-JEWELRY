@@ -16,7 +16,7 @@ const upload = multer({ storage });
 route.get("/", subcategoryController.getAllSubCate);
 route.post("/", checkRole("admin"), subcategoryController.createSubcategory);
 route.put("/:id", checkRole("admin"), subcategoryController.updateSubCate);
-route.post("/upload", checkRole("admin"), upload.array('subcatgory-images', 10), subcategoryController.createImgSub)
+route.post("/upload", checkRole("admin"), upload.array('subcatgory-images', 5), subcategoryController.createImgSub)
 route.delete("/delete-img-tem", checkRole("admin"), subcategoryController.removeImgTem)
 route.delete("/:id/delete-img", checkRole("admin"), subcategoryController.deleteImg)
 route.delete("/:id", checkRole("admin"), subcategoryController.deleteSub);

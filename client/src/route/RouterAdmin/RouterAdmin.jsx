@@ -4,7 +4,7 @@ import { ProtectAdminRouter } from '../Protect/ProtectAdmin'
 import { LayoutAdmin } from '@/layout/LayoutAdmin/LayoutAdmin'
 import { CategoryPage } from '@/page/Admin/category'
 import { BrandPage } from '@/page/Admin/Brand'
-
+import { SubcategoryPage } from '@/page/Admin/subcategory'
 export const RouterAdmin = () => {
     return (
         <Routes>
@@ -12,7 +12,7 @@ export const RouterAdmin = () => {
                 <Route element={<LayoutAdmin />}>
                     <Route path="dashboard" element={<div>dashboard</div>} />
                     <Route path="product-manage/category" element={<CategoryPage />} />
-                    <Route path="product-manage/subcategory" element={<div>subcategory</div>} />
+                    <Route path="product-manage/subcategory" element={<SubcategoryPage />} />
                     <Route path="product-manage/brand" element={<BrandPage />} />
                     <Route path="product-manage/products" element={<div>products</div>} />
                     <Route path="product-manage/products/add" element={<div>products/add</div>} />
