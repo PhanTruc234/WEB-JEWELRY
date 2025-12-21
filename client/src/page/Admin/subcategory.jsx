@@ -119,7 +119,11 @@ export const SubcategoryPage = () => {
         setSelectSub(item.categoryId._id);
         setImgSubcate(item.images)
         setSubId(item._id)
+        const main = item.images.find((img) => img.isMain === true)
+        console.log(main, "mianxjnsjn")
+        setMainImage(main.url)
     }
+    console.log("mainImddhvdbv", mainImage)
     const handleDeleteSubCate = async (id) => {
         const deleteData = await deleteSubcate(id);
         console.log(deleteData)
@@ -174,7 +178,9 @@ export const SubcategoryPage = () => {
                             className="bg-white rounded-xl shadow-md px-5 py-4 flex justify-between hover:shadow-md transition"
                         >
                             <div className="pr-6 flex items-center gap-3">
-                                <div><img src={imgMain ? imgMain.url : imgRandom.url} className="w-24 h-24 object-cover rounded-xl" alt="" /></div>
+                                <div>
+                                    <img src={imgMain ? imgMain.url : imgRandom.url} className="w-24 h-24 object-cover rounded-xl" alt="" />
+                                </div>
                                 <div>
                                     <h3 className="text-base font-semibold text-gray-800">
                                         Tên :{item.name}
@@ -228,106 +234,135 @@ export const SubcategoryPage = () => {
                 <h3 className="text-lg font-semibold mb-4">
                     {subId ? "Cập nhật danh mục" : "Thêm danh mục"}
                 </h3>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div>
-                        <label className="text-sm font-medium">Tên danh mục</label>
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-6 bg-white rounded-2xl p-6 shadow-sm"
+                >
+                    <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">
+                            Tên danh mục
+                        </label>
                         <input
                             {...register("name")}
-                            className="mt-1 w-full border rounded-lg px-3 py-2 text-sm
-                            focus:ring-2 focus:ring-primary outline-none"/>
+                            placeholder="Nhập tên danh mục..."
+                            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
+                        />
                         {errors.name && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="text-red-500 text-xs mt-1">
                                 {errors.name.message}
                             </p>
                         )}
                     </div>
-                    <div>
-                        <select value={selectSub} onChange={(e) => setSelectSub(e.target.value)}>
-                            <option value={""}>--- chọn danh mục ---</option>
+                    <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">
+                            Danh mục cha
+                        </label>
+                        <select
+                            value={selectSub}
+                            onChange={(e) => setSelectSub(e.target.value)}
+                            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-primary outline-none"
+                        >
+                            <option value="">— Chọn danh mục —</option>
                             {categories?.data?.category?.map((item) => (
-                                <option key={item._id} value={item._id}>{item.name}</option>
+                                <option key={item._id} value={item._id}>
+                                    {item.name}
+                                </option>
                             ))}
                         </select>
                     </div>
-                    <div>
-                        <label className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg cursor-pointer w-fit hover:opacity-70">
-                            <ImageUp size={20} />
-                            <span>Upload Images</span>
+                    <div className="space-y-3">
+                        <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl cursor-pointer hover:opacity-90 transition w-fit">
+                            <ImageUp size={18} />
+                            <span className="text-sm font-medium">Upload images</span>
                             <input type="file" multiple className="hidden" onChange={handleUpload} />
                         </label>
-                        <div className='mt-4'>
-                            {loading ? <div>
-                                {error !== "" ? <div>
-                                    {error}
-                                </div> : <div>
-                                    {Array(length).fill(1).map((item) => (
-                                        <div className="w-24 h-24 bg-gray-300 flex items-center justify-center mt-3">
-                                            <div className='loader w-4'>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>}
-
-                            </div> : <RadioGroup onValueChange={(v) => handleMainImg(v)}>
-                                {imgSubcate.map((item, index) => (
-                                    <div className='relative'>
-                                        {loading ? <div>
-                                        </div> : <div className='space-y-3 flex items-center gap-3'>
-                                            <div>
+                        <div className="mt-3">
+                            {loading ? (
+                                error !== "" ? (
+                                    <p className="text-red-500 text-sm">{error}</p>
+                                ) : (
+                                    <div className="flex gap-3 flex-wrap">
+                                        {Array(length).fill(1).map((_, i) => (
+                                            <div
+                                                key={i}
+                                                className="w-24 h-24 rounded-xl bg-gray-200 animate-pulse"
+                                            />
+                                        ))}
+                                    </div>
+                                )
+                            ) : (
+                                <RadioGroup onValueChange={(v) => handleMainImg(v)} value={mainImage}>
+                                    <div className="flex gap-4 flex-wrap">
+                                        {imgSubcate.map((item, index) => (
+                                            <div key={index} className="relative group">
                                                 <img
-                                                    key={index}
                                                     src={item.url}
                                                     alt=""
-                                                    className="w-24 h-24 object-cover rounded"
+                                                    className="w-24 h-24 object-cover rounded-xl border"
                                                 />
-                                                <button type="button" onClick={() => removePreview(item.url)} className="absolute -top-2 left-20 bg-red-500 p-1 rounded-full text-white cursor-pointer">
-                                                    <Trash2 size={16} />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removePreview(item.url)}
+                                                    className="absolute -top-2 -right-2 bg-red-500 p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition"
+                                                >
+                                                    <Trash2 size={14} />
                                                 </button>
+
+                                                <div className="mt-2 flex items-center gap-2">
+                                                    <RadioGroupItem
+                                                        value={item.url}
+                                                        id={`main-${index}`}
+                                                    />
+                                                    <Label
+                                                        htmlFor={`main-${index}`}
+                                                        className="text-xs text-gray-600 cursor-pointer"
+                                                    >
+                                                        {`Ảnh ${index + 1}`}
+                                                    </Label>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center space-x-2 cursor-pointer">
-                                                <RadioGroupItem value={`${item.url}`} id={`main-${index}`} className='cursor-pointer' />
-                                                <Label className='cursor-pointer' htmlFor={`main-${index}`}>{`Ảnh ${index + 1}`}</Label >
-                                            </div>
-                                        </div>}
+                                        ))}
                                     </div>
-                                ))}
-                            </RadioGroup>}
-                            {message !== "" ? <p>{message}</p> : ""}
+                                </RadioGroup>
+                            )}
+                            {message && (
+                                <p className="text-sm text-green-600 mt-2">{message}</p>
+                            )}
                         </div>
                     </div>
-                    <div>
-                        <label className="text-sm font-medium">Mô tả</label>
+                    <div className="space-y-1">
+                        <label className="text-sm font-semibold text-gray-700">
+                            Mô tả
+                        </label>
                         <textarea
                             rows={3}
                             {...register("description")}
-                            className="mt-1 w-full border rounded-lg px-3 py-2 text-sm resize-none
-              focus:ring-2 focus:ring-primary outline-none"
+                            placeholder="Nhập mô tả..."
+                            className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm resize-none focus:ring-2 focus:ring-primary outline-none transition"
                         />
                         {errors.description && (
-                            <p className="text-red-500 text-sm mt-1">
+                            <p className="text-red-500 text-xs mt-1">
                                 {errors.description.message}
                             </p>
                         )}
                     </div>
-                    <div className="flex justify-end gap-3 pt-3">
+                    <div className="flex justify-end gap-3 pt-4 border-t">
                         <button
                             type="button"
                             onClick={() => setModel(false)}
-                            className="px-4 py-2 bg-gray-200 rounded-lg hover:opacity-80 transition"
+                            className="px-5 py-2.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition text-sm font-medium"
                         >
                             Hủy
                         </button>
-
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="px-4 py-2 bg-primary text-white rounded-lg
-              hover:opacity-80 transition flex items-center justify-center"
+                            className="px-5 py-2.5 rounded-xl bg-primary text-white hover:opacity-90 transition flex items-center justify-center"
                         >
                             {isSubmitting ? (
-                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent cursor-pointer" />
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                             ) : (
-                                <Download />
+                                <Download size={18} />
                             )}
                         </button>
                     </div>
