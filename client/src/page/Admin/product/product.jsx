@@ -2,7 +2,7 @@ import { useGetListProduct } from '@/hooks/Product/useGetListProduct'
 import { formatBigNumber } from '@/lib/format-big-number'
 import { ProductStore } from '@/store/productStore/ProductStore'
 import dayjs from 'dayjs'
-import { CirclePlus, RefreshCw, SquarePen, Trash } from 'lucide-react'
+import { CirclePlus, RefreshCw, SquarePen, Star, Trash } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { BoxProduct } from '../BoxProduct/BoxProduct'
@@ -103,9 +103,12 @@ export const Product = () => {
                                         {item.brandId?.name} · {item.categoryId?.name} ·{" "}
                                         {item.subCategoryId?.name}
                                     </p>
-                                    <span>
-                                        {item.rating} ({item.reviewCount})
-                                    </span>
+                                    <div className='flex items-center gap-2'>
+                                        <span>
+                                            {item.rating} ({item.reviewCount})
+                                        </span>
+                                        <Star size={16} className='text-yellow-500' />
+                                    </div>
                                     <div className="text-xs text-gray-400 mt-1">
                                         Tạo: {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm")}
                                     </div>
@@ -140,16 +143,16 @@ export const Product = () => {
                                                             Độ tinh khiết: {opt.purity}
                                                         </span>
                                                     )}
-                                                    <span className="text-red-600 font-semibold">
-                                                        {formatBigNumber(opt.finalPrice, true)}
-                                                    </span>
                                                     {opt.finalPrice !== opt.originalPrice && (
                                                         <span className="line-through text-gray-400">
                                                             {formatBigNumber(opt.originalPrice, true)}
                                                         </span>
                                                     )}
+                                                    <span className="text-red-600 font-semibold">
+                                                        {formatBigNumber(opt.finalPrice, true)}
+                                                    </span>
                                                     <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded">
-                                                        {item.promotion.discount}%
+                                                        {item.promotion.isActive ? `${item.promotion.discount}%(${dayjs(item.promotion.startAt).format("DD/MM/YYYY HH:mm")}-${dayjs(item.promotion.endAt).format("DD/MM/YYYY HH:mm")})` : `${0}%`}
                                                     </span>
                                                     <span className="text-gray-500">
                                                         Kho: {opt.stockQuantity}

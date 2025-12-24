@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router'
 import { RouterAccount } from './route/RouterAccount/RouterAccount'
@@ -7,8 +7,13 @@ import { UserAuthStore } from './store/userAuthStore'
 import { API_GOOGLE } from './api/api'
 import { RouterAdmin } from './route/RouterAdmin/RouterAdmin'
 import { Toaster } from 'sonner'
+import { ArrowUp } from 'lucide-react'
+import { commonStore } from './store/commonStore/commonStore'
+
 
 function App() {
+  const [show, setShow] = useState(false)
+  const { setValue } = commonStore()
   const setAccessToken = UserAuthStore((s) => s.setAccessToken);
   useEffect(() => {
     const refresh = async () => {
@@ -42,6 +47,18 @@ function App() {
     getUserInfo()
     window.history.replaceState(null, "", window.location.pathname);
   }, [])
+  useEffect(() => {
+    const handleScroll = () => {
+      // console.log(window.scrollY, "lthlthlthym")
+      setShow(window.scrollY > 300);
+      setValue(window.scrollY >= 1500 && window.scrollY <= 2300)
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [show])
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <>
       <Toaster />
@@ -49,6 +66,9 @@ function App() {
         <Route path='/*' element={<RouterAccount />} />
         <Route path='/admin/*' element={<RouterAdmin />} />
       </Routes>
+      <div className={`bg-secondary w-12.5 h-12.5 flex items-center justify-center rounded-full cursor-pointer text-white fixed right-12.5 z-99 bottom-5 ${show ? "opacity-100" : "opacity-0"} transition-all duration-300 ease-in-out`} onClick={scrollToTop}>
+        <ArrowUp size={30} />
+      </div>
     </>
   )
 }

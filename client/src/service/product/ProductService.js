@@ -1,4 +1,4 @@
-import { API_CREATE_PRODUCT, API_DELETE_IMG_PRODUCT, API_DELETE_PRODUCT, API_EDIT_PRODUCT, API_GET_PRODUCT, API_GET_PRODUCT_BY_ID, API_UPLOAD_IMG_PRODUCT } from "@/api/api"
+import { API_CREATE_PRODUCT, API_DELETE_IMG_PRODUCT, API_DELETE_PRODUCT, API_EDIT_PRODUCT, API_GET_ONTIME_PRODUCT, API_GET_PRODUCT, API_GET_PRODUCT_BY_ID, API_UPLOAD_IMG_PRODUCT } from "@/api/api"
 import axiosClient from "../axiosClient"
 import { toast } from "sonner"
 
@@ -17,6 +17,17 @@ export const ProductService = {
         try {
             const res = await axiosClient.get(`${API_GET_PRODUCT_BY_ID}/${id}`)
             if (res.status) {
+                return res;
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getOntime: async (params) => {
+        try {
+            const res = await axiosClient.get(API_GET_ONTIME_PRODUCT, { params })
+            console.log(res, "vfvfbfb")
+            if (res.status === 200) {
                 return res;
             }
         } catch (error) {

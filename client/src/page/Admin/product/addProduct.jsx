@@ -123,7 +123,7 @@ export const AddProduct = ({ id }) => {
     const [message, setMessage] = useState("")
     const { register, control, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
         resolver: zodResolver(ProductSchema),
-        shouldUnregister: true,
+        shouldUnregister: false,
     })
     const { fields, append, remove } = useFieldArray({
         control,
@@ -284,7 +284,6 @@ export const AddProduct = ({ id }) => {
                 <h1 className="text-3xl font-bold text-gray-800 mb-8">
                     {id ? "Sửa sản phẩm" : "Thêm sản phẩm"}
                 </h1>
-
                 <form onSubmit={handleSubmit(onSubmit, (errors) => {
                     console.log("smckscsck", errors)
                 })} className="space-y-10">
@@ -292,7 +291,6 @@ export const AddProduct = ({ id }) => {
                         <h2 className="text-xl font-semibold text-gray-700">
                             Thông tin sản phẩm
                         </h2>
-
                         <div className="grid grid-cols-2 gap-6">
                             <div>
                                 <input
@@ -332,7 +330,6 @@ export const AddProduct = ({ id }) => {
                                         </p>
                                     )}
                                 </div>
-
                                 <div>
                                     <label className="text-sm text-gray-600">Ngày bắt đầu</label>
                                     <input
@@ -341,7 +338,6 @@ export const AddProduct = ({ id }) => {
                                         className="w-full border rounded-lg px-3 py-2"
                                     />
                                 </div>
-
                                 <div>
                                     <label className="text-sm text-gray-600">Ngày kết thúc</label>
                                     <input
@@ -472,7 +468,7 @@ export const AddProduct = ({ id }) => {
                             <button
                                 type="button"
                                 onClick={() => append({ color: "", options: [] })}
-                                className="px-4 py-2 bg-primary text-white rounded-lg"
+                                className="px-4 py-2 bg-primary text-white rounded-lg cursor-pointer"
                             >
                                 + Add Variant
                             </button>

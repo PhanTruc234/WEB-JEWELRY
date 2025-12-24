@@ -66,12 +66,15 @@ export const SubcategoryPage = () => {
             console.log(name, description, selectSub, imgSubcate, "smckscmskcmksmc")
             const newCate = await createSubCategory(name, description, selectSub, imgSubcate)
             console.log(newCate)
+            setModel(false)
             await refreshSubcategoty();
         }
     }
     console.log(">>>> imgSSUb", imgSubcate)
     console.log(">>> subcategory", subcategory)
-    const handleRefresh = () => { }
+    const handleRefresh = async () => {
+        await refreshSubcategoty()
+    }
     const handleUpload = async (e) => {
         const files = e.target.files;
         console.log(files, "filesfilesfilesfiles")

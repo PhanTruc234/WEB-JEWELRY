@@ -23,7 +23,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
         <div className="space-y-4">
             <button
                 type="button"
-                className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-80 transition"
+                className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-80 transition cursor-pointer"
                 onClick={() =>
                     append({
                         type: "NONE",
@@ -38,6 +38,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                 const type = option[index]?.type || "NONE"
                 const value = option[index]?.value
                 const purity = option[index]?.purity
+                console.log("puritypurity", purity)
                 return (
                     <div
                         key={item.id}
@@ -141,7 +142,6 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                         />
                                     </>
                                 )}
-
                                 {type === "GRAM" && (
                                     <>
                                         <input
@@ -203,10 +203,9 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                             <button
                                 type="button"
                                 onClick={() => remove(index)}
-                                className="flex items-center gap-1 text-red-600 text-sm hover:text-red-700"
+                                className="flex items-center gap-1 text-red-600 text-sm hover:text-red-700 cursor-pointer"
                             >
                                 <Trash2 size={16} />
-                                Remove
                             </button>
                         </div>
                     </div>

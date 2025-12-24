@@ -14,10 +14,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 route.get("/", productController.getAllProduct);
+route.get('/date-time', productController.getOntime);
 route.get("/:id", checkRole("admin"), productController.getProductById);
 route.put("/:id", checkRole("admin"), productController.updateProduct);
 route.post("/", checkRole("admin"), productController.createProduct);
 route.post("/upload", checkRole("admin"), upload.array('product-images', 10), productController.uploadImgProduct)
+
 route.delete("/delete-upload", checkRole("admin"), productController.removeImgTem)
 route.delete("/:id", checkRole("admin"), productController.deleteProduct)
 route.delete("/:id/image", checkRole("admin"), productController.deleteImg)

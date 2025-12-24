@@ -11,7 +11,9 @@ const ProductSchema = new Schema(
             discount: { type: Number, min: 0, max: 100, default: 0 },
             startAt: { type: Date, default: null },
             endAt: { type: Date, default: null },
-            isActive: { type: Boolean, default: false }
+            isActive: { type: Boolean, default: false },
+            durationHours: { type: Number, default: null },
+            durationDays: { type: Number, default: null },
         },
         variants: [
             {

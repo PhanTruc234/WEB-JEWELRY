@@ -20,7 +20,20 @@ class ProductController extends BaseController {
             const categoryName = req.query.category?.trim() || "";
             const subCategoryName = req.query.subcategory?.trim() || "";
             const brandName = req.query.brand?.trim() || "";
-            const dataFilter = await productService.getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName)
+            const isNewProduct = req.query.isNewProduct || false
+            const isFeatured = req.query.isFeatured || false
+            const dataFilter = await productService.getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName, isNewProduct, isFeatured)
+            return this.ok(res, dataFilter, "Lấy danh sách sản phẩm thành công");
+        } catch (error) {
+            return this.handleErr(res, error);
+        }
+    }
+    getOntime = async (req, res) => {
+        try {
+            const page = Number(req.query.page || 1);
+            const limit = Number(req.query.limit) || 10;
+            const isActive = req.query.isActive || false
+            const dataFilter = await productService.getOntime(isActive, page, limit)
             return this.ok(res, dataFilter, "Lấy danh sách sản phẩm thành công");
         } catch (error) {
             return this.handleErr(res, error);

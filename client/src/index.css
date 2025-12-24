@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Luxurious+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Luxurious+Script&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -12,6 +13,7 @@
   --breakpoint-2xl : 1536px;
 
   --font-luxurious : "Luxurious Script", cursive;
+  --font-roboto : "Roboto", sans-serif;
 
   --color-primary : #C9A57B;
   --color-secondary : #004955;
@@ -29,6 +31,18 @@
     }
     .btn1 {
         @apply bg-transparent px-8 py-4  border border-white rounded-full
+    }
+    .font-h3{
+      @apply text-[36px] font-bold
+    }
+    .font-p {
+      @apply text-[18px] font-roboto text-[#1B1B1B] font-light
+    }
+    .font-li {
+      @apply text-[14px] font-light font-roboto text-white
+    }
+    .font-foot-h2{
+      @apply text-[30px] font-semibold text-white
     }
 }
 @keyframes dropdown-open {

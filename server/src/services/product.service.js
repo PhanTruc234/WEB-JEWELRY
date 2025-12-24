@@ -12,8 +12,9 @@ import { getPublicId } from "../libs/publicId.js";
 import { calcPrice } from "../libs/calcPrice.js";
 class ProductService {
 
-    async getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName) {
+    async getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName, isNewProduct, isFeatured) {
         const skip = (page - 1) * limit;
+        // const now = new Date()
         const query = {
             $and: []
         };
@@ -21,6 +22,16 @@ class ProductService {
         if (color) {
             query.$and.push({
                 "variants.color": { $regex: color, $options: "i" }
+            })
+        }
+        if (isNewProduct) {
+            query.$and.push({
+                isNewProduct: JSON.parse(isNewProduct)
+            })
+        }
+        if (isFeatured) {
+            query.$and.push({
+                isFeatured: JSON.parse(isFeatured)
             })
         }
         if (carat) {
@@ -64,6 +75,49 @@ class ProductService {
             limit,
             products,
         };
+    }
+    async getOntime(isActive, page, limit) {
+        const skip = (page - 1) * limit;
+        const now = new Date()
+        const hasActiveSale = !!(await productModel.exists({
+            "promotion.isActive": true,
+            "promotion.startAt": { $lte: now },
+            "promotion.endAt": { $gt: now },
+        }));
+        console.log(">>> hasActiveSale", hasActiveSale)
+        if (!hasActiveSale) {
+            return {
+                currentPage: page,
+                totalItems: 0,
+                products: [],
+                serverTime: now.toISOString(),
+                hasActiveSale,
+            };
+        }
+        const query = isActive
+            ? {
+                "promotion.isActive": true,
+                "promotion.startAt": { $lte: now },
+                "promotion.endAt": { $gt: now },
+            }
+            : {};
+        const [products, totalItems] = await Promise.all([
+            productModel
+                .find(query)
+                .sort({ createdAt: -1 })
+                .sort({ "promotion.discount": -1 })
+                .skip(skip)
+                .limit(limit),
+            productModel.countDocuments(query),
+        ]);
+        return {
+            currentPage: page,
+            totalItems,
+            products,
+            serverTime: now.toISOString(),
+            hasActiveSale
+        }
+
     }
     async getProductById(id) {
         if (!id) {
@@ -109,13 +163,25 @@ class ProductService {
                 finalPrice: calcPrice(op, promotion.isActive ? promotion.discount : 0)
             }))
         }));
+        let updatedPromotion = promotion;
+        if (promotion?.isActive) {
+            const start = new Date(promotion.startAt)
+            const end = new Date(promotion.endAt);
+            if (end <= start) {
+                throw new BadRequest("Thời gian khuyến mãi không hợp lệ");
+            }
+            const diffMs = end.getTime() - start.getTime();
+            const durationHours = Math.ceil(diffMs / (1000 * 60 * 60));
+            const durationDays = Math.ceil(durationHours / 24);
+            updatedPromotion = { ...updatedPromotion, durationHours, durationDays }
+        }
         const newProduct = await productModel.create({
             slug,
             name,
             brandId,
             categoryId,
             subCategoryId,
-            promotion,
+            promotion: updatedPromotion,
             variants: generateSku,
             images,
             description,
@@ -159,6 +225,18 @@ class ProductService {
                 finalPrice: calcPrice(op, promotion.isActive ? promotion.discount : 0)
             }))
         }));
+        let updatedPromotion = promotion;
+        if (promotion?.isActive) {
+            const start = new Date(promotion.startAt)
+            const end = new Date(promotion.endAt);
+            if (end <= start) {
+                throw new BadRequest("Thời gian khuyến mãi không hợp lệ");
+            }
+            const diffMs = end.getTime() - start.getTime();
+            const durationHours = Math.ceil(diffMs / (1000 * 60 * 60));
+            const durationDays = Math.ceil(durationHours / 24);
+            updatedPromotion = { ...updatedPromotion, durationHours, durationDays }
+        }
         const mergedImg = [...images, ...product.images].filter(
             (v, i, arr) => arr.findIndex(t => t.url === v.url) === i
         );
@@ -172,7 +250,7 @@ class ProductService {
                 brandId,
                 categoryId,
                 subCategoryId,
-                promotion,
+                promotion: updatedPromotion,
                 variants: generateSku,
                 images: mergedImg,
                 description,
