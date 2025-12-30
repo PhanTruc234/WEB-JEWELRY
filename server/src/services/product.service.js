@@ -11,10 +11,8 @@ import fs from "fs/promises";
 import { getPublicId } from "../libs/publicId.js";
 import { calcPrice } from "../libs/calcPrice.js";
 class ProductService {
-
     async getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName, isNewProduct, isFeatured) {
         const skip = (page - 1) * limit;
-        // const now = new Date()
         const query = {
             $and: []
         };
@@ -55,7 +53,6 @@ class ProductService {
         if (category) query.$and.push({ categoryId: category._id });
         if (subcategory) query.$and.push({ subCategoryId: subcategory._id });
         if (brand) query.$and.push({ brandId: brand._id });
-        const now = new Date();
         const [products, totalItems] = await Promise.all([
             productModel
                 .find(query)
@@ -67,6 +64,23 @@ class ProductService {
                 .limit(limit),
             productModel.countDocuments(query),
         ]);
+        const now = new Date();
+        const normalProducts = products.map(product => {
+            if (
+                product.promotion?.isActive &&
+                product.promotion.endAt &&
+                new Date(product.promotion.endAt) <= now
+            ) {
+                product.promotion.isActive = false;
+                product.promotion.discount = 0;
+                product.variants.forEach(variant => {
+                    variant.options.forEach(option => {
+                        option.finalPrice = option.originalPrice;
+                    });
+                });
+            }
+            return product;
+        });
         const totalPages = Math.ceil(totalItems / limit)
         return {
             currentPage: page,
@@ -74,7 +88,7 @@ class ProductService {
             totalPages,
             limit,
             serverTime: now.toISOString(),
-            products,
+            products: normalProducts,
         };
     }
     async getOntime(isActive, page, limit) {
@@ -124,7 +138,23 @@ class ProductService {
         if (!id) {
             throw new BadRequest("Thiếu thông tin");
         }
-        const data = await productModel.findById(id);
+        const data = await productModel.findById(id).populate("brandId")
+            .populate("categoryId")
+            .populate("subCategoryId");
+        const now = new Date();
+        if (
+            data.promotion?.isActive &&
+            data.promotion.endAt &&
+            new Date(data.promotion.endAt) <= now
+        ) {
+            data.promotion.isActive = false;
+            data.promotion.discount = 0;
+            data.variants.forEach(variant => {
+                variant.options.forEach(option => {
+                    option.finalPrice = option.originalPrice;
+                });
+            });
+        }
         return data;
     }
     async createProduct(data) {

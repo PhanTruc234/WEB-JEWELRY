@@ -6,6 +6,7 @@ import SignupPage from '@/page/signup/SignupPage'
 import LoginPage from '@/page/login/LoginPage'
 import { Collections } from '@/page/Account/Collections/Collections'
 import { FilterProduct } from '@/page/Account/Collections/FilterProduct'
+import { DetailProduct } from '@/page/Account/DetailProduct/DetailProduct'
 
 export const RouterAccount = () => {
     return (
@@ -15,6 +16,7 @@ export const RouterAccount = () => {
                 <Route path='login' element={<LoginPage />} />
                 <Route path='collections' element={<Collections />} />
                 <Route path='collections/:slug' element={<FilterProduct />} />
+                <Route path='product/detail/:id' element={<DetailProduct />} />
                 <Route index element={<Home />} />
             </Route>
         </Routes>

@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from 'react-router'
 export const Featured = () => {
     const { products, isLoading, isValidating, refreshProduct, error } = useGetListProduct({
         page: 1,
@@ -52,7 +53,7 @@ export const Featured = () => {
                             new Date(server).getTime();
                         console.log(minPrice, "vnfnvfbfb")
                         return (
-                            <div className='px-3'>
+                            <Link to={`/product/detail/${item._id}`} key={item._id} className='px-3'>
                                 <div key={item._id} className='p-6 bg-white rounded-2xl relative group'>
                                     <div className="w-8.75 h-8.75 rounded-full bg-secondary flex items-center justify-center absolute text-white top-8.75 right-8.75 group-hover:translate-x-0 group-hover:opacity-100 translate-x-15 opacity-0 transition-all duration-500 ease-in-out">
                                         <Heart size={20} />
@@ -94,7 +95,7 @@ export const Featured = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         )
                     })}
                 </Slider>

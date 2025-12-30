@@ -2,7 +2,7 @@ import { useGetListProduct } from '@/hooks/Product/useGetListProduct'
 import { formatBigNumber } from '@/lib/format-big-number'
 import { Check, Heart, Star } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { Link, useParams } from 'react-router'
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useGetListSubcategory } from '@/hooks/subcategoty/useGetListSubcategory'
@@ -271,7 +271,7 @@ export const FilterProduct = () => {
                                 new Date(server).getTime();
 
                             return (
-                                <div key={item._id} className="px-3">
+                                <Link to={`/product/detail/${item._id}`} key={item._id} className="px-3">
                                     <div className="p-6 bg-white rounded-2xl relative group">
                                         <div className="w-8.75 h-8.75 rounded-full bg-secondary flex items-center justify-center absolute text-white top-8.75 right-8.75 group-hover:translate-x-0 group-hover:opacity-100 translate-x-15 opacity-0 transition-all duration-500 ease-in-out">
                                             <Heart size={20} />
@@ -345,7 +345,7 @@ export const FilterProduct = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             );
                         })}
                     </div>

@@ -269,11 +269,10 @@ export const AddProduct = ({ id }) => {
                     const main = item.images.find((img) => img.isMain === true)
                     setImgUp(item.images)
                     setMainImage(main.url)
-                    setBrandId(item.brandId)
-                    setCateId(item.categoryId)
-                    setSubcateId(item.subCategoryId)
+                    setBrandId(item.brandId._id)
+                    setCateId(item.categoryId._id)
+                    setSubcateId(item.subCategoryId._id)
                 }
-
             }
             handleProductId();
         }
