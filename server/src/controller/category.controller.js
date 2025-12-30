@@ -2,7 +2,6 @@ import categoryService from "../services/category.service.js";
 import BaseController from "./base.controller.js";
 
 class CategoryController extends BaseController {
-
     getAllCategory = async (req, res) => {
         try {
             const page = Number(req.query.page || 1)

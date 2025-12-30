@@ -6,7 +6,7 @@ import useSWR from "swr"
 export const useGetListBrand = (dataFilter) => {
     const { accessToken } = UserAuthStore();
     const shouldFetch = accessToken && dataFilter;
-    const { data, error, isLoading, isValidating, mutate } = useSWR(shouldFetch ? [API_GET_BRAND, dataFilter] : null, ([_, params]) => BrandService.getBrand(params), {
+    const { data, error, isLoading, isValidating, mutate } = useSWR(shouldFetch ? [`${API_GET_BRAND}?page=${shouldFetch.page}&limit=${shouldFetch.limit}`, shouldFetch] : null, ([_, params]) => BrandService.getBrand(params), {
         dedupingInterval: 2000,
         revalidateOnFocus: false,
         revalidateIfStale: false,

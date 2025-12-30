@@ -27,6 +27,7 @@ export const BestSeller = () => {
         sliderRef.current.slickNext()
     }
     console.log(products, "fbmfmbf")
+    const server = products?.data?.data?.serverTime
     return (
         <div className='my-16 mx-7.5 relative group/slider'>
             <div className='text-center'>
@@ -46,6 +47,9 @@ export const BestSeller = () => {
                                 )
                             )
                         );
+                        const date =
+                            new Date(item.promotion.endAt).getTime() -
+                            new Date(server).getTime();
                         console.log(minPrice, "vnfnvfbfb")
                         return (
                             <div className='px-3'>
@@ -53,9 +57,18 @@ export const BestSeller = () => {
                                     <div className="w-8.75 h-8.75 rounded-full bg-secondary flex items-center justify-center absolute text-white top-8.75 right-8.75 group-hover:translate-x-0 group-hover:opacity-100 translate-x-15 opacity-0 transition-all duration-500 ease-in-out">
                                         <Heart size={20} />
                                     </div>
-                                    <div className={`w-10 h-10 rounded-full ${item.promotion.discount ? "bg-secondary" : "bg-transparent"} flex items-center justify-center absolute text-white top-8.75 left-8.75`}>
-                                        {item.promotion.discount ? `-${item.promotion.discount}%` : ""}
-                                    </div>
+                                    {date > 0 && (
+                                        <div
+                                            className={`w-10 h-10 rounded-full ${item.promotion.discount
+                                                ? "bg-secondary"
+                                                : "bg-transparent"
+                                                } flex items-center justify-center absolute text-white top-8.75 left-8.75`}
+                                        >
+                                            {item.promotion.discount
+                                                ? `-${item.promotion.discount}%`
+                                                : ""}
+                                        </div>
+                                    )}
                                     <div className='w-full h-57.25 rounded-2xl overflow-hidden'>
                                         <img src={img?.url} alt="" className='w-full h-full object-cover' />
                                     </div>

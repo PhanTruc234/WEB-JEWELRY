@@ -18,10 +18,10 @@ export const Header = () => {
 
                 <ul className='flex items-center gap-8 text-[14px] font-medium text-white'>
                     <li>
-                        Home
+                        <Link to="/"> Home</Link>
                     </li>
                     <li>
-                        Collection
+                        <Link to="collections"> Collection</Link>
                     </li>
                     <li>
                         About

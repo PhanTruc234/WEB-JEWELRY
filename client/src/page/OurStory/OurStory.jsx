@@ -16,7 +16,9 @@ export const OurStory = () => {
             }, 50)
             return () => clearInterval(timer)
         } else {
-            setCount(0)
+            setCount(30)
+            setCount1(50)
+            setCount2(1000)
         }
     }, [value])
     // console.log(count, "ppppppppp")

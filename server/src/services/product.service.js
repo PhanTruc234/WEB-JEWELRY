@@ -55,7 +55,7 @@ class ProductService {
         if (category) query.$and.push({ categoryId: category._id });
         if (subcategory) query.$and.push({ subCategoryId: subcategory._id });
         if (brand) query.$and.push({ brandId: brand._id });
-
+        const now = new Date();
         const [products, totalItems] = await Promise.all([
             productModel
                 .find(query)
@@ -73,6 +73,7 @@ class ProductService {
             totalItems,
             totalPages,
             limit,
+            serverTime: now.toISOString(),
             products,
         };
     }

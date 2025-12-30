@@ -11,3 +11,4 @@ const k = Object.fromEntries(arr);
 console.log(Object.fromEntries((Object.entries(k))))
 console.log(k)
 console.log(j)
+let p = {};

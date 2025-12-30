@@ -6,13 +6,16 @@ import categoryModel from "../models/category.model.js";
 import subcategoryModel from "../models/subcategory.model.js";
 
 class SubcategoryService {
-    async getAllSubCate(page, limit, search) {
+    async getAllSubCate(page, limit, search, slug) {
         const skip = (page - 1) * limit;
         const query = {
             $and: []
         };
         if (search) {
             query.$and.push({ name: { $regex: search, $options: "i" } })
+        }
+        if (slug) {
+            query.$and.push({ slug: { $regex: slug, $options: "i" } })
         }
         const [allSub, totalItem] = await Promise.all([
             subcategoryModel.

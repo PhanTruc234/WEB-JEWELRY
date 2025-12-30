@@ -2,19 +2,18 @@ import subcategoryService from "../services/subcategory.service.js";
 import BaseController from "./base.controller.js";
 
 class SubcategoryController extends BaseController {
-
     getAllSubCate = async (req, res) => {
         try {
             const page = Number(req.query.page || 1);
             const limit = Number(req.query.limit || 10);
             const search = req.query.search?.trim() || "";
-            const data = await subcategoryService.getAllSubCate(page, limit, search);
+            const slug = req.query.slug?.trim() || ""
+            const data = await subcategoryService.getAllSubCate(page, limit, search, slug);
             return this.ok(res, data, "Lấy danh mục con thành công");
         } catch (err) {
             return this.handleErr(res, err);
         }
     };
-
     createSubcategory = async (req, res) => {
         try {
             const { name, description, categoryId, images } = req.body;

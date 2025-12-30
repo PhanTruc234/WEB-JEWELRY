@@ -23,8 +23,8 @@ export const BrandPage = () => {
     const [model, setModel] = useState(false);
     const dataFilter = {
         page: 1,
-        limit: 2,
-        search: "",
+        limit: 10,
+        // search: "",
     }
     const { brands, isLoading, isValidating, refreshBrand } = useGetListBrand(dataFilter)
     const onSubmit = async (data) => {
@@ -68,7 +68,7 @@ export const BrandPage = () => {
         const params = new URLSearchParams({
             page: dataFilter.page.toString(),
             limit: dataFilter.limit.toString(),
-            search: dataFilter.search
+            search: dataFilter.search || ""
         });
         setSearchParams(params);
     }, [dataFilter.page, dataFilter.limit, dataFilter.search]);

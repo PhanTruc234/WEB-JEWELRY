@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router'
 import { RouterAccount } from './route/RouterAccount/RouterAccount'
@@ -14,6 +14,7 @@ import { commonStore } from './store/commonStore/commonStore'
 function App() {
   const [show, setShow] = useState(false)
   const { setValue } = commonStore()
+  const lastValue = useRef(null);
   const setAccessToken = UserAuthStore((s) => s.setAccessToken);
   useEffect(() => {
     const refresh = async () => {
@@ -49,13 +50,20 @@ function App() {
   }, [])
   useEffect(() => {
     const handleScroll = () => {
-      // console.log(window.scrollY, "lthlthlthym")
       setShow(window.scrollY > 300);
-      setValue(window.scrollY >= 1500 && window.scrollY <= 2300)
+      const current =
+        window.scrollY >= 1500 && window.scrollY <= 2300;
+
+      if (current !== lastValue.current) {
+        setValue(current);
+        lastValue.current = current;
+      }
+
+      setShow(window.scrollY > 300);
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [show])
+  }, [])
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
