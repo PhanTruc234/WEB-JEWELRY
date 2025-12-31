@@ -11,8 +11,11 @@ export const SaleItem = () => {
     const [countTime, setCountTime] = useState({})
     useEffect(() => {
         const handleGetTime = async () => {
-            const dataTime = await getOnTime({ page: 1, limit: 10, isActive: true })
-            setDataOnTime(dataTime?.data?.data)
+            const { accessToken } = UserAuthStore();
+            if (accessToken) {
+                const dataTime = await getOnTime({ page: 1, limit: 10, isActive: true })
+                setDataOnTime(dataTime?.data?.data)
+            }
         }
         handleGetTime()
     }, [])

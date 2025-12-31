@@ -74,7 +74,7 @@ function App() {
         <Route path='/*' element={<RouterAccount />} />
         <Route path='/admin/*' element={<RouterAdmin />} />
       </Routes>
-      <div className={`bg-secondary w-12.5 h-12.5 flex items-center justify-center rounded-full cursor-pointer text-white fixed right-12.5 z-99 bottom-5 ${show ? "opacity-100" : "opacity-0"} transition-all duration-300 ease-in-out`} onClick={scrollToTop}>
+      <div className={`bg-secondary w-12.5 h-12.5 flex items-center justify-center rounded-full cursor-pointer text-white fixed right-12.5 z-99 bottom-5 ${show ? "opacity-100" : "opacity-0"} transition-all duration-300 ease-in-out z-50`} onClick={scrollToTop}>
         <ArrowUp size={30} />
       </div>
     </>
