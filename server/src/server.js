@@ -12,7 +12,7 @@ import brandRoute from "./routes/brand.route.js"
 import reviewRoute from "./routes/review.route.js"
 import productRoute from "./routes/product.route.js"
 import helmet from "helmet";
-import rateLimit from "express-rate-limit"
+import chatBoxRoute from "./routes/chatBox.route.js"
 import { authApiLimiter, globalLimiter } from "./libs/rateLimit.js";
 // import { swaggerSpec, swaggerUiServe, swaggerUiSetup } from "./swagger.js";
 const app = express()
@@ -38,6 +38,7 @@ app.use("/api/subcategory", authApiLimiter, authUser, subcategoryRoute)
 app.use("/api/brand", authApiLimiter, authUser, brandRoute)
 app.use("/api/review", authApiLimiter, authUser, reviewRoute)
 app.use("/api/product", authUser, productRoute)
+app.use('/api/chat-box', authUser, chatBoxRoute)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
