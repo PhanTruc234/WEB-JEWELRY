@@ -25,6 +25,7 @@ export const ProductService = {
     },
     getOntime: async (params) => {
         try {
+            console.log(params, "paramsparams")
             const res = await axiosClient.get(API_GET_ONTIME_PRODUCT, { params })
             console.log(res, "vfvfbfb")
             if (res.status === 200) {

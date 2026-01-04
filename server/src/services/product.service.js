@@ -125,6 +125,7 @@ class ProductService {
                 .limit(limit),
             productModel.countDocuments(query),
         ]);
+        console.log(products, "oooooooooo")
         return {
             currentPage: page,
             totalItems,
@@ -250,8 +251,8 @@ class ProductService {
             color: item.color,
             options: item.options.map((op) => ({
                 ...op,
-                sku: `${toSlug(name).toUpperCase().slice(0, 3)}-${item.color ? item.color.toUpperCase().slice(0, 2) : "NO"
-                    }-${String(op.value).replace('.', '')}-${nanoid(6).toUpperCase()}`,
+                sku: `${toSlug(name).toUpperCase().slice(0, 3)}-${toSlug(item.color ? item.color.toUpperCase().slice(0, 2) : "NO"
+                )}-${String(op.value).replace('.', '')}-${nanoid(6).toUpperCase()}`,
                 originalPrice: calcPrice(op),
                 finalPrice: calcPrice(op, promotion.isActive ? promotion.discount : 0)
             }))

@@ -9,16 +9,18 @@ export const SaleItem = () => {
     const offsetRef = useRef(0);
     const [active, setActive] = useState(false)
     const [countTime, setCountTime] = useState({})
+    const { accessToken } = UserAuthStore();
     useEffect(() => {
         const handleGetTime = async () => {
-            const { accessToken } = UserAuthStore();
+            console.log(accessToken, "accessTokenaccessToken")
             if (accessToken) {
                 const dataTime = await getOnTime({ page: 1, limit: 10, isActive: true })
+                console.log(dataTime, "dataTimedataTime")
                 setDataOnTime(dataTime?.data?.data)
             }
         }
         handleGetTime()
-    }, [])
+    }, [accessToken])
     const firstProduct = dataOnTime?.products?.[0];
     useEffect(() => {
         if (!firstProduct?.promotion?.endAt || !dataOnTime?.serverTime) return;

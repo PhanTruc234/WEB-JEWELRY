@@ -31,6 +31,7 @@ export const ChatBox = () => {
             ...prev,
             { role: 'user', message, products: [] },
         ])
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight
         const data = await sendMessage(message)
         console.log(data)
         setLiveMessages((prev) => [
@@ -159,7 +160,7 @@ export const ChatBox = () => {
                     ))}
                     {sending && (
                         <div className="text-sm text-gray-400 italic">
-                            Bot đang trả lời...
+                            <div className='loader-dot'></div>
                         </div>
                     )}
                 </div>
