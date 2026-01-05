@@ -51,6 +51,7 @@ class ProductController extends BaseController {
     createProduct = async (req, res) => {
         try {
             const { name, brandId, categoryId, subCategoryId, promotion, variants, images, description, isFeatured, isNewProduct } = req.body;
+            console.log(name, brandId, categoryId, subCategoryId, promotion, variants, images, description, isFeatured, isNewProduct, "pppppppppppppppppp")
             const newProduct = await productService.createProduct({ name, brandId, categoryId, subCategoryId, promotion, variants, images, description, isFeatured, isNewProduct })
             return this.created(res, newProduct, "Thêm sản phẩm thành công");
         } catch (error) {

@@ -7,6 +7,6 @@ import { objectIdSchema } from "../Schema/commonSchema.js";
 const route = express.Router();
 route.get("/", categoryController.getAllCategory)
 route.post("/", checkRole("admin"), middleware(createCateSchema, "body"), categoryController.createCategory)
-route.put("/:id", checkRole("admin"), middleware(updateCateSchema, "body"), middleware(objectIdSchema, "params"), categoryController.updateCategory)
+route.put("/:id", checkRole("admin"), middleware(objectIdSchema, "params"), middleware(updateCateSchema, "body"), categoryController.updateCategory)
 route.delete("/:id", checkRole("admin"), middleware(objectIdSchema, "params"), categoryController.deleteCategory)
 export default route

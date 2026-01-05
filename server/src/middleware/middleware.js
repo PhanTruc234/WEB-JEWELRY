@@ -10,10 +10,11 @@ export const middleware = (schema, type = "body") => {
             if (type === "query") req.query = parsed;
             return next();
         } catch (error) {
-            if (err instanceof ZodError) {
+            console.log(error, "errorerrorerror")
+            if (error instanceof ZodError) {
                 return res.status(400).json({
                     message: "Validation failed",
-                    errors: err.errors.map(e => ({
+                    errors: error.errors.map(e => ({
                         path: e.path.join("."),
                         msg: e.message
                     })),

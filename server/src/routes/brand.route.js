@@ -1,6 +1,9 @@
 import express from "express";
 import brandController from "../controller/brand.controller.js";
 import { checkRole } from "../auth/checkRole.js";
+import { middleware } from "../middleware/middleware.js";
+import { createBrandSchema, updateBrandSchema } from "../Schema/brand.shema.js";
+import { objectIdSchema } from "../Schema/commonSchema.js";
 const route = express.Router();
 // /**
 //  * @swagger
@@ -57,7 +60,7 @@ const route = express.Router();
 //  *                             example: "gucci"
 // */
 route.get("/", brandController.getAllBrand);
-route.post("/", checkRole("admin"), brandController.createBrand);
-route.put("/:id", checkRole("admin"), brandController.updateBrand);
-route.delete("/:id", checkRole("admin"), brandController.deleteBrand);
+route.post("/", checkRole("admin"), middleware(createBrandSchema, "body"), brandController.createBrand);
+route.put("/:id", checkRole("admin"), middleware(objectIdSchema, "params"), middleware(updateBrandSchema, "body"), brandController.updateBrand);
+route.delete("/:id", checkRole("admin"), middleware(objectIdSchema, "params"), brandController.deleteBrand);
 export default route
