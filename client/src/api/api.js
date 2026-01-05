@@ -34,4 +34,4 @@ export const API_DELETE_IMG_PRODUCT = "/api/product/delete-upload"
 export const API_REMOVE_IMG_PRODUCT = "/api/product"
 
 export const API_CHAT_BOX = "/api/chat-box"
-export const API_GET_CHAT_BOX = "/api/chat-box"
+export const API_GET_CHAT_BOX = "/api/chat-bot"

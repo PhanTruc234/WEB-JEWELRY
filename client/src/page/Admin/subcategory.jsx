@@ -47,6 +47,7 @@ export const SubcategoryPage = () => {
     })
     const onSubmit = async (data) => {
         const { name, description } = data;
+        setMessage("")
         if (selectSub === "") {
             setMessage("Bạn chưa nhập danh mục")
             return
@@ -78,6 +79,7 @@ export const SubcategoryPage = () => {
     const handleUpload = async (e) => {
         const files = e.target.files;
         console.log(files, "filesfilesfilesfiles")
+        setMessage("")
         const formData = new FormData();
         for (const file of files) {
             formData.append("subcatgory-images", file)
@@ -329,7 +331,7 @@ export const SubcategoryPage = () => {
                                 </RadioGroup>
                             )}
                             {message && (
-                                <p className="text-sm text-green-600 mt-2">{message}</p>
+                                <p className="text-sm text-red-600 mt-2">{message}</p>
                             )}
                         </div>
                     </div>

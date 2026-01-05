@@ -16,6 +16,7 @@ export const subcategoryService = {
     },
     createSubcategory: async (name, description, categoryId, images) => {
         try {
+            console.log(images, "kkkkkkkk")
             const res = await axiosClient.post(API_CREATE_SUBCATE, { name, description, categoryId, images })
             if (res.status === 201) {
                 toast.success("Thêm thành công")
