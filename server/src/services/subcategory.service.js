@@ -39,8 +39,12 @@ class SubcategoryService {
         if (!name || !description || !categoryId) {
             throw new BadRequest("Thiếu thông tin")
         }
+        console.log(images, ">>> images")
         if (!Array.isArray(images) || images.length <= 0) {
             throw new BadRequest("Phải có ít nhất 1 ảnh")
+        }
+        if (!images.some(img => img.isMain)) {
+            images[0].isMain = true;
         }
         const slug = toSlug(name);
         const exitSlug = await subcategoryModel.findOne({ slug });
