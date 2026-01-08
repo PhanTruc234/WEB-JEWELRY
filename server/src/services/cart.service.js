@@ -82,6 +82,7 @@ class CartService {
                 purity: a.option.purity || null,
                 unitPrice: a.option.finalPrice,
                 quantity: quantity,
+                stockQuantity: a.option.stockQuantity
             })
         }
         await cart.save();
