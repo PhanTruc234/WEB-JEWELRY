@@ -39,3 +39,7 @@ export const API_GET_CHAT_BOX = "/api/chat-bot"
 export const API_CREATE_CART = "/api/cart"
 export const API_GET_CART = "/api/cart"
 export const API_UPDATE_CART = "/api/cart"
+export const API_DELETE_CART = "/api/cart"
+
+export const API_CHAT = "/api/chat"
+export const API_CHAT_ME = "/api/chat/me"

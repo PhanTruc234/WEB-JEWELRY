@@ -10,6 +10,7 @@ import {
     ListIndentIncrease,
     ListOrdered,
     LogOut,
+    MessageSquareMore,
     MessageSquareText,
     PackageSearch,
     Settings,
@@ -139,6 +140,10 @@ export const LayoutAdmin = () => {
                                 <Link to={"/admin/user-manage/reviews"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <MessageSquareText className="size-5" />
                                     Review / Feedback
+                                </Link>
+                                <Link to={"/admin/chat"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <MessageSquareMore className="size-5" />
+                                    Chat
                                 </Link>
                             </div>
                         )}

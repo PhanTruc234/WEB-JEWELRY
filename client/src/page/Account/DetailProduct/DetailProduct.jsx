@@ -1,4 +1,5 @@
 import { formatBigNumber } from '@/lib/format-big-number'
+import { CartStore } from '@/store/cartStore/CartStore'
 import { ProductStore } from '@/store/productStore/ProductStore'
 import { Star, Van } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
@@ -6,6 +7,7 @@ import { useParams } from 'react-router'
 
 export const DetailProduct = () => {
     const params = useParams()
+    const { createCart, addToCart, cart } = CartStore()
     const { getProductById } = ProductStore()
     const [showImg, setShowImg] = useState("")
     const [choose, setChoose] = useState(1)
@@ -13,6 +15,7 @@ export const DetailProduct = () => {
     const [selectedColor, setSelectedColor] = useState(null)
     const [selectedOption, setSelectedOption] = useState(null)
     const [quantity, setQuantity] = useState(1)
+    const [img, setImg] = useState("")
     useEffect(() => {
         const callProduct = async () => {
             const data = await getProductById(params.id)
@@ -22,6 +25,33 @@ export const DetailProduct = () => {
         callProduct()
     }, [params.id])
     console.log(detail, "detaildetaildetail")
+    const handleAddToCart = async (id) => {
+        console.log(id)
+        console.log(quantity, "quantityquantity")
+        const newCart = await createCart(id, selectedOption.sku, quantity)
+        console.log(newCart, "newCartnewCartnewCart")
+        if (newCart.status === 201) {
+            const k = newCart?.data?.data?.items.find((i) => i.sku === selectedOption.sku)
+            const data = await getProductById(k.productId)
+            console.log(data, "datadatadatadata")
+            if (data.status === 200) {
+                const imgMain = data?.data?.data?.images.find((item) => item.isMain)
+                console.log(imgMain, "imgMainimgMain")
+                addToCart({
+                    img: imgMain.url
+                })
+                setSelectedColor(null)
+                setSelectedOption(null)
+                setQuantity(1)
+            }
+        }
+        console.log(newCart, "newCartnewCartnewCart")
+    }
+    useEffect(() => {
+        console.log("cart changed", cart)
+        const findImg = cart.find((img) => img.img !== "")
+        setImg(findImg?.img)
+    }, [cart])
     useEffect(() => {
         if (detail?.images?.length) {
             const imgMain = detail?.images.find(img => img.isMain)
@@ -32,8 +62,12 @@ export const DetailProduct = () => {
     const finalPrice = detail?.variants.flatMap((item) => item.options.map((ele) => ele.finalPrice))
     console.log(originalPrice, finalPrice)
     console.log(selectedOption, "mkmkgmbga")
+    console.log(img, "findImgfindImg")
     return (
-        <div className="bg-gray-50 px-10 py-16">
+        <div className="bg-gray-50 px-10 py-16 relative">
+            {img && <div className='w-17.5 h-17.5 absolute top-10 right-12'>
+                <img src={img} alt="" className=' w-full h-full object-cover rounded-xl animate-cart-fx' />
+            </div>}
             <div className="max-w-7xl mx-auto grid grid-cols-2 gap-14">
                 <div className="space-y-6">
                     <div className="w-full aspect-square rounded-2xl overflow-hidden bg-white shadow">
@@ -124,11 +158,11 @@ export const DetailProduct = () => {
                         </div>
                         <div className="space-y-1">
                             <p className="text-2xl font-bold text-primary">
-                                Giá tiền: {formatBigNumber(finalPrice[0], true)}
+                                Giá tiền: {selectedOption?.finalPrice ? formatBigNumber(selectedOption?.finalPrice, true) : formatBigNumber(finalPrice[0], true)}
                             </p>
-                            {finalPrice[0] !== originalPrice[0] && (
+                            {selectedOption?.finalPrice !== selectedOption?.originalPrice || finalPrice[0] !== originalPrice[0] && (
                                 <p className="text-gray-400 line-through">
-                                    Giá cũ{formatBigNumber(originalPrice[0], true)}
+                                    Giá cũ{selectedOption?.originalPrice ? formatBigNumber(selectedOption?.originalPrice, true) : formatBigNumber(originalPrice[0], true)}
                                 </p>
                             )}
                         </div>
@@ -141,7 +175,7 @@ export const DetailProduct = () => {
                             </div>
                             {quantity >= selectedOption?.stockQuantity ? <p>Số lượng tồn kho đã hết</p> : ""}
                         </div>
-                        <button className="w-full py-3 rounded-xl bg-primary text-white font-semibold hover:opacity-90 transition cursor-pointer">
+                        <button onClick={() => handleAddToCart(detail._id)} className="w-full py-3 rounded-xl bg-primary text-white font-semibold hover:opacity-90 transition cursor-pointer">
                             Add to cart
                         </button>
                         <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">

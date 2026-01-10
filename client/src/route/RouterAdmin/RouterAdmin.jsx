@@ -8,6 +8,7 @@ import { SubcategoryPage } from '@/page/Admin/subcategory'
 import { AddProduct } from '@/page/Admin/product/addProduct'
 import { Product } from '@/page/Admin/product/product'
 import { EditProduct } from '@/page/Admin/product/editProduct'
+import { AdminChat } from '@/page/Admin/AdminChat/AdminChat'
 export const RouterAdmin = () => {
     return (
         <Routes>
@@ -26,6 +27,7 @@ export const RouterAdmin = () => {
                     <Route path="user-manage/reviews" element={<div>reviews</div>} />
                     <Route path="coupons" element={<div>coupon</div>} />
                     <Route path="settings" element={<div>settings</div>} />
+                    <Route path='chat' element={<AdminChat />} />
                 </Route>
             </Route>
         </Routes>

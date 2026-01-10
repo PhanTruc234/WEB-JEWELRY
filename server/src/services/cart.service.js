@@ -22,15 +22,27 @@ class CartService {
             return {
                 items: [],
                 totalItems: 0,
+                toatlPrice: 0,
+                total: 0,
+                tax: 0,
                 page,
                 limit
             };
         }
+        console.log(cart, "cartcartcart")
         const totalItems = cart.items.length
         const paginatedItems = cart.items.slice(skip, skip + limit);
+        const toatlPrice = cart.items.reduce((acc, ele) => acc += ele.unitPrice * ele.quantity, 0)
+        const TAX_RATE = 0.05;
+        const tax = toatlPrice * TAX_RATE;
+        const total = toatlPrice + tax;
+        console.log(toatlPrice)
         return {
             data: paginatedItems,
             totalItems,
+            toatlPrice,
+            tax,
+            total,
             page,
             limit
         };

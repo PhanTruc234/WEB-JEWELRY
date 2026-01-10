@@ -8,5 +8,10 @@ export const commonStore = create((set, get) => ({
     },
     setShowBot: (showBot) => {
         set({ showBot })
+    },
+    showChat: false,
+    setShowChat: (showChat) => {
+        set({ showChat })
     }
+
 }))
