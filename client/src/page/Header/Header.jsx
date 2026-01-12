@@ -36,6 +36,9 @@ export const Header = () => {
                         <Link to="collections"> Collection</Link>
                     </li>
                     <li>
+                        <Link to="compare">Comapre</Link>
+                    </li>
+                    <li>
                         About
                     </li>
                     <li>

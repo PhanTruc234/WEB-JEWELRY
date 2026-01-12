@@ -9,6 +9,7 @@ import { FilterProduct } from '@/page/Account/Collections/FilterProduct'
 import { DetailProduct } from '@/page/Account/DetailProduct/DetailProduct'
 import { Cart } from '@/page/Account/Cart/Cart'
 import { CustomerChat } from '@/page/Account/CustomerChat/CustomerChat'
+import { Compare } from '@/page/Account/Compare/Compare'
 
 export const RouterAccount = () => {
     return (
@@ -18,6 +19,7 @@ export const RouterAccount = () => {
                 <Route path='login' element={<LoginPage />} />
                 <Route path='collections' element={<Collections />} />
                 <Route path='collections/:slug' element={<FilterProduct />} />
+                <Route path='compare' element={<Compare />} />
                 <Route path='product/detail/:id' element={<DetailProduct />} />
                 <Route path='cart' element={<Cart />} />
                 <Route path='chat-customer' element={<CustomerChat />} />

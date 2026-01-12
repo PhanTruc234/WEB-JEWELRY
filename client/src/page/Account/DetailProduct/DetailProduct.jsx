@@ -1,13 +1,16 @@
 import { formatBigNumber } from '@/lib/format-big-number'
 import { CartStore } from '@/store/cartStore/CartStore'
+import { CompareStore } from '@/store/compareStore/CompareStore'
 import { ProductStore } from '@/store/productStore/ProductStore'
-import { Star, Van } from 'lucide-react'
+import { Scale, Star, Van } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { toast } from 'sonner'
 
 export const DetailProduct = () => {
     const params = useParams()
     const { createCart, addToCart, cart } = CartStore()
+    const { createCompare } = CompareStore()
     const { getProductById } = ProductStore()
     const [showImg, setShowImg] = useState("")
     const [choose, setChoose] = useState(1)
@@ -46,6 +49,9 @@ export const DetailProduct = () => {
             }
         }
         console.log(newCart, "newCartnewCartnewCart")
+    }
+    const handleCompare = async (id) => {
+        await createCompare(id, selectedOption.sku)
     }
     useEffect(() => {
         console.log("cart changed", cart)
@@ -175,9 +181,14 @@ export const DetailProduct = () => {
                             </div>
                             {quantity >= selectedOption?.stockQuantity ? <p>Số lượng tồn kho đã hết</p> : ""}
                         </div>
-                        <button onClick={() => handleAddToCart(detail._id)} className="w-full py-3 rounded-xl bg-primary text-white font-semibold hover:opacity-90 transition cursor-pointer">
-                            Add to cart
-                        </button>
+                        <div className='flex items-center gap-4'>
+                            <button onClick={() => handleAddToCart(detail._id)} className="px-6 py-3.5 rounded-xl bg-primary text-white font-semibold hover:opacity-90 transition cursor-pointer">
+                                Add to cart
+                            </button>
+                            <div className='w-13 h-13 border-2 border-primary flex items-center justify-center rounded-xl text-primary cursor-pointer' onClick={() => handleCompare(detail._id)}>
+                                <Scale />
+                            </div>
+                        </div>
                         <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
                             <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-white">
                                 <Van size={18} />
