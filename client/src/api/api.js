@@ -40,6 +40,12 @@ export const API_CREATE_CART = "/api/cart"
 export const API_GET_CART = "/api/cart"
 export const API_UPDATE_CART = "/api/cart"
 export const API_DELETE_CART = "/api/cart"
+export const API_CLEAR_CART = "/api/cart"
 
 export const API_CHAT = "/api/chat"
 export const API_CHAT_ME = "/api/chat/me"
+
+export const API_GET_COMPARE = "/api/compare"
+export const API_CREATE_COMPARE = "/api/compare"
+export const API_DELETE_COMPARE = "/api/compare"
+export const API_CLEAR_COMPARE = "/api/compare"
