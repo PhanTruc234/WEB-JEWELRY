@@ -47,7 +47,7 @@ export const Cart = () => {
                                             <p className='font-bold'>{i.productId.name}</p>
                                             <div className='flex items-center gap-2 font-light text-[14px]'>
                                                 <p>{i.type}</p>
-                                                <p>{i.value}</p>
+                                                <p>{i.value}{i.type === "CARAT" ? "ct" : i.type === "GRAM" ? "g" : "mm"}</p>
                                                 <p>{i.purity && i.purity}</p>
                                             </div>
                                             <div className='font-medium text-primary'>

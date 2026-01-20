@@ -9,6 +9,9 @@ import { AddProduct } from '@/page/Admin/product/addProduct'
 import { Product } from '@/page/Admin/product/product'
 import { EditProduct } from '@/page/Admin/product/editProduct'
 import { AdminChat } from '@/page/Admin/AdminChat/AdminChat'
+import { Material } from '@/page/Admin/Items/Material'
+import { GemStone } from '@/page/Admin/Items/GemStone'
+import { Coupon } from '@/page/Admin/Coupon/Coupon'
 export const RouterAdmin = () => {
     return (
         <Routes>
@@ -22,10 +25,12 @@ export const RouterAdmin = () => {
                     <Route path="product-manage/products/add" element={<AddProduct />} />
                     <Route path="product-manage/products/edit/:id" element={<EditProduct />} />
                     <Route path="order-manage/orders" element={<div>order</div>} />
-                    <Route path="order-manage/cart" element={<div>cart</div>} />
+                    {/* <Route path="order-manage/cart" element={<div>cart</div>} /> */}
                     <Route path="user-manage/users" element={<div>users</div>} />
                     <Route path="user-manage/reviews" element={<div>reviews</div>} />
-                    <Route path="coupons" element={<div>coupon</div>} />
+                    <Route path='material-manage/material' element={<Material />} />
+                    <Route path='material-manage/gem' element={<GemStone />} />
+                    <Route path="coupons" element={<Coupon />} />
                     <Route path="settings" element={<div>settings</div>} />
                     <Route path='chat' element={<AdminChat />} />
                 </Route>

@@ -58,9 +58,12 @@ export const createProductShema = z.object({
         }),
     variants: z.array(
         z.object({
+            _id: z.string().optional(),
             color: z.string().min(1, "Chưa nhập màu"),
             options: z.array(
                 z.object({
+                    _id: z.string().optional(),
+                    itemId: z.string().min(1, "Chưa nhập mã itemId"),
                     type: z.enum(["CARAT", "GRAM", "MM", "NONE"]),
                     value: z.coerce.number().optional(),
                     purity: z.string().nullable().optional(),

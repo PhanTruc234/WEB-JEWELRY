@@ -21,7 +21,8 @@ const ProductSchema = new Schema(
                 options: [
                     {
                         sku: { type: String, required: true },
-                        type: { type: String, enum: ["CARAT", "GRAM", "MM", "NONE"], required: true, default: "NONE" },
+                        itemId: { type: String, required: true },
+                        type: { type: String, enum: ["CARAT", "GRAM", "NONE"], required: true, default: "NONE" },
                         value: { type: Number },
                         purity: { type: String },
                         originalPrice: { type: Number, required: true },

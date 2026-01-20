@@ -10,6 +10,8 @@ import cloudinary from "../config/configCloudDinary.js";
 import fs from "fs/promises";
 import { getPublicId } from "../libs/publicId.js";
 import { calcPrice } from "../libs/calcPrice.js";
+import materialModel from "../models/material.model.js";
+import gemstoneModel from "../models/gemstone.model.js";
 class ProductService {
     async getAllProduct(page, limit, search, minPrice, maxPrice, color, carat, gram, purity, mm, categoryName, subCategoryName, brandName, isNewProduct, isFeatured) {
         const skip = (page - 1) * limit;
@@ -187,16 +189,30 @@ class ProductService {
         if (!images.some(img => img.isMain)) {
             images[0].isMain = true;
         }
-        const generateSku = variants.map((item) => ({
-            color: item.color,
-            options: item.options.map((op) => ({
-                ...op,
-                sku: `${toSlug(name).toUpperCase().slice(0, 3)}-${item.color ? item.color.toUpperCase().slice(0, 2) : "NO"
-                    }-${String(op.value).replace('.', '')}-${nanoid(6).toUpperCase()}`,
-                originalPrice: calcPrice(op),
-                finalPrice: calcPrice(op, promotion.isActive ? promotion.discount : 0)
-            }))
-        }));
+        console.log(variants, ">>>variants")
+
+        const generateSku = [];
+        for (const variant of variants) {
+            const newVariant = {
+                color: variant.color,
+                options: []
+            };
+            for (const op of variant.options) {
+                const material = await materialModel.findById(op.itemId);
+
+                const pricePerUnit = material?.pricePerUnit ?? 0;
+
+                newVariant.options.push({
+                    ...op,
+                    sku: `${toSlug(name).toUpperCase().slice(0, 3)}-${variant.color ? variant.color.toUpperCase().slice(0, 2) : "NO"
+                        }-${String(op.value).replace('.', '')}-${nanoid(6).toUpperCase()}`,
+                    originalPrice: pricePerUnit * op.value,
+                    finalPrice:
+                        promotion.isActive ? pricePerUnit * op.value - (pricePerUnit * op.value * promotion.discount / 100) : pricePerUnit * op.value
+                });
+            }
+            generateSku.push(newVariant);
+        }
         let updatedPromotion = promotion;
         if (promotion?.isActive) {
             const start = new Date(promotion.startAt)
@@ -249,16 +265,31 @@ class ProductService {
         if (!Array.isArray(images) || images.length === 0)
             throw new BadRequest("Phải có ít nhất 1 ảnh");
 
-        const generateSku = variants.map((item) => ({
-            color: item.color,
-            options: item.options.map((op) => ({
-                ...op,
-                sku: `${toSlug(name).toUpperCase().slice(0, 3)}-${toSlug(item.color ? item.color.toUpperCase().slice(0, 2) : "NO"
-                )}-${String(op.value).replace('.', '')}-${nanoid(6).toUpperCase()}`,
-                originalPrice: calcPrice(op),
-                finalPrice: calcPrice(op, promotion.isActive ? promotion.discount : 0)
-            }))
-        }));
+        const generateSku = [];
+        for (const variant of variants) {
+            const newVariant = {
+                color: variant.color,
+                options: []
+            };
+            for (const op of variant.options) {
+                const ll = product.variants.find((va) => va._id.toString() === variant._id)
+                const sku = ll.options.find((sk) => sk._id.toString() === op._id)
+                const material = await materialModel.findById(op.itemId);
+                const gemStone = await gemstoneModel.findById(op.itemId)
+                console.log(material, "materialmaterial")
+                const pricePerUnit = material ? material?.pricePerUnit ?? 0 : gemStone?.pricePerUnit ?? 0;
+                console.log(pricePerUnit, "pricePerUnitpricePerUnit")
+                console.log(op, "kbkgbgmkbgm")
+                newVariant.options.push({
+                    ...op,
+                    sku: sku.sku,
+                    originalPrice: pricePerUnit * op.value,
+                    finalPrice:
+                        promotion.isActive ? pricePerUnit * op.value - (pricePerUnit * op.value * promotion.discount / 100) : pricePerUnit * op.value
+                });
+            }
+            generateSku.push(newVariant);
+        }
         let updatedPromotion = promotion;
         if (promotion?.isActive) {
             const start = new Date(promotion.startAt)

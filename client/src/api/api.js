@@ -49,3 +49,20 @@ export const API_GET_COMPARE = "/api/compare"
 export const API_CREATE_COMPARE = "/api/compare"
 export const API_DELETE_COMPARE = "/api/compare"
 export const API_CLEAR_COMPARE = "/api/compare"
+
+export const API_GET_ITEMS = "/api/items"
+
+export const API_GET_MATERIAL = "/api/material"
+export const API_CREATE_MATERIAL = "/api/material"
+export const API_UPDATE_MATERIAL = "/api/material"
+export const API_DELETE_MATERIAL = "/api/material"
+
+export const API_GET_GEMSTONE = "/api/gemstone"
+export const API_CREATE_GEMSTONE = "/api/gemstone"
+export const API_UPDATE_GEMSTONE = "/api/gemstone"
+export const API_DELETE_GEMSTONE = "/api/gemstone"
+
+export const API_GET_COUPON = "/api/coupon"
+export const API_CREATE_COUPON = "/api/coupon"
+export const API_UPDATE_COUPON = "/api/coupon"
+export const API_DELETE_COUPON = "/api/coupon"

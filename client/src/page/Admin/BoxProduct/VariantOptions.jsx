@@ -1,13 +1,15 @@
+import { useGetListItems } from '@/hooks/Item/useGetListItem'
 import { formatBigNumber } from '@/lib/format-big-number'
 import { Trash2 } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useFieldArray, useWatch } from 'react-hook-form'
 
-export const VariantOptions = ({ control, register, variantsIndex, discount, isActive }) => {
+export const VariantOptions = ({ control, register, variantsIndex, discount, isActive, setValue, errors }) => {
     const { fields, append, remove } = useFieldArray({
         control,
         name: `variants.${variantsIndex}.options`
     })
+    console.log(fields, "fieldsfieldsfieldsfields")
     const pricePerGram = {
         "24K": 2000000,
         "18K": 1500000,
@@ -19,6 +21,8 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
         name: `variants.${variantsIndex}.options`
     }) || []
     console.log(discount, ">>> discount")
+    const { items, isLoading, refreshItems } = useGetListItems()
+    console.log(items, "itemsitemsitemsitems")
     return (
         <div className="space-y-4">
             <button
@@ -26,6 +30,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                 className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-80 transition cursor-pointer"
                 onClick={() =>
                     append({
+                        itemId: "",
                         type: "NONE",
                         value: "",
                         stockQuantity: "",
@@ -35,10 +40,16 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                 + Add Option
             </button>
             {fields.map((item, index) => {
+                const itemId = option[index]?.itemId;
+                console.log(itemId, "itemIditemIditemId")
+                const selectedItem = items?.data?.data?.find(i => i._id === itemId);
+                console.log(selectedItem, "selectedItemselectedItem")
                 const type = option[index]?.type || "NONE"
+                console.log(type, "typetypetypetypetype")
                 const value = option[index]?.value
                 const purity = option[index]?.purity
                 console.log("puritypurity", purity)
+                console.log(itemId, type, purity, value, "kgkgkmngkmng")
                 return (
                     <div
                         key={item.id}
@@ -47,16 +58,33 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                         <div className="grid grid-cols-3 gap-4">
                             <select
                                 {...register(
-                                    `variants.${variantsIndex}.options.${index}.type`
+                                    `variants.${variantsIndex}.options.${index}.itemId`
                                 )}
                                 className="border rounded-lg px-3 py-2 text-sm"
+                                onChange={(e) => {
+                                    const selected = items?.data?.data?.find(o => o._id === e.target.value);
+                                    setValue(`variants.${variantsIndex}.options.${index}.itemId`, selected?._id);
+                                    setValue(`variants.${variantsIndex}.options.${index}.type`, selected?.unit);
+                                    if (selected.type === "METAL") {
+                                        setValue(`variants.${variantsIndex}.options.${index}.purity`, selected.purity);
+                                    }
+                                    if (selected?.type === "GEMSTONE") {
+                                        setValue(`variants.${variantsIndex}.options.${index}.purity`, null);
+                                    }
+                                }}
                             >
-                                <option value="NONE">No Size</option>
-                                <option value="CARAT">Carat</option>
-                                <option value="GRAM">Gram</option>
-                                <option value="MM">MM</option>
+                                <option value="">---- Chọn ----</option>
+                                {items?.data?.data
+                                    ?.filter(i => i.active)
+                                    ?.map(i => (
+                                        <option key={i._id} value={i._id}>
+                                            {i.name} {i.purity ?? ""}
+                                        </option>
+                                    ))}
                             </select>
-
+                            <input type='text' value={selectedItem?.unit} disabled
+                                {...register(`variants.${variantsIndex}.options.${index}.type`)}
+                                className="border rounded-lg px-3 py-2 text-sm bg-white" />
                             {type === "CARAT" && (
                                 <input
                                     type="text"
@@ -79,7 +107,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                 />
                             )}
 
-                            {type === "MM" && (
+                            {/* {type === "MM" && (
                                 <select
                                     {...register(
                                         `variants.${variantsIndex}.options.${index}.value`
@@ -93,7 +121,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                         </option>
                                     ))}
                                 </select>
-                            )}
+                            )} */}
 
                             {type === "NONE" && (
                                 <input
@@ -103,20 +131,19 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                 />
                             )}
 
-                            {type === "GRAM" && (
+                            {/* {type === "GRAM" && (
                                 <select
                                     {...register(
                                         `variants.${variantsIndex}.options.${index}.purity`
                                     )}
                                     className="border rounded-lg px-3 py-2 text-sm"
                                 >
-                                    <option value="">--- Độ tinh khiết ---</option>
-                                    <option value="24K">24K</option>
-                                    <option value="18K">18K</option>
-                                    <option value="14K">14K</option>
-                                    <option value="925">Bạc 925</option>
+                                    <option value="">--- Chọn độ tinh khiết ---</option>
+                                    {items?.data?.data?.map((i) => (
+                                        <option value={i.purity}>{i.purity} {i.purity ? i.slug : ""}</option>
+                                    ))}
                                 </select>
-                            )}
+                            )} */}
                         </div>
                         {(type === "CARAT" || type === "GRAM" || type === "MM") && (
                             <div className="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded-xl">
@@ -124,7 +151,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                     <>
                                         <input
                                             type="text"
-                                            value={formatBigNumber(2500000, true)}
+                                            value={formatBigNumber(selectedItem?.pricePerUnit, true)}
                                             disabled
                                             className="border rounded-lg px-3 py-2 text-sm bg-white"
                                         />
@@ -132,9 +159,9 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                             type="text"
                                             value={formatBigNumber(
                                                 isActive
-                                                    ? 2500000 * value -
-                                                    (2500000 * value * discount) / 100
-                                                    : 2500000 * value,
+                                                    ? selectedItem?.pricePerUnit * value -
+                                                    (selectedItem?.pricePerUnit * value * discount) / 100
+                                                    : selectedItem?.pricePerUnit * value,
                                                 true
                                             )}
                                             disabled
@@ -142,12 +169,12 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                         />
                                     </>
                                 )}
-                                {type === "GRAM" && (
+                                {type === "GRAM" && purity && (
                                     <>
                                         <input
                                             type="text"
                                             value={formatBigNumber(
-                                                pricePerGram[`${purity}`],
+                                                selectedItem?.pricePerUnit,
                                                 true
                                             )}
                                             disabled
@@ -157,9 +184,9 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                             type="text"
                                             value={formatBigNumber(
                                                 isActive
-                                                    ? pricePerGram[`${purity}`] * value -
-                                                    (pricePerGram[`${purity}`] * value * discount) / 100
-                                                    : pricePerGram[`${purity}`] * value,
+                                                    ? selectedItem?.pricePerUnit * value -
+                                                    (selectedItem?.pricePerUnit * value * discount) / 100
+                                                    : selectedItem?.pricePerUnit * value,
                                                 true
                                             )}
                                             disabled
@@ -168,7 +195,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                     </>
                                 )}
 
-                                {type === "MM" && (
+                                {/* {type === "MM" && (
                                     <>
                                         <input
                                             type="text"
@@ -188,7 +215,7 @@ export const VariantOptions = ({ control, register, variantsIndex, discount, isA
                                             className="border rounded-lg px-3 py-2 text-sm bg-white text-red-600 font-semibold"
                                         />
                                     </>
-                                )}
+                                )} */}
                             </div>
                         )}
                         <div className="flex items-center justify-between">

@@ -2,7 +2,6 @@ import brandService from "../services/brand.service.js";
 import BaseController from "./base.controller.js";
 
 class BrandController extends BaseController {
-
     getAllBrand = async (req, res) => {
         try {
             const page = Number(req.query.page || 1);

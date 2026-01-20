@@ -5,44 +5,59 @@ import { SendHorizontal } from "lucide-react";
 
 export const AdminChat = () => {
     const [roomId, setRoomId] = useState("");
-    const [msgs, setMsgs] = useState({ userId: {}, messages: [] });
+    const [rooms, setRooms] = useState({});
     const [input, setInput] = useState("");
-    const { chats, error, isLoading } = useGetListChat({ page: 1, limit: 10 });
-    console.log(chats, "chatschatschats")
+    const { chats, isLoading } = useGetListChat({ page: 1, limit: 10 });
+    console.log(chats, "chatschatschatschatschats")
+    useEffect(() => {
+        if (chats?.data?.data?.messages) {
+            const map = {};
+            chats.data.data.messages.forEach(c => {
+                map[c.roomId] = c;
+            });
+            setRooms(map);
+        }
+    }, [chats]);
+    console.log(rooms, "roomsroomsrooms")
     useEffect(() => {
         const handler = (msg) => {
-            console.log("SOCKET RECEIVED:", msg);
-            setMsgs(prev => ({
-                ...prev,
-                messages: [...(prev.messages || []), msg]
-            }));
-            console.log(msg, "msghandle")
+            console.log(msg, "msgmsgmsg")
+            setRooms(prev => {
+                const room = prev[msg.roomId] || {
+                    roomId: msg.roomId,
+                    messages: []
+                };
+                console.log(room, ">>> roomroomroomroom")
+                return {
+                    ...prev,
+                    [msg.roomId]: {
+                        ...room,
+                        messages: [...room.messages, msg]
+                    }
+                };
+            });
         };
         socket.on("message", handler);
-        return () => {
-            socket.off("message", handler);
-        };
+        return () => socket.off("message", handler);
     }, []);
-    console.log(msgs, "msgmsgmsgmsg")
     const joinRoom = (id) => {
         setRoomId(id);
-        const rooms = chats?.data?.data?.messages ?? [];
-        const convo = rooms.find((c) => c.roomId === id);
-        console.log(convo, "convoconvo")
-        setMsgs(convo ? convo : { userId: {}, messages: [] });
-        setUnread(prev => ({
-            ...prev,
-            [id]: 0
-        }));
         socket.emit("admin_join_room", id);
     };
     const send = () => {
-        socket.emit("admin_message", { roomId, message: input });
+        if (!input.trim() || !roomId) return;
+        socket.emit("admin_message", {
+            userId: roomId,
+            roomId,
+            message: input
+        });
         setInput("");
     };
+    const currentRoom = rooms[roomId];
+    console.log(currentRoom, "currentRoomcurrentRoom")
     return (
         <div className="relative min-h-screen flex gap-4">
-            {(isLoading) && (
+            {isLoading && (
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-20">
                     <div className="loader"></div>
                 </div>
@@ -50,42 +65,59 @@ export const AdminChat = () => {
             <div className="w-1/3 border-r">
                 <h2 className="font-bold mb-2">Danh sách chat</h2>
                 <ul>
-                    {chats?.data?.data?.messages?.map((c) => (
+                    {Object.values(rooms).map((c) => (
                         <li
                             key={c.roomId}
                             onClick={() => joinRoom(c.roomId)}
-                            className={`cursor-pointer p-2 border-b hover:bg-gray-100 ${roomId === c.roomId ? "bg-gray-200 font-bold" : ""
-                                }`}
+                            className={`cursor-pointer p-2 border-b hover:bg-gray-100
+                              ${roomId === c.roomId ? "bg-gray-200 font-bold" : ""}`}
                         >
                             <div className="flex items-center gap-2">
-                                <img src={c.userId.avatar} alt="" className="w-8 h-8 rounded-full" />
-                                <span>{c.userId.fullName}</span>
+                                <img
+                                    src={c.userId?.avatar}
+                                    alt=""
+                                    className="w-8 h-8 rounded-full"
+                                />
+                                <span>{c.userId?.fullName}</span>
                             </div>
                             <small className="text-gray-400">
-                                {c.messages[c.messages.length - 1]?.message.slice(0, 30)}...
+                                {c.messages?.[c.messages.length - 1]?.message?.slice(0, 30)}...
                             </small>
                         </li>
                     ))}
                 </ul>
             </div>
+            <div className="w-2/3 flex flex-col">
+                <h3 className="font-semibold mb-2">
+                    {currentRoom?.userId?.fullName
+                        ? `Chat với: ${currentRoom.userId.fullName}`
+                        : "Chọn một cuộc trò chuyện"}
+                </h3>
 
-            <div className="w-2/3">
-                <h3>Chat với: {chats?.data?.data?.messages?.userId?.name}</h3>
-                <div className="h-100 overflow-y-auto border p-2">
-                    {msgs?.messages?.map((m, i) => (
+                <div className="flex-1 border p-2 max-h-[500px] overflow-y-auto">
+                    {currentRoom?.messages?.map((m, i) => (
                         <div
                             key={i}
-                            className={`flex ${m.from === "admin" ? "justify-end" : "justify-start items-center gap-3"}`}
+                            className={`flex mb-2 ${m.from === "admin"
+                                ? "justify-end"
+                                : "justify-start items-center gap-2"
+                                }`}
                         >
-                            {m.from === "customer" ? <div className="w-6 h-6 rounded-full overflow-hidden">
-                                <img src={msgs?.userId?.avatar} alt="" className="w-full h-full object-cover" />
-                            </div> : <div>
-                            </div>}
+                            {m.from === "customer" && (
+                                <div className="w-6 h-6 rounded-full overflow-hidden">
+                                    <img
+                                        src={currentRoom?.userId?.avatar}
+                                        alt=""
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            )}
+
                             <div
-                                className={`mt-2 px-2 py-2 rounded-xl max-w-xs wrap-break-word shadow
-                        ${m.from === "admin"
+                                className={`px-3 py-2 rounded-xl max-w-xs wrap-break-word shadow
+                                  ${m.from === "admin"
                                         ? "bg-primary text-white rounded-br-none"
-                                        : "bg-secondary text-white border rounded-bl-none"
+                                        : "bg-secondary text-white rounded-bl-none"
                                     }`}
                             >
                                 <p className="text-sm">{m.message}</p>
@@ -93,17 +125,19 @@ export const AdminChat = () => {
                         </div>
                     ))}
                 </div>
-
-                <div className="flex gap-2 mt-2">
-                    <input
-                        className="border flex-1 p-2 rounded-2xl"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                    />
-                    <button onClick={send} className=" text-primary px-4 py-2">
-                        <SendHorizontal />
-                    </button>
-                </div>
+                {roomId && (
+                    <div className="flex gap-2 mt-2">
+                        <input
+                            className="border flex-1 p-2 rounded-2xl"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Nhập tin nhắn..."
+                        />
+                        <button onClick={send} className="text-primary px-4 py-2">
+                            <SendHorizontal />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

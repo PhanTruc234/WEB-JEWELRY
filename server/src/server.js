@@ -15,6 +15,11 @@ import reviewRoute from "./routes/review.route.js"
 import productRoute from "./routes/product.route.js"
 import cartRoute from "./routes/cart.route.js"
 import chatRoute from "./routes/conversation.route.js"
+import compareRoute from "./routes/compare.route.js"
+import materialRoute from "./routes/material.route.js"
+import gemstoneRoute from "./routes/gemstone.route.js"
+import itemRoute from "./routes/item.route.js"
+import couponRoute from "./routes/coupon.route.js"
 import helmet from "helmet";
 import chatBotRoute from "./routes/chatBox.route.js"
 import { authApiLimiter, globalLimiter } from "./libs/rateLimit.js";
@@ -46,6 +51,11 @@ app.use("/api/review", authApiLimiter, authUser, reviewRoute)
 app.use("/api/product", authUser, productRoute)
 app.use('/api/chat-bot', authUser, chatBotRoute)
 app.use('/api/cart', authUser, cartRoute)
+app.use("/api/compare", authUser, compareRoute)
+app.use("/api/material", authUser, materialRoute)
+app.use("/api/gemstone", authUser, gemstoneRoute)
+app.use("/api/items", authUser, itemRoute)
+app.use("/api/coupon", authUser, couponRoute)
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {

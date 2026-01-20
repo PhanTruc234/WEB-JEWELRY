@@ -51,6 +51,7 @@ export const DetailProduct = () => {
         console.log(newCart, "newCartnewCartnewCart")
     }
     const handleCompare = async (id) => {
+        console.log(selectedOption.sku)
         await createCompare(id, selectedOption.sku)
     }
     useEffect(() => {

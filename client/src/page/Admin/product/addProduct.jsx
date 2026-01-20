@@ -20,21 +20,19 @@ const ProductSchema = z.object({
     promotion: z
         .object({
             isActive: z.boolean(),
-            discount: z.string().optional(),
-            startAt: z.any().optional(),
-            endAt: z.any().optional(),
+            discount: z.coerce.number().optional(),
+            startAt: z.coerce.date().optional(),
+            endAt: z.coerce.date().optional(),
         })
         .optional()
         .superRefine((data, ctx) => {
             if (!data || !data.isActive) return;
-            if (!data.discount || isNaN(Number(data.discount))) {
+            if (data.discount <= 0 || data.discount >= 100) {
                 ctx.addIssue({
                     path: ["discount"],
-                    message: "Giảm giá phải là số",
+                    message: "Giá trị phải > 0 và < 100",
                 });
-                return;
             }
-
             const d = Number(data.discount);
             if (d <= 0 || d >= 100) {
                 ctx.addIssue({
@@ -42,14 +40,14 @@ const ProductSchema = z.object({
                     message: "Giá trị phải > 0 và < 100",
                 });
             }
-            if (!(data.startAt instanceof Date)) {
+            if (!(data.startAt)) {
                 ctx.addIssue({
                     path: ["startAt"],
                     message: "Chọn ngày bắt đầu",
                 });
             }
 
-            if (!(data.endAt instanceof Date)) {
+            if (!(data.endAt)) {
                 ctx.addIssue({
                     path: ["endAt"],
                     message: "Chọn ngày kết thúc",
@@ -57,8 +55,8 @@ const ProductSchema = z.object({
             }
 
             if (
-                data.startAt instanceof Date &&
-                data.endAt instanceof Date &&
+                data.startAt &&
+                data.endAt &&
                 data.endAt <= data.startAt
             ) {
                 ctx.addIssue({
@@ -69,13 +67,16 @@ const ProductSchema = z.object({
         }),
     variants: z.array(
         z.object({
+            _id: z.string().optional(),
             color: z.string().min(1, "Chưa nhập màu"),
             options: z.array(
                 z.object({
-                    type: z.enum(["CARAT", "GRAM", "MM", "NONE"]),
-                    value: z.string().optional(),
+                    _id: z.string().optional(),
+                    itemId: z.string().min(1, "Chưa chọn item"),
+                    type: z.enum(["CARAT", "GRAM", "NONE"]),
+                    value: z.coerce.number().nullable().optional(),
                     purity: z.string().nullable().optional(),
-                    stockQuantity: z.string(),
+                    stockQuantity: z.coerce.number(),
                 }).refine(
                     (data) => {
                         if (data.type === "NONE") {
@@ -121,7 +122,7 @@ export const AddProduct = ({ id }) => {
     const [length, setLenght] = useState(0)
     const [error, setError] = useState("")
     const [message, setMessage] = useState("")
-    const { register, control, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
+    const { register, control, handleSubmit, setValue, formState: { errors, isSubmitting }, reset } = useForm({
         resolver: zodResolver(ProductSchema),
         shouldUnregister: false,
     })
@@ -156,38 +157,51 @@ export const AddProduct = ({ id }) => {
             setMessage("Chưa có danh mục con")
             return
         }
-        const tranfer = data.variants.map((item) => ({
-            color: item.color,
-            options: item.options.map((ele) => ({
-                type: ele.type,
-                value: ele.value ? Number(ele.value) : null,
-                purity: ele.purity || null,
-                stockQuantity: ele.stockQuantity ? Number(ele.stockQuantity) : 0
-            }))
-        }))
-
-        const tranderPromo = data.promotion.isActive ? {
-            ...data.promotion,
-            discount: Number(data.promotion.discount),
-            startAt: data.promotion.startAt.toISOString(),
-            endAt: data.promotion.endAt.toISOString()
-        } : {
-            ...data.promotion
-        }
+        // const tranfer = data.variants.map((item) => ({
+        //     color: item.color,
+        //     options: item.options.map((ele) => ({
+        //         itemId: ele.itemId,
+        //         type: ele.type,
+        //         value: ele.value ? Number(ele.value) : null,
+        //         purity: ele.purity || null,
+        //         stockQuantity: ele.stockQuantity ? ele.stockQuantity : 0
+        //     }))
+        // }))
+        // console.log(tranfer, "tranfertranfertranfer")
+        // const tranderPromo = data.promotion.isActive ? {
+        //     ...data.promotion,
+        //     discount: Number(data.promotion.discount),
+        //     startAt: data.promotion.startAt,
+        //     endAt: data.promotion.endAt
+        // } : {
+        //     ...data.promotion
+        // }
 
         if (id) {
+            // const tranferrr = data.variants.map((item) => ({
+            //     _id: item._id,
+            //     color: item.color,
+            //     options: item.options.map((ele) => ({
+            //         _id: ele._id,
+            //         itemId: ele.itemId,
+            //         type: ele.type,
+            //         value: ele.value ? Number(ele.value) : null,
+            //         purity: ele.purity || null,
+            //         stockQuantity: ele.stockQuantity ? Number(ele.stockQuantity) : 0
+            //     }))
+            // }))
             console.log(id, "sckskcskcksn")
-            console.log(">>>> tranderPromo", tranderPromo)
-            console.log(">>> tranfer", tranfer)
+            // console.log(">>>> tranderPromo", tranderPromo)
+            // console.log(">>> tranfer", tranfer)
             console.log(">>> imgUp", imgUp)
             console.log(brandId, cateId, subcateId, "jdncjncjdnj")
-            const editProduct = await updateProduct(id, { ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, promotion: tranderPromo, variants: tranfer, images: imgUp })
+            const editProduct = await updateProduct(id, { ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, images: imgUp })
             if (editProduct.status === 200) {
                 navigate('/admin/product-manage/products')
                 reset()
             }
         } else {
-            const newProduct = await createProduct({ ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, promotion: tranderPromo, variants: tranfer, images: imgUp })
+            const newProduct = await createProduct({ ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, images: imgUp })
             console.log(">>> newProduct", newProduct)
             if (newProduct.status === 201) {
                 navigate('/admin/product-manage/products')
@@ -205,7 +219,7 @@ export const AddProduct = ({ id }) => {
         setLenght(files.length)
         setLoading(true)
         const imgData = await uploadImgProduct(formData)
-        if (imgData.status === 201) {
+        if (imgData?.status === 201) {
             console.log(">>> imgData", imgData)
             setLoading(false)
             setImgUp((prev) => [
@@ -254,8 +268,11 @@ export const AddProduct = ({ id }) => {
                                 isActive: item.promotion.isActive
                             },
                         variants: item.variants.map((vari) => ({
+                            _id: vari._id,
                             color: vari.color,
                             options: vari.options.map((op) => ({
+                                _id: op._id,
+                                itemId: op.itemId,
                                 type: op.type,
                                 value: String(op.value),
                                 purity: op.purity ?? null,
@@ -333,7 +350,7 @@ export const AddProduct = ({ id }) => {
                                     <label className="text-sm text-gray-600">Ngày bắt đầu</label>
                                     <input
                                         type="date"
-                                        {...register("promotion.startAt", { valueAsDate: true })}
+                                        {...register("promotion.startAt")}
                                         className="w-full border rounded-lg px-3 py-2"
                                     />
                                 </div>
@@ -341,7 +358,7 @@ export const AddProduct = ({ id }) => {
                                     <label className="text-sm text-gray-600">Ngày kết thúc</label>
                                     <input
                                         type="date"
-                                        {...register("promotion.endAt", { valueAsDate: true })}
+                                        {...register("promotion.endAt")}
                                         className="w-full border rounded-lg px-3 py-2"
                                     />
                                     {errors.promotion?.endAt && (
@@ -500,6 +517,8 @@ export const AddProduct = ({ id }) => {
                                     variantsIndex={index}
                                     discount={discount}
                                     isActive={isActive}
+                                    setValue={setValue}
+                                    errors={errors}
                                 />
                             </div>
                         ))}

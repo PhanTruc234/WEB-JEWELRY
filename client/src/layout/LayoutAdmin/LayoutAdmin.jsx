@@ -1,6 +1,8 @@
 import { UserAuthStore } from "@/store/userAuthStore";
 import {
+    Anvil,
     ChartBarStacked,
+    ChartColumnBig,
     ChartColumnStacked,
     ChevronDown,
     Codesandbox,
@@ -28,6 +30,7 @@ export const LayoutAdmin = () => {
     const [isDropDown, setIsDropDown] = useState(false)
     const [isDropDown2, setIsDropDown2] = useState(false)
     const [isDropDown3, setIsDropDown3] = useState(false)
+    const [isDropDown4, setIsDropDown4] = useState(false)
     const [isActive, setIsActive] = useState(false)
     const user = localStorage.getItem("user")
     const dataUser = user ? JSON.parse(user) : null;
@@ -114,10 +117,10 @@ export const LayoutAdmin = () => {
                                     <ShoppingBag className="size-5" />
                                     Orders
                                 </Link>
-                                <Link to={"/admin/order-manage/cart"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                {/* <Link to={"/admin/order-manage/cart"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <ShoppingCart className="size-5" />
                                     Cart
-                                </Link>
+                                </Link> */}
                             </div>
                         )}
                     </div>
@@ -148,7 +151,28 @@ export const LayoutAdmin = () => {
                             </div>
                         )}
                     </div>
-
+                    <div>
+                        <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown4(!isDropDown4)}>
+                            <div className="flex gap-2 items-center">
+                                <ChartColumnBig className="size-5" />
+                                {isOpen && <p>Material And Gem</p>}
+                            </div>
+                            {isOpen && <ChevronDown className="size-5" />}
+                        </div>
+                        {isOpen && (
+                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown4 ? "max-h-125" : "max-h-0"
+                                }`}>
+                                <Link to={"/admin/material-manage/material"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <Anvil className="size-5" />
+                                    Material
+                                </Link>
+                                <Link to={"/admin/material-manage/gem"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <Gem className="size-5" />
+                                    Gem stone
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                     <Link to={'/admin/coupons'} className="flex items-center gap-2 hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out cursor-pointer">
                         <TicketPercent className="size-5" />
                         {isOpen && <span>Coupon Management</span>}

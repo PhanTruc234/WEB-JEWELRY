@@ -8,7 +8,7 @@ export const BoxProduct = ({ remove, setModelDelete, handleDelete }) => {
                 <div className="absolute top-2 right-2 cursor-pointer hover:text-red-500" onClick={() => setModelDelete(false)}>
                     <X />
                 </div>
-                <h2 className='my-4'>{`Bạn có chắc muốn xóa ${remove.name} không?`}</h2>
+                <h2 className='my-4'>{`Bạn có chắc muốn xóa ${remove.name ? remove.name : remove.code} không?`}</h2>
                 <div className="flex justify-end gap-3 pt-2">
                     <button
                         type="button"

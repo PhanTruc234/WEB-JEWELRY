@@ -61,47 +61,58 @@
 // );
 // console.log(">>> mergedImg", mergedImg)
 // console.log(typeof (1 * 9))
-const l = [
-    {
-        color: "k",
-        options: [
-            {
-                sku: "p",
-                k: 0
-            },
-            {
-                sku: "o",
-                k: 2
-            }
-        ]
-    },
-    {
-        color: "h",
-        options: [
-            {
-                sku: "t",
-                k: 0
-            },
-            {
-                sku: "d",
-                k: 2
-            }
-        ]
-    }
-]
-let a = [];
-l.forEach((item) => {
-    const option = item.options.find(o => o.sku === "p");
-    if (option) {
-        a.push({
-            color: item.color,
-            options: option
-        });
-    }
-});
-console.log(a, "ppppppp")
-const product = l.map((item) => ({
-    color: item.color,
-    options: item.options.find((s) => s.sku === "p")
-}))
-console.log(">>> product", product)
+// const l = [
+//     {
+//         color: "k",
+//         options: [
+//             {
+//                 sku: "p",
+//                 k: 0
+//             },
+//             {
+//                 sku: "o",
+//                 k: 2
+//             }
+//         ]
+//     },
+//     {
+//         color: "h",
+//         options: [
+//             {
+//                 sku: "t",
+//                 k: 0
+//             },
+//             {
+//                 sku: "d",
+//                 k: 2
+//             }
+//         ]
+//     }
+// ]
+// let a = [];
+// l.forEach((item) => {
+//     const option = item.options.find(o => o.sku === "p");
+//     if (option) {
+//         a.push({
+//             color: item.color,
+//             options: option
+//         });
+//     }
+// });
+// console.log(a, "ppppppp")
+// const product = l.map((item) => ({
+//     color: item.color,
+//     options: item.options.find((s) => s.sku === "p")
+// }))
+// console.log(">>> product", product)
+const l = {}
+const a = {
+    roomId: "room2",
+    from: "customer",
+    message: "Cho mình hỏi giá sản phẩm"
+}
+const y = l[a.roomId] || {
+    roomId: a.roomId,
+    messages: []
+}
+console.log(y)
