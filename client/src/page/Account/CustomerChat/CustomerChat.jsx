@@ -23,7 +23,6 @@ export const CustomerChat = () => {
     console.log(msgs, "msgsmsgsmsgsmsgsmsgsmsgsmsgsmsgs")
     useEffect(() => {
         socket.emit("customer_open_chat", roomId);
-
         const handler = (msg) =>
             setMsgs((prev) => ({
                 ...prev,
@@ -61,7 +60,7 @@ export const CustomerChat = () => {
                         </div> : <div>
                         </div>}
                         <div
-                            className={`mt-2 px-2 py-2 rounded-xl max-w-xs break-words shadow 
+                            className={`mt-2 px-2 py-2 rounded-xl max-w-xs wrap-break-word shadow 
               ${m.from === "customer"
                                     ? "bg-primary text-white rounded-br-none"
                                     : "bg-secondary text-white border rounded-bl-none"}

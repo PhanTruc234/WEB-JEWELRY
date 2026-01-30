@@ -1,8 +1,5 @@
 import React from 'react'
 import about_banner from "../../../assets/DIV-5.png"
-import img1 from "../../../assets/IMG-81.png"
-import img2 from "../../../assets/IMG-87.png"
-import img3 from "../../../assets/IMG-88.png"
 import * as LucideIcons from "lucide-react";
 import { ShieldAlert } from 'lucide-react'
 export const About = () => {

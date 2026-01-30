@@ -22,5 +22,24 @@ class ConservationController extends BaseController {
             return this.handleErr(res, error)
         }
     }
+    hasUnread = async (req, res) => {
+        try {
+            const hasUnread = await conservationService.hasUnread();
+            return this.ok(res, { hasUnread });
+        } catch (e) {
+            return this.handleErr(res, e);
+        }
+    };
+
+    markRead = async (req, res) => {
+        try {
+            const { roomId } = req.params;
+            await conservationService.markRead(roomId);
+            return this.ok(res);
+        } catch (e) {
+            return this.handleErr(res, e);
+        }
+    };
+
 }
 export default new ConservationController()

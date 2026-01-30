@@ -1,53 +1,75 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { socket } from "../../../socket";
 import { useGetListChat } from "@/hooks/Chat/useGetListChat";
 import { SendHorizontal } from "lucide-react";
+import { ChatNotifyStore } from "@/store/ChatNotifyStore/ChatNotifyStore";
+import { useLocation } from "react-router";
 
 export const AdminChat = () => {
+    const location = useLocation();
+    const name = location.pathname.split("/").pop()
     const [roomId, setRoomId] = useState("");
     const [rooms, setRooms] = useState({});
     const [input, setInput] = useState("");
     const { chats, isLoading } = useGetListChat({ page: 1, limit: 10 });
     console.log(chats, "chatschatschatschatschats")
     useEffect(() => {
-        if (chats?.data?.data?.messages) {
-            const map = {};
-            chats.data.data.messages.forEach(c => {
-                map[c.roomId] = c;
-            });
-            setRooms(map);
-        }
-    }, [chats]);
-    console.log(rooms, "roomsroomsrooms")
+        console.log("join_admin", "vfbmbb")
+        socket.emit("join_admin");
+    }, []);
     useEffect(() => {
-        const handler = (msg) => {
-            console.log(msg, "msgmsgmsg")
+        if (name !== "chat") return;
+        const messageHandler = (msg) => {
+            console.log(msg, "msgmsgmsgmsg")
             setRooms(prev => {
-                const room = prev[msg.roomId] || {
+                const prevRoom = prev[msg.roomId] || {
                     roomId: msg.roomId,
-                    messages: []
+                    messages: [],
+                    hasUnread: false
                 };
-                console.log(room, ">>> roomroomroomroom")
+                console.log(prevRoom, "prevRoomprevRoom")
                 return {
                     ...prev,
                     [msg.roomId]: {
-                        ...room,
-                        messages: [...room.messages, msg]
+                        ...prevRoom,
+                        messages: [...prevRoom.messages, msg],
+                        hasUnread: msg.roomId !== roomId
                     }
                 };
             });
         };
-        socket.on("message", handler);
-        return () => socket.off("message", handler);
+        socket.on("message", messageHandler);
+        return () => socket.off("message", messageHandler);
     }, []);
+    useEffect(() => {
+        if (chats?.data?.data?.messages) {
+            const map = {};
+            chats.data.data.messages.forEach(c => {
+                map[c.user._id] = {
+                    ...c,
+                    roomId: c.user._id
+                };
+            });
+            setRooms(map);
+        }
+        console.log(rooms, "roomsroomsmap")
+    }, [chats]);
+    console.log(rooms, "roomsroomsrooms")
     const joinRoom = (id) => {
         setRoomId(id);
+        ChatNotifyStore.getState().clearUnread();
         socket.emit("admin_join_room", id);
+        setRooms(prev => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                hasUnread: false
+            }
+        }));
     };
     const send = () => {
         if (!input.trim() || !roomId) return;
         socket.emit("admin_message", {
-            userId: roomId,
             roomId,
             message: input
         });
@@ -55,6 +77,7 @@ export const AdminChat = () => {
     };
     const currentRoom = rooms[roomId];
     console.log(currentRoom, "currentRoomcurrentRoom")
+    console.log(rooms, "roomsroomsroomsroomsroomsrooms")
     return (
         <div className="relative min-h-screen flex gap-4">
             {isLoading && (
@@ -67,22 +90,26 @@ export const AdminChat = () => {
                 <ul>
                     {Object.values(rooms).map((c) => (
                         <li
-                            key={c.roomId}
+                            key={c.user._id}
                             onClick={() => joinRoom(c.roomId)}
-                            className={`cursor-pointer p-2 border-b hover:bg-gray-100
+                            className={`relative cursor-pointer p-2 border-b hover:bg-gray-100
                               ${roomId === c.roomId ? "bg-gray-200 font-bold" : ""}`}
                         >
                             <div className="flex items-center gap-2">
                                 <img
-                                    src={c.userId?.avatar}
+                                    src={c.user?.avatar}
                                     alt=""
                                     className="w-8 h-8 rounded-full"
                                 />
-                                <span>{c.userId?.fullName}</span>
+                                <span>{c.user?.fullName}</span>
                             </div>
                             <small className="text-gray-400">
                                 {c.messages?.[c.messages.length - 1]?.message?.slice(0, 30)}...
                             </small>
+                            {c.hasUnread && (
+                                <span className="absolute right-2 top-4 w-2.5 h-2.5 bg-red-500 rounded-full" />
+                            )}
+
                         </li>
                     ))}
                 </ul>
@@ -94,7 +121,7 @@ export const AdminChat = () => {
                         : "Chọn một cuộc trò chuyện"}
                 </h3>
 
-                <div className="flex-1 border p-2 max-h-[500px] overflow-y-auto">
+                <div className="flex-1 border p-2 max-h-125 overflow-y-auto">
                     {currentRoom?.messages?.map((m, i) => (
                         <div
                             key={i}
@@ -106,7 +133,7 @@ export const AdminChat = () => {
                             {m.from === "customer" && (
                                 <div className="w-6 h-6 rounded-full overflow-hidden">
                                     <img
-                                        src={currentRoom?.userId?.avatar}
+                                        src={currentRoom?.user?.avatar}
                                         alt=""
                                         className="w-full h-full object-cover"
                                     />

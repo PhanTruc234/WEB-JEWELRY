@@ -64,51 +64,73 @@ const io = new Server(server, {
   }
 })
 let customer = {}
-io.on("connect", (socket) => {
+io.on("connection", (socket) => {
   socket.on("customer_open_chat", (userId) => {
+    console.log(userId, "bkfkbgbk")
     const roomId = userId;
-    customer[roomId] = { roomId }
-    console.log(customer, ">>> customer")
-    socket.join(roomId)
-    io.emit("customers_list", Object.values(customer))
-  })
+    socket.join(roomId);
+  });
+  socket.on("join_admin", () => {
+    socket.join("admins");
+    console.log("ADMIN JOIN:", socket.id);
+  });
+  socket.on("admin_join_room", async (roomId) => {
+    console.log(roomId, ",nmnnhmn")
+    socket.join(roomId);
+    await conversationModel.updateOne(
+      { roomId },
+      {
+        $set: { "messages.$[m].isReadByAdmin": true }
+      },
+      {
+        arrayFilters: [{ "m.from": "customer", "m.isReadByAdmin": false }]
+      }
+    );
+  });
   socket.on("customer_message", async ({ userId, roomId, message }) => {
-    console.log("From FE:", roomId, message);
     await conversationModel.findOneAndUpdate(
       { roomId },
       {
         $set: { userId },
-        $push: { messages: { from: "customer", message } }
+        $push: {
+          messages: { from: "customer", message, isReadByAdmin: false }
+        }
       },
       { upsert: true }
     );
+
     io.to(roomId).emit("message", {
       roomId,
       from: "customer",
       message
-    })
-  })
-  socket.on("admin_join_room", (roomId) => {
-    console.log(roomId, "roomIdroomIdroomId")
-    socket.join(roomId)
-  })
-  socket.on("admin_message", async ({ userId, roomId, message }) => {
+    });
+    io.to("admins").emit("admin_message_notify", {
+      roomId,
+      type: "new_message"
+    });
+  });
+  socket.on("admin_message", async ({ roomId, message }) => {
+    console.log(roomId, message, "fmkmfkmfb")
     await conversationModel.findOneAndUpdate(
       { roomId },
       {
-        $set: { userId },
-        $push: { messages: { from: "admin", message } }
-      },
-      { upsert: true }
+        $push: {
+          messages: { from: "admin", message, isReadByAdmin: true }
+        }
+      }
     );
     io.to(roomId).emit("message", {
       roomId,
       from: "admin",
-      message,
+      message
     });
   });
   socket.on("disconnect", () => {
-    delete customer[socket.id]
+    Object.keys(customer).forEach(roomId => {
+      if (customer[roomId].socketId === socket.id) {
+        delete customer[roomId];
+      }
+    });
     io.emit("customers_list", Object.values(customer));
   })
 })

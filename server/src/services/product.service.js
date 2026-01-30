@@ -127,7 +127,6 @@ class ProductService {
                 .limit(limit),
             productModel.countDocuments(query),
         ]);
-        console.log(products, "oooooooooo")
         return {
             currentPage: page,
             totalItems,

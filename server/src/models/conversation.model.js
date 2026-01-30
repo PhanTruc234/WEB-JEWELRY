@@ -8,7 +8,8 @@ const conversationSchema = new mongoose.Schema(
             {
                 from: { type: String, enum: ["customer", "admin"], required: true },
                 message: { type: String, required: true },
-                createdAt: { type: Date, default: Date.now }
+                createdAt: { type: Date, default: Date.now },
+                isReadByAdmin: { type: Boolean, default: false }
             }
         ]
     },

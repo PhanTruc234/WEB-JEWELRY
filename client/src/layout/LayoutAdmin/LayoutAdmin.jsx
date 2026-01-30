@@ -22,8 +22,13 @@ import {
     User,
     Users
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router";
+import { ChatNotifyStore } from "@/store/ChatNotifyStore/ChatNotifyStore";
+import { socket } from "@/socket";
+import { API_CHAT_HASUNREAD } from "@/api/api";
+import axios from "axios";
+import axiosClient from "@/service/axiosClient";
 
 export const LayoutAdmin = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -32,12 +37,29 @@ export const LayoutAdmin = () => {
     const [isDropDown3, setIsDropDown3] = useState(false)
     const [isDropDown4, setIsDropDown4] = useState(false)
     const [isActive, setIsActive] = useState(false)
+    const hasUnread = ChatNotifyStore(state => state.hasUnread);
+    console.log(hasUnread, "hasUnreadhasUnreadhasUnread")
     const user = localStorage.getItem("user")
     const dataUser = user ? JSON.parse(user) : null;
     const { logout } = UserAuthStore();
     const handleLogout = async () => {
         await logout()
     }
+    const onNotify = async () => {
+        const res = await axiosClient.get(API_CHAT_HASUNREAD);
+        console.log(res, "jfnbjfnbjfnb")
+        if (res.data?.data?.hasUnread) {
+            ChatNotifyStore.getState().markUnread();
+        } else {
+            ChatNotifyStore.getState().clearUnread();
+        }
+    };
+    useEffect(() => {
+        socket.emit("join_admin");
+        onNotify();
+        socket.on("admin_message_notify", onNotify);
+        return () => socket.off("admin_message_notify", onNotify);
+    }, []);
     return (
         <div className="flex bg-gray-100 min-h-screen">
             <nav
@@ -126,10 +148,13 @@ export const LayoutAdmin = () => {
                     </div>
 
                     <div>
-                        <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown3(!isDropDown3)}>
+                        <div className="relative flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown3(!isDropDown3)}>
                             <div className="flex gap-2 items-center">
                                 <User className="size-5" />
                                 {isOpen && <p>User Management</p>}
+                                {hasUnread && (
+                                    <span className="absolute right-23 top-0 w-2.5 h-2.5 bg-red-500 rounded-full z-999" />
+                                )}
                             </div>
                             {isOpen && <ChevronDown className="size-5" />}
                         </div>
@@ -144,9 +169,12 @@ export const LayoutAdmin = () => {
                                     <MessageSquareText className="size-5" />
                                     Review / Feedback
                                 </Link>
-                                <Link to={"/admin/chat"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                <Link to={"/admin/chat"} className="relative flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <MessageSquareMore className="size-5" />
                                     Chat
+                                    {hasUnread && (
+                                        <span className="absolute left-17 top-1 w-2.5 h-2.5 bg-red-500 rounded-full" />
+                                    )}
                                 </Link>
                             </div>
                         )}

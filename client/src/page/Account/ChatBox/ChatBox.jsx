@@ -173,7 +173,7 @@ export const ChatBox = () => {
                                 }
                             }}
                             className="flex-1 resize-none border rounded-2xl px-4 py-2 text-sm
-             focus:outline-none focus:ring-2 focus:ring-indigo-500
+             focus:outline-none focus:ring-2 focus:ring-primary
              max-h-32 overflow-y-auto"
                         />
                         <button

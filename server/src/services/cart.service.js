@@ -29,7 +29,6 @@ class CartService {
                 limit
             };
         }
-        console.log(cart, "cartcartcart")
         const totalItems = cart.items.length
         const paginatedItems = cart.items.slice(skip, skip + limit);
         const toatlPrice = cart.items.reduce((acc, ele) => acc += ele.unitPrice * ele.quantity, 0)

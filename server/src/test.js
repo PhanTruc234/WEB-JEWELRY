@@ -111,8 +111,9 @@ const a = {
     from: "customer",
     message: "Cho mình hỏi giá sản phẩm"
 }
-const y = l[a.roomId] || {
-    roomId: a.roomId,
-    messages: []
-}
+// const y = l[a.roomId] || {
+//     roomId: a.roomId,
+//     messages: []
+// }
+const y = a["roomId"]
 console.log(y)
