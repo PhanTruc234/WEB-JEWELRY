@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { Bot, MessageCircleMore } from 'lucide-react'
+import { commonStore } from '@/store/commonStore/commonStore'
 import { Banner } from '../Banner/Banner'
 import { Service } from '../ServiceShip/service'
 import { SaleItem } from '../SaleItem/SaleItem'
@@ -6,10 +8,7 @@ import { BestSeller } from '../BestSeller/BestSeller'
 import { OurStory } from '../OurStory/OurStory'
 import { Featured } from '../Featured/Featured'
 import { Stay } from '../Stay/Stay'
-import { ChatBox } from '../Account/ChatBox/ChatBox'
-import { Bot, MessageCircleMore } from 'lucide-react'
-import { commonStore } from '@/store/commonStore/commonStore'
-import { CustomerChat } from '../Account/CustomerChat/CustomerChat'
+import { CustomerChat } from '../CustomerChat/CustomerChat'
 
 export const Home = () => {
     const { setShowBot, showBot, showChat, setShowChat } = commonStore()

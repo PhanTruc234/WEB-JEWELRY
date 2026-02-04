@@ -1,7 +1,8 @@
 import React from 'react'
-import { Header } from '../../page/Header/Header'
+
 import { Outlet } from 'react-router'
-import { Footter } from '@/page/Footter/Footter'
+import { Footter } from '@/page/Account/Footter/Footter'
+import { Header } from '@/page/Account/Header/Header'
 
 export const LayoutAccount = () => {
     return (
