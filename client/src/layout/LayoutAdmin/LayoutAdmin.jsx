@@ -5,6 +5,7 @@ import {
     ChartColumnBig,
     ChartColumnStacked,
     ChevronDown,
+    ClipboardList,
     Codesandbox,
     Gem,
     House,
@@ -87,14 +88,14 @@ export const LayoutAdmin = () => {
                     </div>
                     <Link to={"/admin/dashboard"} className="flex items-center gap-2 cursor-pointer  hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out">
                         <House className="size-5" />
-                        {isOpen && <span>Dashboard</span>}
+                        {isOpen && <span>Doanh thu</span>}
                     </Link>
 
                     <div>
                         <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown(!isDropDown)} >
                             <div className="flex items-center gap-2">
                                 <PackageSearch className="size-5" />
-                                {isOpen && <p>Product Management</p>}
+                                {isOpen && <p>Quản lý sản phẩm</p>}
                             </div>
                             {isOpen && <ChevronDown className="size-5 cursor-pointer" />}
                         </div>
@@ -103,22 +104,22 @@ export const LayoutAdmin = () => {
                                 }`}>
                                 <Link to={"/admin/product-manage/category"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <ChartBarStacked className="size-5" />
-                                    Category
+                                    Danh mục
                                 </Link>
                                 <Link
                                     to={"/admin/product-manage/subcategory"}
                                     className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out"
                                 >
                                     <ChartColumnStacked className="size-5" />
-                                    Subcategory
+                                    Danh mục con
                                 </Link>
                                 <Link to={"/admin/product-manage/brand"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Codesandbox className="size-5" />
-                                    Brand
+                                    Thương hiệu
                                 </Link>
                                 <Link to={"/admin/product-manage/products"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Gem className="size-5" />
-                                    Product list
+                                    Danh sách sản phẩm
                                 </Link>
                             </div>
                         )}
@@ -128,7 +129,7 @@ export const LayoutAdmin = () => {
                         <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown2(!isDropDown2)} >
                             <div className="flex gap-2 items-center">
                                 <ListOrdered className="size-5" />
-                                {isOpen && <p>Order Management</p>}
+                                {isOpen && <p>Quản lý đơn hàng</p>}
                             </div>
                             {isOpen && <ChevronDown className="size-5" />}
                         </div>
@@ -137,7 +138,7 @@ export const LayoutAdmin = () => {
                                 }`}>
                                 <Link to={"/admin/order-manage/orders"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <ShoppingBag className="size-5" />
-                                    Orders
+                                    Đơn hàng
                                 </Link>
                                 {/* <Link to={"/admin/order-manage/cart"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <ShoppingCart className="size-5" />
@@ -151,7 +152,7 @@ export const LayoutAdmin = () => {
                         <div className="relative flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown3(!isDropDown3)}>
                             <div className="flex gap-2 items-center">
                                 <User className="size-5" />
-                                {isOpen && <p>User Management</p>}
+                                {isOpen && <p>Quản lý người dùng</p>}
                                 {hasUnread && (
                                     <span className="absolute right-23 top-0 w-2.5 h-2.5 bg-red-500 rounded-full z-999" />
                                 )}
@@ -163,18 +164,22 @@ export const LayoutAdmin = () => {
                                 }`}>
                                 <Link to={"/admin/user-manage/users"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Users className="size-5" />
-                                    Users
+                                    Người dùng
                                 </Link>
                                 <Link to={"/admin/user-manage/reviews"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <MessageSquareText className="size-5" />
-                                    Review / Feedback
+                                    Đánh giá
                                 </Link>
                                 <Link to={"/admin/chat"} className="relative flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <MessageSquareMore className="size-5" />
-                                    Chat
+                                    Nhắn tin
                                     {hasUnread && (
                                         <span className="absolute left-17 top-1 w-2.5 h-2.5 bg-red-500 rounded-full" />
                                     )}
+                                </Link>
+                                <Link to={"/admin/user-manage/require"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <ClipboardList className="size-5" />
+                                    Yêu cầu
                                 </Link>
                             </div>
                         )}
@@ -183,7 +188,7 @@ export const LayoutAdmin = () => {
                         <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown4(!isDropDown4)}>
                             <div className="flex gap-2 items-center">
                                 <ChartColumnBig className="size-5" />
-                                {isOpen && <p>Material And Gem</p>}
+                                {isOpen && <p>Vật liệu và Đá quý</p>}
                             </div>
                             {isOpen && <ChevronDown className="size-5" />}
                         </div>
@@ -192,23 +197,23 @@ export const LayoutAdmin = () => {
                                 }`}>
                                 <Link to={"/admin/material-manage/material"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Anvil className="size-5" />
-                                    Material
+                                    Quản lý vật liệu
                                 </Link>
                                 <Link to={"/admin/material-manage/gem"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Gem className="size-5" />
-                                    Gem stone
+                                    Quản lý đá quý
                                 </Link>
                             </div>
                         )}
                     </div>
                     <Link to={'/admin/coupons'} className="flex items-center gap-2 hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out cursor-pointer">
                         <TicketPercent className="size-5" />
-                        {isOpen && <span>Coupon Management</span>}
+                        {isOpen && <span>Quản lý mã giảm giá</span>}
                     </Link>
 
                     <Link to={"/admin/settings"} className="flex items-center gap-2 hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out cursor-pointer">
                         <Settings className="size-5" />
-                        {isOpen && <span>Settings</span>}
+                        {isOpen && <span>Cài đặt</span>}
                     </Link>
                 </div>
 

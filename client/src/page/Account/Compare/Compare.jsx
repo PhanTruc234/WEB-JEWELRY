@@ -33,8 +33,8 @@ export const Compare = () => {
                 <img src={img} alt="" className=' w-full h-full object-cover rounded-xl animate-cart-fx' />
             </div>}
             <div>
-                <p className='font-medium text-[14px] text-secondary mt-4'>Home {`>`} Compare</p>
-                <h2 className='font-bold text-[28px] text-primary mt-8'>Compare Jewelry</h2>
+                <p className='font-medium text-[14px] text-secondary mt-4'>Trang chủ {`>`} So sánh</p>
+                <h2 className='font-bold text-[28px] text-primary mt-8'>So sánh trang sức</h2>
             </div>
             <div className='my-16'>
                 {compares?.data?.data?.data?.items?.length <= 0 ?
@@ -80,7 +80,7 @@ export const Compare = () => {
                                     </div>
                                     <div className='mb-6 mx-6'>
                                         <button onClick={() => handleAddToCart(item.productId._id, item.sku, 1, mainImg)} className="w-full py-3.5 rounded-xl bg-primary text-white font-semibold hover:opacity-90 transition cursor-pointer">
-                                            Add to cart
+                                            Thêm giỏ hàng
                                         </button>
                                     </div>
                                 </div>

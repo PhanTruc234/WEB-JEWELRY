@@ -1,8 +1,8 @@
 import React from 'react'
-import service_1 from "../../assets/services-1_65x.png"
-import service_2 from "../../assets/services-2_65x.png";
-import service_3 from "../../assets/services-3_65x.png";
-import service_4 from "../../assets/services-4_65x.png";
+import service_1 from "../../../assets/services-1_65x.png"
+import service_2 from "../../../assets/services-2_65x.png";
+import service_3 from "../../../assets/services-3_65x.png";
+import service_4 from "../../../assets/services-4_65x.png";
 export const Service = () => {
     return (
         <div className="px-7.5 py-7.5">

@@ -1,0 +1,22 @@
+import { orderService } from "@/service/order/orderService";
+import { create } from "zustand";
+
+export const orderStore = create(() => ({
+    previews: {},
+    setPreview: (data) => {
+        orderStore.setState({ previews: data });
+    },
+    previewOrder: async (payload) => {
+        console.log(payload, "payloadpayload")
+        const res = await orderService.previewOrder(payload)
+        return res;
+    },
+    createOrder: async (payload) => {
+        const res = await orderService.createOrder(payload)
+        return res;
+    },
+    updateOrderStatus: async (id, status) => {
+        const res = await orderService.updateOrderStatus(id, status)
+        return res;
+    }
+}))

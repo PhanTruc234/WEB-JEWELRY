@@ -12,6 +12,10 @@ import { AdminChat } from '@/page/Admin/AdminChat/AdminChat'
 import { Material } from '@/page/Admin/Items/Material'
 import { GemStone } from '@/page/Admin/Items/GemStone'
 import { Coupon } from '@/page/Admin/Coupon/Coupon'
+import { Requirement } from '@/page/Admin/Requierement/Requirement'
+import { OrderListPage } from '@/page/Admin/Order/OrderListPage'
+import { UserPage } from '@/page/Admin/User/UserPage'
+import { Review } from '@/page/Admin/Review/Review'
 export const RouterAdmin = () => {
     return (
         <Routes>
@@ -24,10 +28,11 @@ export const RouterAdmin = () => {
                     <Route path="product-manage/products" element={<Product />} />
                     <Route path="product-manage/products/add" element={<AddProduct />} />
                     <Route path="product-manage/products/edit/:id" element={<EditProduct />} />
-                    <Route path="order-manage/orders" element={<div>order</div>} />
+                    <Route path="order-manage/orders" element={<OrderListPage />} />
                     {/* <Route path="order-manage/cart" element={<div>cart</div>} /> */}
-                    <Route path="user-manage/users" element={<div>users</div>} />
-                    <Route path="user-manage/reviews" element={<div>reviews</div>} />
+                    <Route path="user-manage/users" element={<UserPage />} />
+                    <Route path="user-manage/require" element={<Requirement />} />
+                    <Route path="user-manage/reviews" element={<Review />} />
                     <Route path='material-manage/material' element={<Material />} />
                     <Route path='material-manage/gem' element={<GemStone />} />
                     <Route path="coupons" element={<Coupon />} />

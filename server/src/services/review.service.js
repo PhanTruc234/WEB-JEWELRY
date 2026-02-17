@@ -1,13 +1,41 @@
 import { BadRequest, Forbidden, NotFound } from "../core/error.response.js";
+import orderModel from "../models/order.model.js";
 import productModel from "../models/product.model.js";
 import reviewModel from "../models/review.model.js";
+import userModel from "../models/user.model.js";
 class ReviewService {
-    async getAllReview(productId, page, limit) {
+    async getAllReview(page, limit) {
+        const skip = (page - 1) * limit;
+        const [allReview, totalItem] = await Promise.all([
+            reviewModel
+                .find()
+                .populate("userId")
+                .populate("productId")
+                .populate("orderItemId")
+                .sort({ createdAt: -1 })
+                .limit(limit)
+                .skip(skip)
+                .sort({ createdAt: -1 }),
+
+            reviewModel.countDocuments()
+        ]);
+        const totalPage = Math.ceil(totalItem / limit);
+        const totalAvarageReview = allReview.reduce((acc, re) => acc + re.rating, 0) / totalItem
+        return {
+            currentPage: page,
+            totalItem,
+            totalPage,
+            limit,
+            review: allReview,
+            totalAvarageReview: Number(totalAvarageReview.toFixed(1))
+        };
+    }
+    async getReviewByProductId(productId, page, limit) {
         const skip = (page - 1) * limit;
         const [allReview, totalItem] = await Promise.all([
             reviewModel
                 .find({ productId })
-                .populate("userId", "fullName avatar")
+                .populate("userId")
                 .sort({ createdAt: -1 })
                 .limit(limit)
                 .skip(skip)
@@ -16,21 +44,24 @@ class ReviewService {
             reviewModel.countDocuments({ productId })
         ]);
         const totalPage = Math.ceil(totalItem / limit);
+        const averageRaring = allReview.reduce((acc, o) => acc + o.rating, 0) / totalItem
         return {
             currentPage: page,
             totalItem,
             totalPage,
             limit,
-            review: allReview
+            review: allReview,
+            averageRaring: Number(averageRaring.toFixed(1))
         };
     }
-    async createReview(productId, userId, rating, comment) {
-        if (!productId || !userId || !rating) {
+    async createReview(userId, productId, orderItemId, rating, comment) {
+        if (!productId || !orderItemId || !userId || !rating) {
             throw new BadRequest("Thiếu");
         }
-        const [product, user] = await Promise.all([
+        const [product, user, order] = await Promise.all([
             productModel.findById(productId),
-            userModel.findById(userId)
+            userModel.findById(userId),
+            orderModel.findById(orderItemId)
         ]);
         if (!product) {
             throw new NotFound("Không tìm thấy sản phẩm");
@@ -38,9 +69,16 @@ class ReviewService {
         if (!user) {
             throw new NotFound("Không tìm thấy người dùng");
         }
+        if (!order) {
+            throw new NotFound("Không tìm thấy đơn hàng");
+        }
+        if (order.status !== "COMPLETED") {
+            throw new Forbidden("Chỉ được đánh giá sau khi nhận hàng");
+        }
         const newComment = await reviewModel.create({
             productId,
             userId,
+            orderItemId,
             rating,
             comment
         });

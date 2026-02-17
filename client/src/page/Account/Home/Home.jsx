@@ -9,6 +9,7 @@ import { OurStory } from '../OurStory/OurStory'
 import { Featured } from '../Featured/Featured'
 import { Stay } from '../Stay/Stay'
 import { CustomerChat } from '../CustomerChat/CustomerChat'
+import { ChatBox } from '../ChatBox/ChatBox'
 
 export const Home = () => {
     const { setShowBot, showBot, showChat, setShowChat } = commonStore()

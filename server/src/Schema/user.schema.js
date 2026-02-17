@@ -6,7 +6,7 @@ export const updateUserSchema = z.object({
     address: z.string().optional()
 })
 export const updateRoleSchema = z.object({
-    role: z.enum(['1', '2'])
+    role: z.enum(['admin', 'user'])
 })
 export const updatePasswordSchema = z.object({
     oldPassword: z.string().min(8, "Mật khẩu cũ ít nhất 8 ký tự").max(100),

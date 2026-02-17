@@ -8,10 +8,10 @@ const CartItemSchema = new Schema(
             required: true,
         },
         color: { type: String },
-        sku: { type: String, required: true },
+        sku: { type: String, required: false },
         type: {
             type: String,
-            enum: ["CARAT", "GRAM", "MM", "NONE"],
+            enum: ["CARAT", "GRAM", "MM", "GRAM+CARAT", "GRAM+MM", "CARAT+GRAM", "CARAT+MM", "NONE"],
             default: "NONE",
         },
         value: { type: Number },

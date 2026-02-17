@@ -11,7 +11,7 @@ const authUser = async (req, res, next) => {
         }
         // console.log(">>> accessToken", accessToken)
         const decode = await verifyToken(accessToken);
-        // console.log(">>> decode", decode)
+        console.log(">>> decode", decode)
         req.user = decode;
         next();
     } catch (error) {

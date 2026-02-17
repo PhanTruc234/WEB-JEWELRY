@@ -11,8 +11,8 @@ export const Collections = () => {
                 {`Home > Categories`}
             </div>
             <div className='text-center mb-16'>
-                <h3 className='font-h3 text-primary'>Explore Our Collections</h3>
-                <p>Discover our carefully curated jewelry collections, each piece crafted with precision <br></br>and passion to celebrate life's most precious moments.</p>
+                <h3 className='font-h3 text-primary'>Khám phá các bộ sưu tập của chúng tôi</h3>
+                <p>Khám phá bộ sưu tập trang sức được tuyển chọn kỹ lưỡng của chúng tôi, mỗi món đều được chế tác tỉ mỉ <br></br>và niềm đam mê để trân trọng những khoảnh khắc quý giá nhất của cuộc sống.</p>
             </div>
             <div className='grid grid-cols-3 gap-6'>
                 {subcategory?.data?.data?.subcategory.map((item) => {

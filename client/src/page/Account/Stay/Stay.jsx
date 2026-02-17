@@ -5,13 +5,13 @@ export const Stay = () => {
         <div className='px-7.5 mb-16'>
             <div className='bg-linear-to-r from-primary/20 to-secondary/20 text-center rounded-xl p-12'>
                 <div className='space-y-4'>
-                    <h3 className='font-h3'>Stay in Touch</h3>
-                    <p className='font-p'>Be the first to know about new collections, exclusive offers, and jewelry care tips</p>
+                    <h3 className='font-h3'>Giữ liên lạc</h3>
+                    <p className='font-p'>Hãy là người đầu tiên biết về các bộ sưu tập mới, ưu đãi độc quyền và mẹo chăm sóc trang sức.</p>
                     <div className='space-x-4'>
-                        <input type="text" name="" id="" placeholder='Enter your email address' className='bg-white py-4.25 px-6.25 rounded-full' />
-                        <button className='btn'>Subscribe</button>
+                        <input type="text" name="" id="" placeholder='Nhập địa chỉ email' className='bg-white py-4.25 px-6.25 rounded-full' />
+                        <button className='btn'>Đặt mua</button>
                     </div>
-                    <p className='font-p'>We respect your privacy. Unsubscribe at any time.</p>
+                    <p className='font-p'>Chúng tôi tôn trọng quyền riêng tư của bạn. Bạn có thể hủy đăng ký bất cứ lúc nào.</p>
                 </div>
             </div>
         </div>

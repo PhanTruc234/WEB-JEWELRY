@@ -6,7 +6,7 @@ export const UserAuthStore = create((set, get) => ({
     user: (() => {
         const userStr = localStorage.getItem("user")
         return userStr ? JSON.parse(userStr) : null;
-    }),
+    })(),
     loading: false,
     setAccessToken: (accessToken) => {
         set({ accessToken });
@@ -45,5 +45,13 @@ export const UserAuthStore = create((set, get) => ({
         } catch (error) {
             console.log(error)
         }
+    },
+    updateRole: async (id, role) => {
+        const res = await userService.updateRole(id, role);
+        return res;
+    },
+    deleteUser: async (id) => {
+        const res = await userService.deleteUser(id)
+        return res;
     }
 }))

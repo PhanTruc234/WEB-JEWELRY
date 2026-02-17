@@ -2,20 +2,25 @@ import { useGetListProduct } from '@/hooks/Product/useGetListProduct'
 import { formatBigNumber } from '@/lib/format-big-number'
 import { ProductStore } from '@/store/productStore/ProductStore'
 import dayjs from 'dayjs'
-import { CirclePlus, RefreshCw, SquarePen, Star, Trash } from 'lucide-react'
+import { CirclePlus, FileUp, RefreshCw, SquarePen, Star, Trash } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { BoxProduct } from '../BoxProduct/BoxProduct'
-
+import PreviewModal from './PreviewModal'
+import { PaginationCustom } from '@/lib/PaginationCustom'
 export const Product = () => {
     const navigate = useNavigate()
-    const { products, error, isLoading, isValidating, refreshProduct } = useGetListProduct({
-        page: 1,
-        limit: 10
-    })
-    const { deleteProduct } = ProductStore()
+    const { deleteProduct, upFileProduct, previewUpFile } = ProductStore()
     const [modelDelete, setModelDelete] = useState(false)
     const [deletePro, setDeletePro] = useState({})
+    const [showModel, setShowModel] = useState(false)
+    const [dataUpTem, setDataUpTem] = useState([])
+    const [uploadFile, setUploadFile] = useState(null)
+    const [valuePage, setValuePage] = useState(1)
+    const { products, error, isLoading, isValidating, refreshProduct } = useGetListProduct({
+        page: valuePage,
+        limit: 2
+    })
     const handleRefresh = async () => {
         await refreshProduct()
     }
@@ -31,9 +36,46 @@ export const Product = () => {
         setModelDelete(false)
         await refreshProduct()
     }
+    const handleUpload = async (e) => {
+        console.log(e, "oooooooooooo")
+        const file = e.target.files[0]
+        console.log(file, "fileeeeee")
+        if (!file) {
+            return
+        }
+        setUploadFile(file)
+        const formData = new FormData()
+        formData.append("file-excel", file)
+        console.log([...formData.entries()], "fvfvffbfbg")
+        const dataUpPreview = await previewUpFile(formData)
+        if (dataUpPreview.status === 200) {
+            console.log(dataUpPreview, "dataUpPreviewdataUpPreviewdataUpPreview")
+            setShowModel(true)
+            setDataUpTem(dataUpPreview?.data?.data?.detailFinalProduct)
+            setForm(true)
+        }
+    }
+    const handleConfirmUpload = async () => {
+        if (!uploadFile) return
+
+        const formData = new FormData()
+        formData.append("file-excel", uploadFile)
+        const dataUp = await upFileProduct(formData)
+        if (dataUp.status === 200) {
+            setShowModel(false)
+            setUploadFile(null)
+            await refreshProduct()
+        }
+    }
+    const handleChangePage = (e, value) => {
+        console.log(value, "fvfjvnfjvnfj")
+        setValuePage(value)
+    }
+    console.log(dataUpTem, "dataUpPreviewdataUpPreviewdataUpPreviewdataUpPreview")
     console.log("products", products)
     return (
         <div className="relative min-h-screen bg-gray-100 px-8 py-6 shadow-md">
+            <PreviewModal open={showModel} onClose={() => setShowModel(false)} data={dataUpTem} onConfirm={handleConfirmUpload} />
             {(isLoading || isValidating) && (
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-20">
                     <div className="loader"></div>
@@ -55,6 +97,20 @@ export const Product = () => {
                         <RefreshCw size={18} />
                         Refresh
                     </button>
+                    <label
+                        htmlFor="fileUpload"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:opacity-80"
+                    >
+                        <FileUp size={18} />
+                        Upload File
+                    </label>
+
+                    <input
+                        id="fileUpload"
+                        type="file"
+                        hidden
+                        onChange={handleUpload}
+                    />
                 </div>
             </div>
             <div className="max-w-5xl space-y-3">
@@ -103,11 +159,16 @@ export const Product = () => {
                                         {item.brandId?.name} · {item.categoryId?.name} ·{" "}
                                         {item.subCategoryId?.name}
                                     </p>
-                                    <div className='flex items-center gap-2'>
-                                        <span>
-                                            {item.rating} ({item.reviewCount})
-                                        </span>
-                                        <Star size={16} className='text-yellow-500' />
+                                    <div>
+                                        <div className='flex items-center gap-2'>
+                                            <span className='text-[20px]'>
+                                                {item.rating}/5
+                                            </span>
+                                            <Star size={16} fill="#FFD700" className='text-yellow-500' />
+                                        </div>
+                                        <div>
+                                            Số lượt đánh giá: {item.reviewCount}
+                                        </div>
                                     </div>
                                     <div className="text-xs text-gray-400 mt-1">
                                         Tạo: {dayjs(item.createdAt).format("DD/MM/YYYY HH:mm")}
@@ -171,6 +232,7 @@ export const Product = () => {
                 })}
             </div>
             {modelDelete && <BoxProduct remove={deletePro} setModelDelete={setModelDelete} handleDelete={handleDeleteProduct} />}
+            <PaginationCustom total={products?.data?.data?.totalItems} valuePage={valuePage} handleChangePage={handleChangePage} limit={2} />
         </div>
     )
 }

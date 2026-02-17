@@ -1,5 +1,7 @@
 export const API_GET_USERS = '/api/users'
+export const API_GET_ALL_USERS = "/api/users"
 export const API_UPDATE_ROLE = "/api/users/update-role"
+export const API_DELETE_USER = "/api/users"
 
 export const API_SIGN_UP = "/api/sign-up";
 export const API_SIGN_IN = "/api/sign-in";
@@ -32,6 +34,8 @@ export const API_GET_ONTIME_PRODUCT = "/api/product/date-time"
 export const API_UPLOAD_IMG_PRODUCT = "/api/product/upload"
 export const API_DELETE_IMG_PRODUCT = "/api/product/delete-upload"
 export const API_REMOVE_IMG_PRODUCT = "/api/product"
+export const API_UPLOAD_FILE_PRODUCT = "/api/product/file-excel"
+export const API_UPLOAD_FILE_PRODUCT_PREVIEW = "/api/product/file-excel-preview"
 
 export const API_CHAT_BOX = "/api/chat-bot"
 export const API_GET_CHAT_BOX = "/api/chat-bot"
@@ -69,5 +73,34 @@ export const API_CREATE_COUPON = "/api/coupon"
 export const API_UPDATE_COUPON = "/api/coupon"
 export const API_DELETE_COUPON = "/api/coupon"
 
-export const API_PROVINCES = "https://production.cas.so/address-kit/2025-07-01/provinces"
-export const API_COMMUNES = "https://production.cas.so/address-kit/2025-07-01/provinces/{province_code}/communes"
+export const API_GET_WISH = "/api/wish"
+export const API_CREATE_WISH = "/api/wish"
+export const API_DELETE_WISH = "/api/wish"
+
+export const API_GET_CUSTOM = "/api/custom"
+export const API_ADD_CUSTOM = "/api/custom"
+export const API_CAL_CUSTOM = "/api/custom/calculate"
+export const API_EDIT_CUSTOM = "/api/custom"
+export const API_PREVIEW_CUSTOM = "/api/custom/preview"
+export const API_GET_CUSTOM_BY_ID = "/api/custom/user"
+export const API_UPDATE_CUSTOM = "/api/custom/update"
+
+export const API_PREVIEW_ORDER = "/api/order/preview"
+export const API_USE_COUPON = "/api/order/use-coupon"
+export const API_CREATE_ORDER = "/api/order"
+export const API_ORDER = "/api/order"
+export const API_GET_ORDER_BY_ID = "/api/order"
+export const API_GET_ORDERS_BY_USER_ID = "/api/order/list-order"
+export const API_UPDATE_ORDER_STATUS = "/api/order"
+export const API_UPDATE_PAYMENT_STATUS = "/api/order"
+export const API_CANCEL_ORDER = "/api/order"
+
+export const API_PROVINCES = "/api/provinces"
+export const API_COMMUNES = "/api/provinces"
+
+export const API_PAYMENT = "/api/payment"
+export const API_PAYMENT_CUSTOM = "/api/payment/custom"
+
+export const API_GET_REVIEW = "/api/review"
+export const API_CREATE_REVIEW = "/api/review"
+export const API_GET_ALL_VIEW = "/api/review/all"

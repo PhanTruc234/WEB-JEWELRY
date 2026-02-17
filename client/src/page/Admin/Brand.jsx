@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router'
 import { BrandStore } from '@/store/brandStore/BrandStore'
 import { useGetListBrand } from '@/hooks/Brand/useGetListBrand'
 import { BoxProduct } from './BoxProduct/BoxProduct'
+import { PaginationCustom } from '@/lib/PaginationCustom'
 const BrandShema = z.object({
     name: z.string().min(1, "Thiếu tên thương hiệu")
 })
@@ -21,8 +22,9 @@ export const BrandPage = () => {
         resolver: zodResolver(BrandShema)
     })
     const [model, setModel] = useState(false);
+    const [valuePage, setValuePage] = useState(1)
     const dataFilter = {
-        page: 1,
+        page: valuePage,
         limit: 10,
         // search: "",
     }
@@ -64,6 +66,9 @@ export const BrandPage = () => {
     const handleRefresh = async () => {
         await refreshBrand();
     }
+    const handleChangePage = (e, value) => {
+        setValuePage(value)
+    }
     useEffect(() => {
         const params = new URLSearchParams({
             page: dataFilter.page.toString(),
@@ -72,6 +77,7 @@ export const BrandPage = () => {
         });
         setSearchParams(params);
     }, [dataFilter.page, dataFilter.limit, dataFilter.search]);
+    console.log(brands, "fbnfbngmngm")
     return (
         <div className="relative min-h-screen bg-gray-50 px-4 md:px-6 py-6 shadow-md">
             {(isLoading || isValidating) && (
@@ -191,6 +197,7 @@ export const BrandPage = () => {
                     </div>
                 </form>
             </div>
+            <PaginationCustom total={brands?.data?.totalItem} valuePage={valuePage} handleChangePage={handleChangePage} limit={10} />
             {modelDelete && (
                 <BoxProduct
                     remove={removeBrand}

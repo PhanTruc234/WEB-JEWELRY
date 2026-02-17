@@ -1,4 +1,4 @@
-import { API_CREATE_PRODUCT, API_DELETE_IMG_PRODUCT, API_DELETE_PRODUCT, API_EDIT_PRODUCT, API_GET_ONTIME_PRODUCT, API_GET_PRODUCT, API_GET_PRODUCT_BY_ID, API_UPLOAD_IMG_PRODUCT } from "@/api/api"
+import { API_CREATE_PRODUCT, API_DELETE_IMG_PRODUCT, API_DELETE_PRODUCT, API_EDIT_PRODUCT, API_GET_ONTIME_PRODUCT, API_GET_PRODUCT, API_GET_PRODUCT_BY_ID, API_UPLOAD_FILE_PRODUCT, API_UPLOAD_FILE_PRODUCT_PREVIEW, API_UPLOAD_IMG_PRODUCT } from "@/api/api"
 import axiosClient from "../axiosClient"
 import { toast } from "sonner"
 
@@ -46,6 +46,26 @@ export const ProductService = {
         } catch (error) {
             toast.error("Thêm sản phẩm thất bại")
             console.log(error)
+        }
+    },
+    upFileProduct: async (payload) => {
+        try {
+            const res = await axiosClient.post(API_UPLOAD_FILE_PRODUCT, payload)
+            if (res.status === 200) {
+                return res;
+            }
+        } catch (error) {
+            throw error
+        }
+    },
+    previewUpFile: async (payload) => {
+        try {
+            const res = await axiosClient.post(API_UPLOAD_FILE_PRODUCT_PREVIEW, payload)
+            if (res.status === 200) {
+                return res;
+            }
+        } catch (error) {
+            throw error
         }
     },
     updateProduct: async (id, payload) => {

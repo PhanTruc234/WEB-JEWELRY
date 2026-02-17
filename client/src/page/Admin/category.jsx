@@ -8,14 +8,16 @@ import { BoxProduct } from './BoxProduct/BoxProduct';
 import { useSearchParams } from 'react-router';
 import { CategoryStore } from '@/store/categoryStore/CategoryStore';
 import { useGetListCategory } from '@/hooks/category/useGetListCategory';
+import { PaginationCustom } from '@/lib/PaginationCustom';
 const CategorySchema = z.object({
     name: z.string().min(1, "Thiếu tên danh mục"),
     description: z.string().min(1, "Thiếu mô tả danh mục")
 })
 export const CategoryPage = () => {
+    const [valuePage, setValuePage] = useState(1)
     const dataFilter = {
-        page: 1,
-        limit: 10,
+        page: valuePage,
+        limit: 5,
         search: "",
     }
     const { categories, isLoading, isValidating, refreshCategory } = useGetListCategory(dataFilter);
@@ -70,6 +72,9 @@ export const CategoryPage = () => {
     }
     const handleRefresh = async () => {
         await refreshCategory()
+    }
+    const handleChangePage = (e, value) => {
+        setValuePage(value)
     }
     useEffect(() => {
         const params = new URLSearchParams({
@@ -216,6 +221,7 @@ export const CategoryPage = () => {
                     </div>
                 </form>
             </div>
+            <PaginationCustom total={categories?.data?.totalItem} valuePage={valuePage} handleChangePage={handleChangePage} limit={10} />
             {modelDelete && (
                 <BoxProduct
                     remove={deleteCate}

@@ -1,4 +1,5 @@
 import { BadRequest, NotFound } from "../core/error.response.js";
+import { toSlug } from "../libs/toSlug.js";
 import cartModel from "../models/cart.model.js";
 import productModel from "../models/product.model.js";
 
@@ -46,11 +47,13 @@ class CartService {
             limit
         };
     }
-    async createCart(userId, productId, sku, quantity) {
-        const products = await productModel.findById(productId).populate("brandId")
-            .populate("categoryId")
-            .populate("subCategoryId");
-        if (!products) throw new Error("Không tìm thấy sản phẩm");
+    async createCart(userId, productId, color, quantity) {
+
+        if (!color) throw new Error("Thiếu màu sản phẩm");
+
+        const product = await productModel.findById(productId);
+        if (!product) throw new Error("Không tìm thấy sản phẩm");
+
         let cart = await cartModel.findOne({ userId });
         if (!cart) {
             cart = await cartModel.create({
@@ -58,46 +61,52 @@ class CartService {
                 items: [],
             });
         }
-        const existingItem = cart.items.find(i => i.sku === sku);
-        // const now = new Date();
-        // if (
-        //     products.promotion?.isActive &&
-        //     products.promotion.endAt &&
-        //     new Date(products.promotion.endAt) <= now
-        // ) {
-        //     products.promotion.isActive = false;
-        //     products.promotion.discount = 0;
-        //     products.variants.forEach(variant => {
-        //         variant.options.forEach(option => {
-        //             option.finalPrice = option.originalPrice;
-        //         });
-        //     });
-        // }
-        let a;
-        products.variants.forEach((item) => {
-            const option = item.options.find((o) => o.sku === sku)
-            if (option) {
-                a = { color: item.color, option };
-            }
-        })
-        if (!a) throw new Error("Invalid SKU");
+        const variant = product.variants.find(
+            v => v.color && v.color.toLowerCase() === color.toLowerCase()
+        );
+
+        if (!variant) throw new Error("Không tìm thấy màu");
+
+        const totalOriginal = variant.options.reduce(
+            (sum, op) => sum + (op.originalPrice || 0),
+            0
+        );
+
+        const totalFinal = variant.options.reduce(
+            (sum, op) => sum + (op.finalPrice || 0),
+            0
+        );
+
+        const mergedType = variant.options.map(op => op.type).join("+");
+        const mergedValue = variant.options.reduce((acc, op) => acc + op.value, 0);
+
+        const stockQuantity = Math.min(
+            ...variant.options.map(op => op.stockQuantity)
+        );
+
+        const existingItem = cart.items.find(
+            i =>
+                i.productId.toString() === productId.toString() &&
+                i.color &&
+                i.color.toLowerCase() === color.toLowerCase()
+        );
         if (existingItem) {
-            existingItem.quantity += quantity
+            existingItem.quantity += quantity;
         } else {
             cart.items.push({
-                productId: products._id,
-                color: a.color,
-                sku: sku,
-                type: a.option.type,
-                value: a.option.value,
-                purity: a.option.purity || null,
-                unitPrice: a.option.finalPrice,
-                quantity: quantity,
-                stockQuantity: a.option.stockQuantity
-            })
+                productId: product._id,
+                sku: `${toSlug(product.name).toUpperCase().slice(0, 3)}-${variant.color ? variant.color.toUpperCase().slice(0, 2) : "NO"}`,
+                color: variant.color,
+                type: mergedType,
+                value: mergedValue,
+                unitPrice: totalFinal,
+                originalPrice: totalOriginal,
+                quantity,
+                stockQuantity
+            });
         }
         await cart.save();
-        return cart
+        return cart;
     }
     async updateCart(userId, sku, quantity) {
         const cart = await cartModel.findOne({ userId });

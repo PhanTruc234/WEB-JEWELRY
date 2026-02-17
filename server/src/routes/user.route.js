@@ -22,4 +22,5 @@ route.put("/update-role/:id", checkRole("admin"), middleware(objectIdSchema, "pa
 route.get('/logout', userController.logout)
 route.post('/update-password', middleware(updatePasswordSchema, "body"), userController.updatePassword)
 route.post("/upload", upload.single('avatar'), userController.uploadAvatar)
+route.delete("/:id", checkRole("admin"), userController.deleteUser)
 export default route

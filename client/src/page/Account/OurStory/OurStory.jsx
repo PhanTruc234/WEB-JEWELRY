@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import person from "../../assets/IMG-221.png"
+import person from "../../../assets/IMG-221.png"
 import { commonStore } from '@/store/commonStore/commonStore'
 import { useInView } from '@/lib/useInView'
 
@@ -30,28 +30,28 @@ export const OurStory = () => {
                     <img src={person} alt="" className='w-full h-117 object-cover' />
                 </div>
                 <div>
-                    <h3 className='text-[36px] font-bold mb-6'>Our Story</h3>
+                    <h3 className='text-[36px] font-bold mb-6'>Câu chuyện của chúng tôi</h3>
                     <div className='space-y-4 mb-6'>
-                        <p className='font-light font-roboto'>For over three decades, Liora Jewelers has been synonymous with exceptional craftsmanship and timeless elegance. Founded in 1990 by master jeweler Elena Liora, our legacy began with a simple vision: to create jewelry that captures life's most precious moments.</p>
-                        <p className='font-light font-roboto'>Each piece in our collection tells a story of dedication, artistry, and passion. Our skilled craftsmen combine traditional techniques with modern innovation, using only the finest materials sourced from trusted partners around the world.</p>
-                        <p className='font-light font-roboto'>From engagement rings that symbolize eternal love to statement pieces that celebrate personal achievements, we believe that jewelry should be as unique and beautiful as the moments they commemorate.</p>
+                        <p className='font-light font-roboto'>Trong hơn ba thập kỷ qua, Liora Jewelers luôn đồng nghĩa với tay nghề thủ công xuất sắc và vẻ đẹp thanh lịch vượt thời gian. Được thành lập vào năm 1990 bởi nghệ nhân kim hoàn bậc thầy Elena Liora, di sản của chúng tôi bắt đầu từ một tầm nhìn đơn giản: tạo ra những món trang sức ghi lại những khoảnh khắc quý giá nhất của cuộc sống.</p>
+                        <p className='font-light font-roboto'>Mỗi sản phẩm trong bộ sưu tập của chúng tôi đều kể một câu chuyện về sự tận tâm, nghệ thuật và niềm đam mê. Các nghệ nhân lành nghề của chúng tôi kết hợp kỹ thuật truyền thống với sự đổi mới hiện đại, chỉ sử dụng những vật liệu tốt nhất được tuyển chọn từ các đối tác đáng tin cậy trên toàn thế giới.</p>
+                        <p className='font-light font-roboto'>Từ nhẫn đính hôn tượng trưng cho tình yêu vĩnh cửu đến những món trang sức độc đáo tôn vinh những thành tựu cá nhân, chúng tôi tin rằng trang sức nên độc đáo và đẹp đẽ như chính những khoảnh khắc mà chúng kỷ niệm.</p>
                     </div>
                     <div className='grid grid-cols-3 gap-6 mb-6'>
                         <div className='text-center space-y-2'>
                             <p className='text-[30px] text-primary font-bold'>{count}+</p>
-                            <p className='text-[14px] font-roboto font-light'>Years of Excellence</p>
+                            <p className='text-[14px] font-roboto font-light'>Nhiều năm xuất sắc</p>
                         </div>
                         <div className='text-center space-y-2'>
                             <p className='text-[30px] text-primary font-bold'>{count1}K+</p>
-                            <p className='text-[14px] font-roboto font-light'>Happy Customers</p>
+                            <p className='text-[14px] font-roboto font-light'>Khách hàng hài lòng</p>
                         </div>
                         <div className='text-center space-y-2'>
                             <p className='text-[30px] text-primary font-bold'>{count2}+</p>
-                            <p className='text-[14px] font-roboto font-light'>Unique Designs</p>
+                            <p className='text-[14px] font-roboto font-light'>Thiết kế độc đáo</p>
                         </div>
                     </div>
                     <div>
-                        <button className='btn'>Learn More About Us</button>
+                        <button className='btn'>Tìm hiểu thêm về chúng tôi</button>
                     </div>
                 </div>
             </div>

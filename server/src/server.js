@@ -20,11 +20,17 @@ import materialRoute from "./routes/material.route.js"
 import gemstoneRoute from "./routes/gemstone.route.js"
 import itemRoute from "./routes/item.route.js"
 import couponRoute from "./routes/coupon.route.js"
+import orderRoute from "./routes/order.route.js"
+import paymentRoute from "./routes/payment.route.js"
+import provincesRoute from "./routes/provinces.route.js"
+import wishRoute from "./routes/wish.route.js"
+import customRoute from "./routes/custom.route.js"
+import fileRoute from "./routes/file.route.js"
 import helmet from "helmet";
 import chatBotRoute from "./routes/chatBox.route.js"
+import paymentController from "./controller/payment.controller.js"
 import { authApiLimiter, globalLimiter } from "./libs/rateLimit.js";
 import conversationModel from "./models/conversation.model.js";
-// import { swaggerSpec, swaggerUiServe, swaggerUiSetup } from "./swagger.js";
 const app = express()
 const port = 3000
 connectDB();
@@ -47,7 +53,7 @@ app.post("/logout", authApiLimiter, authUser, userController.logout);
 app.use("/api/category", authApiLimiter, authUser, categoryRoute)
 app.use("/api/subcategory", authApiLimiter, authUser, subcategoryRoute)
 app.use("/api/brand", authApiLimiter, authUser, brandRoute)
-app.use("/api/review", authApiLimiter, authUser, reviewRoute)
+app.use("/api/review", authUser, reviewRoute)
 app.use("/api/product", authUser, productRoute)
 app.use('/api/chat-bot', authUser, chatBotRoute)
 app.use('/api/cart', authUser, cartRoute)
@@ -56,6 +62,14 @@ app.use("/api/material", authUser, materialRoute)
 app.use("/api/gemstone", authUser, gemstoneRoute)
 app.use("/api/items", authUser, itemRoute)
 app.use("/api/coupon", authUser, couponRoute)
+app.use("/api/order", authUser, orderRoute)
+app.use("/api/payment", authUser, paymentRoute)
+app.use("/api/wish", authUser, wishRoute)
+app.use("/api/custom", authUser, customRoute)
+app.post("/api/payment/success", paymentController.paymentCallback)
+app.post("/api/payment/webhook", paymentController.webhook)
+app.use("/api/provinces", provincesRoute)
+app.use("/api/file", fileRoute)
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {

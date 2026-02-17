@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useGetListSubcategory } from '@/hooks/subcategoty/useGetListSubcategory'
 import { useForm } from 'react-hook-form'
+import { PaginationCustom } from '@/lib/PaginationCustom'
 
 export const FilterProduct = () => {
     const params = useParams()
@@ -19,9 +20,10 @@ export const FilterProduct = () => {
         { color: "vàng", label: "Gold", value: "#D4AF37" },
         { color: "bạc", lablel: "Sliver", value: "#C0C0C0" }
     ];
+    const [valuePage, setValuePage] = useState(1)
     const [fill, setFill] = useState({
-        page: 1,
-        limit: 10,
+        page: valuePage,
+        limit: 6,
         subcategory: params.slug,
         search: "",
         min: "",
@@ -51,6 +53,7 @@ export const FilterProduct = () => {
 
     console.log(params.slug, "bkbkgmbgmbkmg")
     const { products, refreshProduct, isLoading } = useGetListProduct(fill)
+    console.log(products, "productsproductsproducts")
     const { subcategory } = useGetListSubcategory({
         slug: params.slug
     })
@@ -93,6 +96,9 @@ export const FilterProduct = () => {
         setFill((prev) => ({ ...prev, search: data.search, carat: data.carat, purity: data.purity, gram: data.gram, mm: data.mm, min: value[0], max: value[1], color: valueColor }))
         await refreshProduct()
     };
+    const handleChangePage = (e, value) => {
+        setValuePage(value)
+    }
     console.log(fill, "jkmjkmkmkj")
     return (
         <div className='px-7.5 p-16'>
@@ -355,6 +361,7 @@ export const FilterProduct = () => {
                     </div>
                 )}
             </div>
+            <PaginationCustom total={products?.data?.data?.totalItems} valuePage={valuePage} handleChangePage={handleChangePage} limit={6} />
         </div >
     )
 }

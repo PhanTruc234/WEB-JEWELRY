@@ -6,6 +6,7 @@ import session from "../models/session.model.js";
 import { createToken, createRefershToken, verifyToken } from "./token.service.js";
 import { getPublicId } from "../libs/publicId.js";
 import { BadRequest, Conflict, NotFound, Unauthorized } from "../core/error.response.js";
+import userModel from "../models/user.model.js";
 
 class UserService {
 
@@ -134,7 +135,7 @@ class UserService {
         }
         const updated = await modelUser.findByIdAndUpdate(
             userId,
-            { role: role === "1" ? "admin" : "user" },
+            { role: role === "admin" ? "admin" : "user" },
             { new: true }
         );
 
@@ -201,6 +202,16 @@ class UserService {
             { avatar: result.secure_url },
             { new: true }
         );
+    }
+    async deleteUser(id) {
+        if (!id) {
+            throw new BadRequest("Thiếu id người dùng")
+        }
+        const user = await userModel.findByIdAndDelete(id)
+        if (!user) {
+            throw new NotFound("Không tìm thấy người dùng")
+        }
+        return user;
     }
 }
 

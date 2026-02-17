@@ -11,6 +11,22 @@ import { Compare } from '@/page/Account/Compare/Compare'
 import { About } from '@/page/Account/About/About'
 import { Home } from '@/page/Account/Home/Home'
 import { LayoutAccount } from '@/layout/LayoutAccount/LayoutAccount'
+import { Checkout } from '@/page/Account/Checkout/Checkout'
+import PaymentFailed from '@/page/Account/Payment/PaymentFailed'
+import { PaymentSuccess } from '@/page/Account/Payment/PaymentSuccess'
+import { PaymentSuccessCustom } from "@/page/Account/Payment/PaymentSuccessCustom"
+import { PaymentList } from '@/page/Account/Payment/PaymentList'
+import { Profile } from '@/page/Account/Profile/Profile'
+import { Personal } from '@/page/Account/Profile/Personal'
+import { OrderList } from '@/page/Account/Profile/OrderList'
+import { WishList } from '@/page/Account/Profile/WishList'
+import { WishListPage } from '@/page/Account/Wish/WishListPage'
+import { JewelryType } from '@/page/Account/Custom/JewelryType'
+import { InfomationPage } from '@/page/Account/Custom/InfomationPage'
+import { Custom } from '@/page/Account/Custom/Custom'
+import { Preview3DPage } from '@/page/Account/Custom/Preview3D'
+import { DesignPage } from '@/page/Account/Custom/DesignPage'
+import { DesignRequire } from '@/page/Account/Profile/DesignRequire'
 
 export const RouterAccount = () => {
     return (
@@ -25,7 +41,23 @@ export const RouterAccount = () => {
                 <Route path='cart' element={<Cart />} />
                 <Route path='chat-customer' element={<CustomerChat />} />
                 <Route path='about' element={<About />} />
+                <Route path='custom' element={<Custom />}>
+                    <Route index element={<JewelryType />} />
+                    <Route path='infomation' element={<InfomationPage />} />
+                    <Route path='design' element={<DesignPage />} />
+                </Route>
                 <Route index element={<Home />} />
+                <Route path="order/checkout" element={<Checkout />} />
+                <Route path='/payment-failed' element={<PaymentFailed />} />
+                <Route path="/payment/success" element={<PaymentSuccess />} />
+                <Route path='/payment/success/custom' element={<PaymentSuccessCustom />} />
+                <Route path='/wish' element={<WishListPage />} />
+                <Route path='/account' element={<Profile />}>
+                    <Route index element={<Personal />} />
+                    <Route path='order' element={<OrderList />} />
+                    <Route path='wish' element={<WishList />} />
+                    <Route path='design' element={<DesignRequire />} />
+                </Route>
             </Route>
         </Routes>
     )

@@ -12,9 +12,9 @@ export const CartService = {
             console.log(error)
         }
     },
-    createCart: async (productId, sku, quantity) => {
+    createCart: async (productId, color, quantity) => {
         try {
-            const res = await axiosClient.post(API_CREATE_CART, { productId, sku, quantity })
+            const res = await axiosClient.post(API_CREATE_CART, { productId, color, quantity })
             if (res.status === 201) {
                 return res
             }

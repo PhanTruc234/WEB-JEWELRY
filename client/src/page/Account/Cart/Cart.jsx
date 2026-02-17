@@ -4,11 +4,17 @@ import { CartStore } from '@/store/cartStore/CartStore'
 import React, { useEffect, useState } from 'react'
 import no_cart from "../../../assets/8a585d5429182bff2cea56bc9a9b8be0.jpg"
 import { Trash2 } from 'lucide-react'
+import { orderStore } from '@/store/orderStore/orderStore'
+import { useNavigate } from 'react-router'
+import { PaginationCustom } from '@/lib/PaginationCustom'
 export const Cart = () => {
+    const [valuePage, setValuePage] = useState(1)
     const { carts, refreshCart, isLoading } = useGetListCart({
-        page: 1, limit: 3
+        page: valuePage, limit: 3
     })
+    const navigate = useNavigate()
     const { updateCart, deleteCart, cart, setCartFromServer } = CartStore()
+    const { previewOrder, setPreview } = orderStore()
     const handleUpdateQty = async (item, type) => {
         const newQty =
             type === "inc" ? item.quantity + 1 : item.quantity - 1
@@ -24,9 +30,38 @@ export const Cart = () => {
     useEffect(() => {
         setCartFromServer(carts?.data?.data?.totalItems)
     }, [carts])
+    const handleCheckout = async () => {
+        const res = await previewOrder({ items: carts?.data?.data?.data })
+        if (res.status === 200) {
+            console.log(res, "kfbfbnjbjg")
+            setPreview(res?.data?.data)
+            navigate("/order/checkout")
+        }
+    }
+    const handleChangePage = (e, value) => {
+        setValuePage(value)
+    }
+    console.log(carts, "cartscartscartscarts")
     return (
         <div className='my-40 relative min-h-screen'>
-            {carts?.data?.data?.data?.length > 0 ? <h2 className='text-center mb-6 font-bold text-[28px] text-primary'>Giỏ hàng của bạn</h2> : ""}
+            <div className="max-w-6xl mx-auto mb-12 px-4">
+                <div className="flex items-center justify-center gap-4">
+                    <div className="flex items-center gap-2 text-primary">
+                        <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+                        <span className="font-semibold hidden sm:inline">Giỏ hàng</span>
+                    </div>
+                    <div className="w-16 h-1 bg-gray-300"></div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                        <div className="w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center font-bold">2</div>
+                        <span className="font-semibold hidden sm:inline">Thanh toán</span>
+                    </div>
+                    <div className="w-16 h-1 bg-gray-300"></div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                        <div className="w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center font-bold">3</div>
+                        <span className="font-semibold hidden sm:inline">Hoàn tất</span>
+                    </div>
+                </div>
+            </div>
             {(isLoading) && (
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-20">
                     <div className="loader"></div>
@@ -86,22 +121,19 @@ export const Cart = () => {
                             <span className="font-medium text-gray-800">{formatBigNumber(carts?.data?.data?.tax ? carts?.data?.data?.tax : 0, true)}</span>
                         </div>
 
-                        <div className="my-4 h-px w-full bg-gray-200" />
+                        <div className="h-1 bg-linear-to-r from-transparent via-primary to-transparent mb-6"></div>
                         <div className="mb-5 flex items-center justify-between text-sm font-semibold">
                             <span className="text-gray-800">Tổng</span>
                             <span className="text-primary">{formatBigNumber(carts?.data?.data?.total ? carts?.data?.data?.total : 0, true)}</span>
                         </div>
-                        <button className="mb-3 w-full rounded-lg bg-primary py-3 text-sm font-medium text-white transition hover:opacity-90">
+                        <button className="mb-3 w-full rounded-lg bg-primary py-3 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer" onClick={handleCheckout}>
                             Tiến hành thanh toán
-                        </button>
-
-                        <button className="w-full rounded-lg border border-primary py-3 text-sm font-medium text-primary transition hover:bg-primary/10">
-                            Tiếp tục mua sắm
                         </button>
                     </div>
                 </div>
             </div> : <div className='flex items-center justify-center'>
                 <img src={no_cart} alt="" /></div>}
+            <PaginationCustom total={carts?.data?.data?.totalItems} valuePage={valuePage} handleChangePage={handleChangePage} limit={6} />
         </div>
     )
 }

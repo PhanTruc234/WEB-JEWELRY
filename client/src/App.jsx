@@ -9,6 +9,7 @@ import { RouterAdmin } from './route/RouterAdmin/RouterAdmin'
 import { Toaster } from 'sonner'
 import { ArrowUp } from 'lucide-react'
 import { commonStore } from './store/commonStore/commonStore'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
   return (
     <>
       <Toaster />
+      <ToastContainer />
       <Routes>
         <Route path='/*' element={<RouterAccount />} />
         <Route path='/admin/*' element={<RouterAdmin />} />

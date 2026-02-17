@@ -15,7 +15,7 @@ const createRefershToken = async (payload) => {
 const verifyToken = async (token) => {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(">>> payload", payload);
+        // console.log(">>> payload", payload);
         const decode = await session.findOne({ userId: payload.id });
         if (!decode) {
             throw new Error('Phiên đăng nhập không hợp lệ');

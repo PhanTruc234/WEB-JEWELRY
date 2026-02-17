@@ -1,5 +1,6 @@
 import BaseController from "./base.controller.js";
 import productService from "../services/product.service.js";
+import { BadRequest } from "../core/error.response.js";
 
 class ProductController extends BaseController {
     constructor() {
@@ -56,6 +57,30 @@ class ProductController extends BaseController {
             return this.created(res, newProduct, "Thêm sản phẩm thành công");
         } catch (error) {
             return this.handleErr(res, error);
+        }
+    }
+    upFileProduct = async (req, res) => {
+        try {
+            if (!req.file) {
+                throw new BadRequest("Không có file upload")
+            }
+            const filePath = req.file.path
+            const data = await productService.upFileProduct(filePath)
+            return this.ok(res, data, "Up thành công")
+        } catch (error) {
+            return this.handleErr(res, error)
+        }
+    }
+    previewUpFile = async (req, res) => {
+        try {
+            if (!req.file) {
+                throw new BadRequest("Không có file upload")
+            }
+            const filePath = req.file.path
+            const data = await productService.previewUpFileProduct(filePath)
+            return this.ok(res, data, "Up thành công")
+        } catch (error) {
+            return this.handleErr(res, error)
         }
     }
     updateProduct = async (req, res) => {

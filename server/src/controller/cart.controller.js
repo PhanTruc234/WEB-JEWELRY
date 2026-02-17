@@ -16,8 +16,8 @@ class CartController extends BaseController {
     createCart = async (req, res) => {
         try {
             const userId = req.user.id
-            const { productId, sku, quantity } = req.body
-            const cartItem = await cartService.createCart(userId, productId, sku, quantity)
+            const { productId, color, quantity } = req.body
+            const cartItem = await cartService.createCart(userId, productId, color, quantity)
             return this.created(res, cartItem, "Thêm giỏ hàng thành công")
         } catch (error) {
             return this.handleErr(res, error)

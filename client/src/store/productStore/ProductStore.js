@@ -19,6 +19,14 @@ export const ProductStore = create(() => ({
         const newData = await ProductService.createProduct(payload)
         return newData
     },
+    upFileProduct: async (payload) => {
+        const dataUp = await ProductService.upFileProduct(payload)
+        return dataUp
+    },
+    previewUpFile: async (payload) => {
+        const previewData = await ProductService.previewUpFile(payload)
+        return previewData
+    },
     updateProduct: async (id, payload) => {
         const editData = await ProductService.updateProduct(id, payload)
         return editData;

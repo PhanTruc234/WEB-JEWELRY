@@ -12,33 +12,34 @@ export const createProductShema = z.object({
     promotion: z
         .object({
             isActive: z.boolean(),
-            discount: z.coerce
-                .number()
-                .refine(n => Number.isFinite(n), "Giảm giá không hợp lệ")
-                .gt(0)
-                .lt(100)
-                .optional(),
+            discount: z.coerce.number().optional(),
             startAt: z.coerce.date().nullable().optional(),
             endAt: z.coerce.date().nullable().optional(),
         })
         .optional()
         .superRefine((data, ctx) => {
             if (!data || !data.isActive) return;
-            if (!data.discount || isNaN(Number(data.discount))) {
+            if (data.discount <= 0 || data.discount >= 100) {
                 ctx.addIssue({
                     path: ["discount"],
-                    message: "Giảm giá phải là số",
+                    message: "Giá trị phải > 0 và < 100",
                 });
-                return;
             }
-            if (!(data.startAt instanceof Date)) {
+            const d = Number(data.discount);
+            if (d <= 0 || d >= 100) {
+                ctx.addIssue({
+                    path: ["discount"],
+                    message: "Giá trị phải > 0 và < 100",
+                });
+            }
+            if (!(data.startAt)) {
                 ctx.addIssue({
                     path: ["startAt"],
                     message: "Chọn ngày bắt đầu",
                 });
             }
 
-            if (!(data.endAt instanceof Date)) {
+            if (!(data.endAt)) {
                 ctx.addIssue({
                     path: ["endAt"],
                     message: "Chọn ngày kết thúc",
@@ -46,8 +47,8 @@ export const createProductShema = z.object({
             }
 
             if (
-                data.startAt instanceof Date &&
-                data.endAt instanceof Date &&
+                data.startAt &&
+                data.endAt &&
                 data.endAt <= data.startAt
             ) {
                 ctx.addIssue({
@@ -56,18 +57,16 @@ export const createProductShema = z.object({
                 });
             }
         }).transform((data) => {
-            if (!data) {
-                return data;
-            }
+            if (!data) return data;
             if (!data.isActive) {
                 return {
                     ...data,
                     discount: 0,
                     startAt: null,
-                    endAt: null
-                }
+                    endAt: null,
+                };
             }
-            return data
+            return data;
         }),
     variants: z.array(
         z.object({

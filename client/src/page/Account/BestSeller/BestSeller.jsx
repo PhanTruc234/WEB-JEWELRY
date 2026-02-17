@@ -9,7 +9,7 @@ import { Link } from 'react-router'
 export const BestSeller = () => {
     const { products, isLoading, isValidating, refreshProduct, error } = useGetListProduct({
         page: 1,
-        limit: 10,
+        limit: 6,
         isNewProduct: true,
     })
     const sliderRef = useRef()
@@ -32,8 +32,8 @@ export const BestSeller = () => {
     return (
         <div className='my-16 mx-7.5 relative group/slider'>
             <div className='text-center'>
-                <h2 className='text-[36px] font-bold'>Best Sellers</h2>
-                <p className='mb-12 text-[18px] font-light text-[#1B1B1B]'>Discover our most loved pieces, carefully crafted and cherished by customers worldwide</p>
+                <h2 className='text-[36px] font-bold'>Sản phẩm bán chạy nhất</h2>
+                <p className='mb-12 text-[18px] font-light text-[#1B1B1B]'>Khám phá những sản phẩm được yêu thích nhất của chúng tôi, được chế tác tỉ mỉ và trân trọng bởi khách hàng trên toàn thế giới.</p>
                 <Slider {...settings} ref={sliderRef}>
                     {products && products?.data?.data?.products.map((item) => {
                         const img = item.images.find((img) => img.isMain)
@@ -80,7 +80,7 @@ export const BestSeller = () => {
                                         </div>
                                         <div className='flex gap-3 items-center justify-center'>
                                             {Array(5).fill(0).map((_, index) => (
-                                                <Star size={18} color={index < item.rating ? "#FFD700" : "#C0C0C0"} fill={index < item.rating ? "#FFD700" : "#C0C0C0"}>
+                                                <Star key={index} size={18} color={index < item.rating ? "#FFD700" : "#C0C0C0"} fill={index < item.rating ? "#FFD700" : "#C0C0C0"}>
                                                 </Star>
                                             ))}
                                         </div>

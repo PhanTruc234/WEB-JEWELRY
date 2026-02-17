@@ -1,8 +1,11 @@
+import { useGetListPreviewByProductId } from '@/hooks/Review/useGetListReviewByProductId'
 import { formatBigNumber } from '@/lib/format-big-number'
 import { CartStore } from '@/store/cartStore/CartStore'
 import { CompareStore } from '@/store/compareStore/CompareStore'
 import { ProductStore } from '@/store/productStore/ProductStore'
-import { Scale, Star, Van } from 'lucide-react'
+import { wishStore } from '@/store/wishStore/wishStore'
+import dayjs from 'dayjs'
+import { Heart, Scale, Star, Van } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { toast } from 'sonner'
@@ -10,6 +13,7 @@ import { toast } from 'sonner'
 export const DetailProduct = () => {
     const params = useParams()
     const { createCart, addToCart, cart } = CartStore()
+    const { createWish, addWish } = wishStore()
     const { createCompare } = CompareStore()
     const { getProductById } = ProductStore()
     const [showImg, setShowImg] = useState("")
@@ -19,6 +23,13 @@ export const DetailProduct = () => {
     const [selectedOption, setSelectedOption] = useState(null)
     const [quantity, setQuantity] = useState(1)
     const [img, setImg] = useState("")
+    const [imgWish, setImgWish] = useState("")
+    const { error, isLoading, refreshReviews, reviews } = useGetListPreviewByProductId({
+        page: 1,
+        limit: 8,
+        id: params.id
+    })
+    console.log(reviews, "reviewsreviewsreviewsreviews")
     useEffect(() => {
         const callProduct = async () => {
             const data = await getProductById(params.id)
@@ -29,13 +40,13 @@ export const DetailProduct = () => {
     }, [params.id])
     console.log(detail, "detaildetaildetail")
     const handleAddToCart = async (id) => {
-        console.log(id)
+        console.log(id, "vmkfvmmfmbmk")
         console.log(quantity, "quantityquantity")
-        const newCart = await createCart(id, selectedOption.sku, quantity)
+        console.log(selectedColor, "selectedOptionselectedOptionselectedOption")
+        const newCart = await createCart(id, selectedColor.color, quantity)
         console.log(newCart, "newCartnewCartnewCart")
         if (newCart.status === 201) {
-            const k = newCart?.data?.data?.items.find((i) => i.sku === selectedOption.sku)
-            const data = await getProductById(k.productId)
+            const data = await getProductById(id)
             console.log(data, "datadatadatadata")
             if (data.status === 200) {
                 const imgMain = data?.data?.data?.images.find((item) => item.isMain)
@@ -53,6 +64,20 @@ export const DetailProduct = () => {
     const handleCompare = async (id) => {
         console.log(selectedOption.sku)
         await createCompare(id, selectedOption.sku)
+    }
+    const handleHeart = async (id) => {
+        try {
+            const res = await createWish(id)
+            if (res.status === 201) {
+                const img = res?.data?.data?.items[0].images.find((i) => i.isMain)
+                addWish({
+                    img: img.url
+                })
+                setImgWish(img.url)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
     useEffect(() => {
         console.log("cart changed", cart)
@@ -74,6 +99,9 @@ export const DetailProduct = () => {
         <div className="bg-gray-50 px-10 py-16 relative">
             {img && <div className='w-17.5 h-17.5 absolute top-10 right-12'>
                 <img src={img} alt="" className=' w-full h-full object-cover rounded-xl animate-cart-fx' />
+            </div>}
+            {imgWish && <div className='w-17.5 h-17.5 absolute top-10 right-38'>
+                <img src={imgWish} alt="" className=' w-full h-full object-cover rounded-xl animate-cart-fx' />
             </div>}
             <div className="max-w-7xl mx-auto grid grid-cols-2 gap-14">
                 <div className="space-y-6">
@@ -135,11 +163,7 @@ export const DetailProduct = () => {
                             {selectedColor && (
                                 <div>
                                     <p className="text-sm font-semibold mb-2">
-                                        {selectedColor.options[0].type === "CARAT"
-                                            ? "Carat"
-                                            : selectedColor.options[0].type === "GRAM"
-                                                ? "Gram"
-                                                : "MM"}
+                                        {selectedColor.options[0].type}
                                     </p>
 
                                     <div className="flex gap-3 flex-wrap">
@@ -189,14 +213,17 @@ export const DetailProduct = () => {
                             <div className='w-13 h-13 border-2 border-primary flex items-center justify-center rounded-xl text-primary cursor-pointer' onClick={() => handleCompare(detail._id)}>
                                 <Scale />
                             </div>
+                            <div className='w-13 h-13 border-2 border-primary flex items-center justify-center rounded-xl text-primary cursor-pointer' onClick={() => handleHeart(detail._id)}>
+                                <Heart />
+                            </div>
                         </div>
                         <div className="flex items-center gap-4 bg-white p-4 rounded-xl shadow-sm">
                             <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-white">
                                 <Van size={18} />
                             </div>
                             <div>
-                                <p className="text-sm font-semibold">Free Shipping</p>
-                                <p className="text-xs text-gray-500">Delivered in 3–5 business days</p>
+                                <p className="text-sm font-semibold">Miễn phí giao hàng</p>
+                                <p className="text-xs text-gray-500">Giao hàng trong vòng 3-5 ngày làm việc.</p>
                             </div>
                         </div>
                         <div className='flex items-center justify-around relative'>
@@ -218,32 +245,85 @@ export const DetailProduct = () => {
                             </p>
                         ) : (
                             <div className="space-y-3">
+                                <div className="text-4xl font-semibold">
+                                    {reviews?.data?.data?.averageRaring}/5
+                                </div>
                                 <div className="flex items-center gap-2">
                                     {[1, 2, 3, 4, 5].map((i) => (
                                         <Star
                                             key={i}
                                             size={18}
                                             className={
-                                                i < detail.rating
+                                                i <= reviews?.data?.data?.averageRaring
                                                     ? "fill-yellow-400 text-yellow-400"
                                                     : "text-gray-300"
                                             }
                                         />
                                     ))}
-                                    <span className="text-sm font-semibold">
-                                        {detail.rating}/5
-                                    </span>
                                 </div>
 
-                                {detail.reviewCount > 0 ? (
+                                {reviews?.data?.data?.totalItem > 0 ? (
                                     <p className="text-sm text-gray-600">
-                                        {detail.reviewCount} đánh giá từ khách hàng
+                                        {reviews?.data?.data?.totalItem} đánh giá từ khách hàng
                                     </p>
                                 ) : (
                                     <p className="text-sm text-gray-400 italic">
                                         Chưa có đánh giá nào cho sản phẩm này
                                     </p>
                                 )}
+                                <div>
+                                    <div className="space-y-5">
+                                        {reviews?.data?.data?.review.map((i) => (
+                                            <div
+                                                key={i._id}
+                                                className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition"
+                                            >
+
+                                                <div className="flex items-start gap-4">
+
+                                                    <div className="size-11 rounded-full overflow-hidden border">
+                                                        <img
+                                                            src={i.userId.avatar}
+                                                            alt=""
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center justify-between">
+                                                            <p className="font-semibold text-gray-900">
+                                                                {i.userId.fullName}
+                                                            </p>
+
+                                                            <span className="text-sm text-gray-400">
+                                                                {dayjs(i.createdAt).format("DD/MM/YYYY")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1 mt-1">
+                                                            {[1, 2, 3, 4, 5].map((inn) => (
+                                                                <Star
+                                                                    key={inn}
+                                                                    size={16}
+                                                                    className={
+                                                                        inn <= i.rating
+                                                                            ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
+                                                                            : "text-gray-300"
+                                                                    }
+                                                                />
+                                                            ))}
+
+                                                            <span className="ml-2 text-sm font-medium text-gray-600">
+                                                                {i.rating}.0
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-4 text-gray-700 leading-relaxed text-[15px]">
+                                                    {i.comment}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>

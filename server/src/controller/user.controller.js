@@ -7,7 +7,7 @@ class UserController extends BaseController {
         try {
             const page = Number(req.query.page || 1);
             const limit = Number(req.query.limit || 10);
-            const search = req.query.search?.trim() || ""
+            const search = req?.query?.search?.trim() || ""
             const data = await userService.getAllUser(page, limit, search);
             return this.ok(res, data, "Lấy danh sách người dùng thành công");
         } catch (err) {
@@ -126,6 +126,15 @@ class UserController extends BaseController {
             return this.handleErr(res, err);
         }
     };
+    deleteUser = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const data = await userService.deleteUser(id)
+            return this.ok(res, data, "Xóa người dùng thành công")
+        } catch (error) {
+            return this.handleErr(res, error)
+        }
+    }
 }
 
 export default new UserController();

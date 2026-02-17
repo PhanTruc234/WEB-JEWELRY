@@ -1,4 +1,5 @@
-import banner from "../../assets/banner.jpg"
+import { Link } from "react-router"
+import banner from "../../../assets/banner.jpg"
 export const Banner = () => {
     return (
         <div className="relative">
@@ -7,18 +8,18 @@ export const Banner = () => {
             </div>
             <div className="absolute top-1/2 -translate-y-1/2 w-2xl left-16">
                 <h2 className="font-bold text-[60px] text-white">
-                    Shine Bright Like a Diamond
+                    Tỏa sáng rực rỡ như viên kim cương
                 </h2>
                 <p className="font-extralight text-[18px] text-white mb-8">
-                    Timeless jewelry crafted with purity & passion. Discover our exquisite collection of handcrafted pieces that celebrate life's precious moments.
+                    Trang sức vượt thời gian được chế tác bằng sự tinh khiết và niềm đam mê. Khám phá bộ sưu tập trang sức thủ công tinh xảo của chúng tôi, tôn vinh những khoảnh khắc quý giá trong cuộc sống.
                 </p>
                 <div className="space-x-3 flex">
                     <button className="btn border-none leading-6">
-                        Shop Now
+                        Mua ngay
                     </button>
-                    <button className="btn1 text-white leading-6">
-                        Discover Collections
-                    </button>
+                    <Link to={"/collections"} className="btn1 text-white leading-6">
+                        Khám phá
+                    </Link>
                 </div>
             </div>
         </div>

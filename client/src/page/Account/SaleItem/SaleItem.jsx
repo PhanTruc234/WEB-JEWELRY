@@ -53,29 +53,29 @@ export const SaleItem = () => {
                     <img src={isMainImg?.url} alt="" className='img w-64 h-64 rounded-full' />
                 </div>
                 <div className='space-y-4'>
-                    <p className="text-[36px] font-bold text-white">{firstProduct?.promotion?.discount}% Off This Season</p>
-                    <p className='text-[18px] text-white font-light'>Limited time offer on our premium collection. Don't miss out on these exclusive deals.</p>
+                    <p className="text-[36px] font-bold text-white">Giảm giá {firstProduct?.promotion?.discount}% trong mùa này</p>
+                    <p className='text-[18px] text-white font-light'>Ưu đãi có thời hạn cho bộ sưu tập cao cấp của chúng tôi. Đừng bỏ lỡ những ưu đãi độc quyền này.</p>
                     <div className='flex items-center text-white font-semibold text-[24px] gap-6'>
                         <div>
                             <p className='w-20 h-14 rounded-xl bg-primary flex items-center justify-center'>{countTime.days ? (countTime.days >= 10 ? countTime.days : `0${countTime.days}`) : "00"}</p>
-                            <p className='text-[14px] font-medium text-primary text-center'>days</p>
+                            <p className='text-[14px] font-medium text-primary text-center'>Ngày</p>
                         </div>
                         <div>
                             <p className='w-20 h-14 rounded-xl bg-primary flex items-center justify-center'>{countTime.hours ? (countTime.hours >= 10 ? countTime.hours : `0${countTime.hours}`) : "00"}</p>
-                            <p className='text-[14px] font-medium text-primary text-center'>hours</p>
+                            <p className='text-[14px] font-medium text-primary text-center'>Giờ</p>
                         </div>
                         <div>
                             <p className='w-20 h-14 rounded-xl bg-primary flex items-center justify-center'>{countTime.minutes ? (countTime.minutes >= 10 ? countTime.minutes : `0${countTime.minutes}`) : "00"}</p>
-                            <p className='text-[14px] font-medium text-primary text-center'>minutes</p>
+                            <p className='text-[14px] font-medium text-primary text-center'>Phút</p>
                         </div>
                         <div>
                             <p className='w-20 h-14 rounded-xl bg-primary flex items-center justify-center'>{countTime.seconds ? (countTime.seconds >= 10 ? countTime.seconds : `0${countTime.seconds}`) : "00"}</p>
-                            <p className='text-[14px] font-medium text-primary text-center'>seconds</p>
+                            <p className='text-[14px] font-medium text-primary text-center'>Giây</p>
                         </div>
                     </div>
                     <div>
                         <button className='btn hover:bg-primary transition-all duration-500 cursor-pointer bg-white text-secondary'>
-                            Shop Sale Items
+                            Mua hàng giảm giá
                         </button>
                     </div>
                 </div>

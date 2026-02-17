@@ -202,11 +202,10 @@ export const AddProduct = ({ id }) => {
             //     }))
             // }))
             console.log(id, "sckskcskcksn")
-            // console.log(">>>> tranderPromo", tranderPromo)
-            // console.log(">>> tranfer", tranfer)
             console.log(">>> imgUp", imgUp)
             console.log(brandId, cateId, subcateId, "jdncjncjdnj")
             const editProduct = await updateProduct(id, { ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, images: imgUp })
+            console.log(editProduct, "editProducteditProduct")
             if (editProduct.status === 200) {
                 navigate('/admin/product-manage/products')
                 reset()

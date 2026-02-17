@@ -14,8 +14,8 @@ export const CartStore = create((set, get) => ({
     removeCart: () => set((state) => ({
 
     })),
-    createCart: async (productId, sku, quantity) => {
-        const data = await CartService.createCart(productId, sku, quantity)
+    createCart: async (productId, color, quantity) => {
+        const data = await CartService.createCart(productId, color, quantity)
         return data
     },
     updateCart: async (sku, quantity) => {

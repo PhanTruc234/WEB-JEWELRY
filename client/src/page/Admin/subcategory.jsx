@@ -11,6 +11,7 @@ import { useGetListSubcategory } from '@/hooks/subcategoty/useGetListSubcategory
 import { Label } from '@/components/ui/label'
 import { RadioGroupItem } from '@/components/ui/radio-group'
 import { RadioGroup } from '@radix-ui/react-radio-group'
+import { PaginationCustom } from '@/lib/PaginationCustom'
 const SubcategorySchema = z.object({
     name: z.string().min(1, "Tên bắt buộc nhập"),
     // images: z.array(z.object({
@@ -20,15 +21,17 @@ const SubcategorySchema = z.object({
     description: z.string().min(1, "Chưa nhập mô tả")
 })
 export const SubcategoryPage = () => {
+    const [valuePage, setValuePage] = useState(1)
     const { categories, refreshCategory } = useGetListCategory({
         page: 1,
         limit: 10
     })
     const { subcategory, isLoading, isValidating, refreshSubcategoty } = useGetListSubcategory({
-        page: 1,
-        limit: 10
+        page: valuePage,
+        limit: 5
     })
     const { createSubCategory, uploadImgSub, deleteImgTem, updateSubcate, deleteSubcate } = subcategoryStore()
+    console.log(subcategory, "subcategorysubcategorysubcategory")
     console.log(">>>>categories", categories)
     const [model, setModel] = useState(false)
     const [modelDelete, setModelDelete] = useState(false)
@@ -140,6 +143,9 @@ export const SubcategoryPage = () => {
         const res = await deleteImgTem(url);
         setImgSubcate((prev) => prev.filter((item) => item.url !== url))
     }
+    const handleChangePage = (e, value) => {
+        setValuePage(value)
+    }
     return (
         <div className='relative min-h-screen bg-gray-100 px-8 py-6 shadow-md'>
             {(isLoading || isValidating) && (
@@ -188,7 +194,7 @@ export const SubcategoryPage = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-base font-semibold text-gray-800">
-                                        Tên :{item.name}
+                                        {item.name}
                                     </h3>
                                     <p className="text-sm text-gray-500 mt-0.5">
                                         slug: {item.slug}
@@ -373,6 +379,7 @@ export const SubcategoryPage = () => {
                     </div>
                 </form>
             </div>
+            <PaginationCustom total={subcategory?.data?.data?.totalItem} valuePage={valuePage} handleChangePage={handleChangePage} limit={5} />
             {
                 modelDelete && (
                     <BoxProduct

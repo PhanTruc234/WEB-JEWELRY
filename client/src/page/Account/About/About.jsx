@@ -4,35 +4,35 @@ import * as LucideIcons from "lucide-react";
 import { ShieldAlert } from 'lucide-react'
 export const About = () => {
     const heritageData = {
-        heading: "Our Heritage Story",
+        heading: "Câu chuyện về di sản của chúng ta",
         description: [
-            "Founded in 1992 by master jeweler Marcus Liora, our journey began with a simple yet profound vision: to create jewelry that transcends trends and becomes treasured heirlooms for generations to come.",
-            "What started as a small workshop in the heart of the jewelry district has grown into a renowned atelier, yet we've never lost sight of our core values - exceptional craftsmanship, personal service, and the belief that every piece of jewelry should tell a unique story.",
-            "Today, under the guidance of the second generation, we continue to honor traditional techniques while embracing innovative design approaches, ensuring that each Liora creation is both timeless and contemporary."
+            "Được thành lập vào năm 1992 bởi nghệ nhân kim hoàn bậc thầy Marcus Liora, hành trình của chúng tôi bắt đầu với một tầm nhìn đơn giản nhưng sâu sắc: tạo ra những món trang sức vượt thời gian và trở thành những vật gia truyền quý giá cho các thế hệ mai sau.",
+            "Khởi đầu từ một xưởng nhỏ nằm ngay trung tâm khu phố trang sức, nay đã phát triển thành một thương hiệu nổi tiếng, nhưng chúng tôi chưa bao giờ quên đi những giá trị cốt lõi của mình - tay nghề thủ công xuất sắc, dịch vụ tận tâm và niềm tin rằng mỗi món trang sức đều nên kể một câu chuyện độc đáo.",
+            "Ngày nay, dưới sự dẫn dắt của thế hệ thứ hai, chúng tôi tiếp tục tôn vinh các kỹ thuật truyền thống đồng thời đón nhận những phương pháp thiết kế sáng tạo, đảm bảo mỗi sản phẩm của Liora đều mang vẻ đẹp vượt thời gian và hiện đại."
         ],
 
         timeline: [
             {
                 year: "1992",
-                title: "Founded by Marcus Liora",
-                description: "Started with traditional jewelry crafting techniques"
+                title: "Được thành lập bởi Marcus Liora",
+                description: "Bắt đầu từ các kỹ thuật chế tác trang sức truyền thống."
             },
             {
                 year: "2010",
-                title: "International Recognition",
-                description: "Awarded Best Artisan Jewelry Designer"
+                title: "Sự công nhận quốc tế",
+                description: "Được trao giải Nhà thiết kế trang sức thủ công xuất sắc nhất"
             },
             {
                 year: "2023",
-                title: "Digital Innovation",
-                description: "Launched AR preview and custom design platform"
+                title: "Đổi mới kỹ thuật số",
+                description: "Ra mắt nền tảng xem trước AR và thiết kế tùy chỉnh."
             }
         ],
 
         images: [
             {
                 src: "https://i0.wp.com/trangspa.vn/wp-content/uploads/2021/07/Che-tac-la-gi-trang-spa.jpg",
-                caption: "Our Original Workshop - 1992"
+                caption: "Xưởng sản xuất ban đầu của chúng tôi - năm 1992"
             },
             {
                 src: "https://cezan.edu.vn/uploads/910/90702880-6baa-4c3c-a0d7-a31b183e3549.jpeg"
@@ -44,155 +44,155 @@ export const About = () => {
     };
 
     const valuesData = {
-        heading: "Our Values & Principles",
+        heading: "Giá trị và nguyên tắc của chúng tôi",
         description:
-            "These core values guide everything we do, from the selection of materials to the final polishing of each piece.",
+            "Những giá trị cốt lõi này định hướng mọi hoạt động của chúng tôi, từ việc lựa chọn nguyên liệu đến khâu hoàn thiện cuối cùng của từng sản phẩm.",
         items: [
             {
-                title: "Exceptional Quality",
+                title: "Chất lượng vượt trội",
                 description:
-                    "We source only the finest materials and employ rigorous quality standards to ensure every piece meets our exacting requirements.",
+                    "Chúng tôi chỉ sử dụng những nguyên liệu tốt nhất và áp dụng các tiêu chuẩn chất lượng nghiêm ngặt để đảm bảo mỗi sản phẩm đều đáp ứng những yêu cầu khắt khe của chúng tôi.",
                 icon: "Gem"
             },
             {
-                title: "Artisan Craftsmanship",
+                title: "Nghề thủ công bậc thầy",
                 description:
-                    "Each piece is meticulously handcrafted by skilled artisans who bring decades of experience to their work.",
+                    "Mỗi sản phẩm đều được chế tác thủ công tỉ mỉ bởi các nghệ nhân lành nghề, những người mang trong mình hàng chục năm kinh nghiệm.",
                 icon: "Hand"
             },
             {
-                title: "Timeless Design",
+                title: "Thiết kế vượt thời gian",
                 description:
-                    "Our designs transcend fleeting trends, creating pieces that remain beautiful and relevant for generations.",
+                    "Những thiết kế của chúng tôi vượt qua các xu hướng nhất thời, tạo ra những sản phẩm luôn đẹp và phù hợp với nhiều thế hệ.",
                 icon: "Clock"
             },
             {
-                title: "Personal Connection",
+                title: "Kết nối cá nhân",
                 description:
-                    "We believe jewelry should tell your story, which is why we offer personalized service and custom design options.",
+                    "Chúng tôi tin rằng trang sức nên kể câu chuyện của bạn, đó là lý do chúng tôi cung cấp dịch vụ cá nhân hóa và các tùy chọn thiết kế theo yêu cầu.",
                 icon: "Heart"
             },
             {
-                title: "Trust & Integrity",
+                title: "Niềm tin & Sự chính trực",
                 description:
-                    "Built on transparency and honesty, we provide detailed information about every stone and metal we use.",
+                    "Được xây dựng trên nền tảng minh bạch và trung thực, chúng tôi cung cấp thông tin chi tiết về mọi loại đá và kim loại mà chúng tôi sử dụng.",
                 icon: "ShieldCheck"
             },
             {
-                title: "Sustainable Practices",
+                title: "Thực hành bền vững",
                 description:
-                    "Committed to ethical sourcing and environmentally responsible practices in all aspects of our business.",
+                    "Chúng tôi cam kết thực hiện các hoạt động tìm nguồn cung ứng có đạo đức và có trách nhiệm với môi trường trong mọi khía cạnh kinh doanh.",
                 icon: "Leaf"
             }
         ]
     };
     const data = {
-        heading: "The Art of Craftsmanship",
-        description: "From initial concept to final polish, each piece undergoes a meticulous process that combines traditional techniques with modern innovation to create jewelry of exceptional beauty and quality.",
+        heading: "Nghệ thuật chế tác",
+        description: "Từ ý tưởng ban đầu đến khâu hoàn thiện cuối cùng, mỗi món trang sức đều trải qua một quy trình tỉ mỉ kết hợp kỹ thuật truyền thống với sự đổi mới hiện đại để tạo ra những sản phẩm trang sức có vẻ đẹp và chất lượng vượt trội.",
         items: [
             {
-                title: "Design & Concept",
+                title: "Thiết kế & Ý tưởng",
                 img: "https://bizweb.dktcdn.net/100/302/551/files/quy-trinh-che-tac-trang-suc-bac-4.jpg?v=1745295291062",
-                paragraph: "Every piece begins with inspiration, carefully sketched and refined until the perfect design emerges.",
+                paragraph: "Mỗi tác phẩm đều bắt đầu từ nguồn cảm hứng, được phác thảo và tinh chỉnh cẩn thận cho đến khi thiết kế hoàn hảo ra đời.",
                 list: [
                     {
-                        text: "Handcrafted with precision and care"
+                        text: "Được làm thủ công với độ chính xác và sự tỉ mỉ."
                     },
                     {
-                        text: "Quality checked at every stage"
+                        text: "Kiểm tra chất lượng ở mọi giai đoạn."
                     },
                     {
-                        text: "Backed by lifetime warranty"
+                        text: "Được bảo hành trọn đời."
                     }
                 ]
             },
             {
-                title: "Material Selection",
+                title: "Lựa chọn vật liệu",
                 img: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3",
                 paragraph:
-                    "We carefully select the finest metals and gemstones, ensuring each material meets our exacting standards.",
+                    "Chúng tôi lựa chọn kỹ lưỡng những kim loại và đá quý tốt nhất, đảm bảo mỗi loại vật liệu đều đáp ứng các tiêu chuẩn khắt khe của chúng tôi.",
                 list: [
-                    { text: "Handcrafted with precision and care" },
-                    { text: "Quality checked at every stage" },
-                    { text: "Backed by lifetime warranty" }
+                    { text: "Được làm thủ công với độ chính xác và sự tỉ mỉ." },
+                    { text: "Kiểm tra chất lượng ở mọi giai đoạn." },
+                    { text: "Được bảo hành trọn đời" }
                 ]
             },
             {
-                title: "Expert Crafting",
+                title: "Chế tác chuyên nghiệp",
                 img: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",
                 paragraph:
-                    "Master craftsmen bring the design to life using time-honored techniques and modern precision tools.",
+                    "Các nghệ nhân bậc thầy thổi hồn vào thiết kế bằng cách sử dụng các kỹ thuật truyền thống lâu đời và các công cụ hiện đại với độ chính xác cao.",
                 list: [
-                    { text: "Handcrafted with precision and care" },
-                    { text: "Quality checked at every stage" },
-                    { text: "Backed by lifetime warranty" }
+                    { text: "Được làm thủ công với độ chính xác và sự tỉ mỉ." },
+                    { text: "Kiểm tra chất lượng ở mọi giai đoạn." },
+                    { text: "Được bảo hành trọn đời" }
                 ]
             },
             {
-                title: "Quality Assurance",
+                title: "Đảm bảo chất lượng",
                 img: "https://images.unsplash.com/photo-1586864387789-628af9feed72",
                 paragraph:
-                    "Each piece undergoes rigorous inspection to ensure it meets our standards of perfection before delivery.",
+                    "Các nghệ nhân bậc thầy thổi hồn vào thiết kế bằng cách sử dụng các kỹ thuật truyền thống lâu đời và các công cụ hiện đại với độ chính xác cao.",
                 list: [
-                    { text: "Handcrafted with precision and care" },
-                    { text: "Quality checked at every stage" },
-                    { text: "Backed by lifetime warranty" }
+                    { text: "Được làm thủ công với độ chính xác và sự tỉ mỉ." },
+                    { text: "Kiểm tra chất lượng ở mọi giai đoạn." },
+                    { text: "Được bảo hành trọn đời" }
                 ]
             }
         ]
     }
     const awardsData = {
-        heading: "Recognition & Certifications",
+        heading: "Giải thưởng & Chứng nhận",
         description:
-            "Our commitment to excellence has been recognized by leading industry organizations, and we maintain the highest certifications to ensure quality and ethical standards.",
-        sectionTitle: "Awards & Achievements",
+            "Cam kết của chúng tôi đối với sự xuất sắc đã được ghi nhận bởi các tổ chức hàng đầu trong ngành, và chúng tôi duy trì những chứng nhận cao nhất nhằm đảm bảo chất lượng và tiêu chuẩn đạo đức.",
+        sectionTitle: "Giải thưởng & Thành tựu",
         items: [
             {
                 year: "2023",
-                title: "Best Luxury Jewelry Brand",
-                organization: "International Jewelry Awards",
+                title: "Thương hiệu Trang sức Cao cấp Xuất sắc Nhất",
+                organization: "Giải thưởng Trang sức Quốc tế",
                 icon: "Trophy"
             },
             {
                 year: "2022",
-                title: "Excellence in Craftsmanship",
-                organization: "American Gem Society",
+                title: "Xuất sắc trong Nghệ thuật Chế tác",
+                organization: "Hiệp hội Đá quý Hoa Kỳ",
                 icon: "Medal"
             },
             {
                 year: "2021",
-                title: "Sustainable Jewelry Leader",
-                organization: "Green Business Council",
+                title: "Doanh nghiệp Trang sức Bền vững Hàng đầu",
+                organization: "Hội đồng Doanh nghiệp Xanh",
                 icon: "Leaf"
             },
             {
                 year: "2020",
-                title: "Designer of the Year",
-                organization: "Jewelry Design Institute",
+                title: "Nhà Thiết kế của Năm",
+                organization: "Viện Thiết kế Trang sức",
                 icon: "Star"
             },
             {
                 year: "2019",
-                title: "Innovation in Custom Design",
-                organization: "Jewelry Technology Summit",
+                title: "Đổi mới trong Thiết kế Theo Yêu cầu",
+                organization: "Hội nghị Công nghệ Trang sức",
                 icon: "Lightbulb"
             },
             {
                 year: "2018",
-                title: "Customer Service Excellence",
-                organization: "Retail Excellence Awards",
+                title: "Xuất sắc trong Dịch vụ Khách hàng",
+                organization: "Giải thưởng Bán lẻ Xuất sắc",
                 icon: "Heart"
             },
             {
                 year: "2017",
-                title: "Heritage Preservation Award",
-                organization: "Artisan Guild Society",
+                title: "Giải thưởng Bảo tồn Di sản",
+                organization: "Hiệp hội Nghệ nhân",
                 icon: "Landmark"
             },
             {
                 year: "2015",
-                title: "Master Craftsman Recognition",
-                organization: "International Artisan Council",
+                title: "Công nhận Nghệ nhân Bậc thầy",
+                organization: "Hội đồng Nghệ nhân Quốc tế",
                 icon: "Hammer"
             }
         ]
@@ -206,11 +206,11 @@ export const About = () => {
             <div className=''>
                 <div className='relative mx-16'>
                     <div className='absolute -top-137.5 w-150  text-white'>
-                        <h2 className='text-[48px] font-bold'>Crafting Timeless Elegance Since 1992</h2>
-                        <p className='text-[18px] font-extralight mt-6'>For over three decades, Liora Jewelers has been synonymous with exceptional craftsmanship, uncompromising quality, and timeless design. Each piece we create tells a story of passion, precision, and the pursuit of perfection.</p>
+                        <h2 className='text-[48px] font-bold'>Kiến tạo vẻ đẹp thanh lịch vượt thời gian từ năm 1992.</h2>
+                        <p className='text-[18px] font-extralight mt-6'>Trong hơn ba thập kỷ qua, Liora Jewelers luôn đồng nghĩa với tay nghề thủ công xuất sắc, chất lượng không thỏa hiệp và thiết kế vượt thời gian. Mỗi sản phẩm chúng tôi tạo ra đều kể một câu chuyện về niềm đam mê, sự tỉ mỉ và theo đuổi sự hoàn hảo.</p>
                         <div className='mt-8 gap-4 flex'>
-                            <button className='btn'>Our Collection</button>
-                            <button className='bg-transparent border-white border btn'>Watch Our Story</button>
+                            <button className='btn'>Bộ sưu tập của chúng tôi</button>
+                            <button className='bg-transparent border-white border btn'>Xem câu chuyện của chúng tôi</button>
                         </div>
                     </div>
                 </div>

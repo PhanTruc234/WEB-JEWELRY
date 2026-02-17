@@ -3,6 +3,7 @@ import couponModel from "../models/coupon.model.js";
 
 class CouponService {
     async getCoupon(page, limit, search) {
+        const now = Date.now()
         const skip = (page - 1) * limit
         const query = {
             $and: []
@@ -10,17 +11,27 @@ class CouponService {
         if (search) {
             query.$and.push({ "code": { $regex: search, $options: "i" } })
         }
-        const [coupon, totalItems] = await Promise.all([
-            await couponModel.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip),
+        const [coupons, totalItems] = await Promise.all([
+            await couponModel.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip).lean(),
             await couponModel.countDocuments(query)
         ])
+        const formattedCoupons = coupons.map(coupon => {
+            const isActive =
+                (!coupon.startDate || coupon.startDate <= now) &&
+                (!coupon.endDate || coupon.endDate >= now);
+
+            return {
+                ...coupon,
+                isActive
+            };
+        });
         const totalPage = Math.ceil(totalItems / limit);
         return {
             currentPage: page,
             totalItems,
             totalPage,
             limit,
-            coupon
+            coupon: formattedCoupons
         }
     }
     async createCoupon(code, discountType, discountValue, minOrderValue, startDate, endDate, isActive) {
