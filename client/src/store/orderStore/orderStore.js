@@ -11,6 +11,11 @@ export const orderStore = create(() => ({
         const res = await orderService.previewOrder(payload)
         return res;
     },
+    useCoupon: async (code, totalPrice) => {
+        console.log(code, totalPrice, "bjgnjtn")
+        const res = await orderService.useCoupon(code, totalPrice)
+        return res;
+    },
     createOrder: async (payload) => {
         const res = await orderService.createOrder(payload)
         return res;

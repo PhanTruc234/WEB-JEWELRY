@@ -1,5 +1,6 @@
 import { BadRequest, NotFound } from "../core/error.response.js";
 import { baseGramBySize, snapCarat } from "../libs/estimateCustom.js";
+import couponModel from "../models/coupon.model.js";
 import customModel from "../models/custom.model.js";
 import gemstoneModel from "../models/gemstone.model.js";
 import materialModel from "../models/material.model.js";
@@ -83,7 +84,7 @@ class CustomService {
         }
     }
     async updateCustom(userId,
-        id, shippingAddress, paymentMethod, paymentStatus, quantity) {
+        id, shippingAddress, paymentMethod, paymentStatus, codeCou, quantity) {
         if (!userId) {
             throw new BadRequest("Thiếu thông tin người dùng")
         }
@@ -92,11 +93,22 @@ class CustomService {
             throw new NotFound("Không tìm thấy")
         }
         const TAX_RATE = 0.05;
+        let coo = null
         const tax = Math.round(cus.subTotal * TAX_RATE * 100) / 100;
-        const total = cus.subTotal * quantity + tax;
-        const cuss = await customModel.findByIdAndUpdate(id, { shippingAddress, paymentMethod, paymentStatus, quantity, total, tax }, { new: true })
+        let total = cus.subTotal * quantity + tax;
+        if (codeCou) {
+            const cou = await couponModel.findOne({ code: codeCou, isActive: true });
+            coo = cou._id
+            let discountAmount = 0;
+            if (cou.discountType === "percent") {
+                discountAmount = total * (cou.discountValue / 100);
+            } else {
+                discountAmount = cou.discountValue;
+            }
+            total = total - discountAmount;
+        }
+        const cuss = await customModel.findByIdAndUpdate(id, { shippingAddress, paymentMethod, paymentStatus, quantity, total, coupon: coo, tax }, { new: true })
         return cuss
-
     }
     async addCustom(
         userId,
@@ -105,6 +117,7 @@ class CustomService {
         gemId,
         size,
         budget,
+        coupon
     ) {
         console.log(userId,
             jewelryType,

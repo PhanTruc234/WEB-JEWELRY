@@ -27,8 +27,9 @@ class OrderController extends BaseController {
     useCoupon = async (req, res) => {
         try {
             const userId = req.user.id;
-            const { code } = req.body;
-            const data = await orderService.useCoupon(userId, code);
+            const { code, totalPrice } = req.body;
+            console.log(code, totalPrice, 'fvjffjg')
+            const data = await orderService.useCoupon(userId, code, totalPrice);
             return this.ok(res, data, "Áp dụng mã giảm giá thành công");
         } catch (error) {
             return this.handleErr(res, error);

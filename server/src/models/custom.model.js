@@ -37,6 +37,10 @@ const customSchema = new Schema(
         carat: { type: Number, required: true },
         subTotal: { type: Number, required: true },
         total: { type: Number },
+        coupon: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "coupon",
+        },
         tax: { type: Number, default: 0 },
         status: { type: String, enum: ["PENDING", "APPROVED", "CANCEL"], default: "PENDING" },
         shippingAddress: ShippingAddressSchema,

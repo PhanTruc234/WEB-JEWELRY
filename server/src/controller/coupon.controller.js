@@ -26,6 +26,7 @@ class CouponController extends BaseController {
         try {
             const { id } = req.params
             const { code, discountType, discountValue, minOrderValue, startDate, endDate, isActive } = req.body
+            console.log(code, discountType, discountValue, minOrderValue, startDate, endDate, isActive)
             const data = await couponService.updateCoupon(id, code, discountType, discountValue, minOrderValue, startDate, endDate, isActive)
             return this.ok(res, data, "Sửa mã giảm giá thành công")
         } catch (error) {

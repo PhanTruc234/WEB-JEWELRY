@@ -10,6 +10,7 @@ import { useGetListCommunes } from "@/hooks/communes/useGetListCommunes"
 import { provincesService } from "@/service/Provinces/provincesService"
 import { paymentStore } from "@/store/paymentStore/paymentStore"
 import { CustomStore } from "@/store/customStore/CustomStore"
+import { toast } from "sonner"
 const ShippingSchema = z.object({
     name: z.string().min(1, "Vui lòng nhập họ và tên"),
     phone: z.string().min(10, "Số điện thoại không hợp lệ").max(15, "Số điện thoại không hợp lệ"),
@@ -32,13 +33,15 @@ export const Checkout = () => {
     })
     const { provinces, error, isLoading, isValidating, refreshProvinces } = useGetListProvinces()
     console.log(provinces, "provincesprovinces")
-    const { previews, createOrder } = orderStore()
+    const { previews, createOrder, useCoupon } = orderStore()
     console.log(previews, 'previewspreviewspreviews')
     const { previewCustom, updateCustom } = CustomStore()
     console.log(previewCustom, "previewCustompreviewCustom")
     const { createPayment, createPaymentCustom } = paymentStore()
     const [loading, setLoading] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState("CASH")
+    const [codeCou, setCodeCou] = useState("")
+    const [dataCou, setDataCou] = useState(null)
     const handleCheckout = async (data) => {
         const { name, phone, address } = data
         console.log(name, phone, address, cityName, wardName, "checkoutdata")
@@ -58,6 +61,7 @@ export const Checkout = () => {
                     city: cityName,
                     ward: wardName,
                 },
+                coupon: codeCou,
                 subtotal: previewCustom.subtotal,
                 tax: previewCustom.tax,
                 total: previewCustom.total,
@@ -95,6 +99,19 @@ export const Checkout = () => {
             setLoading(false)
         }
     }
+    const handleCoupon = async (totalPrice) => {
+        console.log(codeCou, totalPrice, "mbkfbfbn")
+        if (!codeCou) {
+            toast.error("Bạn chưa nhập mã giảm")
+            return
+        }
+        const res = await useCoupon(codeCou, totalPrice)
+        if (res.status === 200) {
+            console.log(res, "fbfbmfbgbmggitihjth")
+            setDataCou(res?.data?.data)
+            toast.success("Áp dụng thành công")
+        }
+    }
     const handleCheckoutCustom = async (data) => {
         const { name, phone, address } = data
         console.log(name, phone, address, cityName, wardName, "checkoutdata")
@@ -112,7 +129,7 @@ export const Checkout = () => {
                 city: cityName,
                 ward: wardName,
             }, paymentMethod,
-                "PENDING", 1)
+                "PENDING", codeCou, 1)
             console.log(customRes, "customRes")
             const id = customRes.data.data._id
             if (!id) {
@@ -314,6 +331,7 @@ export const Checkout = () => {
                                             <p className="font-semibold text-gray-800">{method.label}</p>
                                         </div>
                                     </div>
+
                                 </label>
                             ))}
                         </div>
@@ -369,12 +387,53 @@ export const Checkout = () => {
                                 <span className="font-semibold text-green-600">Miễn phí</span>
                             </div>
                         </div>
+                        <div className="w-full">
+                            <div>
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                                    Mã giảm giá
+                                </label>
+
+                                <div className="flex items-center  rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary transition border focus-within:border-none">
+                                    <input
+                                        onChange={(e) => setCodeCou(e.target.value)}
+                                        type="text"
+                                        placeholder="Nhập mã giảm giá..."
+                                        className="flex-1 px-2 py-1 outline-none text-sm"
+                                    />
+
+                                    <button
+                                        onClick={() => handleCoupon(previewCustom.total)}
+                                        className="px-5 py-3 bg-primary text-white text-sm font-medium 
+                     hover:opacity-70 active:scale-95 transition-all cursor-pointer"
+                                    >
+                                        Áp dụng
+                                    </button>
+                                </div>
+
+                                <p className="text-xs text-gray-500 my-2">
+                                    Ví dụ: SALE10,SALE20,SALE50
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            {dataCou && <div className="my-3 p-3 border rounded-lg bg-green-50 text-sm">
+                                <p className="font-semibold text-green-700">Áp dụng mã thành công</p>
+
+                                <div className="mt-2 space-y-1 text-gray-700">
+                                    <p>Giá trị: {dataCou.discountValue}{dataCou.discountType === "percent" ? "%" : "đ"}</p>
+                                    <p>Số tiền giảm: {formatBigNumber(Math.ceil(dataCou.discountAmount), true)}</p>
+                                    <p className="font-medium text-black">
+                                        Tổng sau giảm: {formatBigNumber(Math.ceil(dataCou.totalFinal), true)}
+                                    </p>
+                                </div>
+                            </div>}
+                        </div>
                         <div className="h-1 bg-linear-to-r from-transparent via-primary to-transparent mb-6"></div>
                         <div className="bg-secondary rounded-lg p-4 mb-6">
                             <div className="flex justify-between items-center">
                                 <span className="text-xl font-bold text-white">Tổng cộng:</span>
                                 <span className="text-2xl font-bold text-primary">
-                                    {formatBigNumber(previewCustom.total, true)}
+                                    {formatBigNumber(dataCou.totalFinal ? dataCou.totalFinal : previewCustom.total, true)}
                                 </span>
                             </div>
                         </div>
@@ -458,12 +517,53 @@ export const Checkout = () => {
                                 <span className="font-semibold text-green-600">Miễn phí</span>
                             </div>
                         </div>
+                        <div className="w-full">
+                            <div>
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                                    Mã giảm giá
+                                </label>
+
+                                <div className="flex items-center  rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary transition border focus-within:border-none">
+                                    <input
+                                        type="text"
+                                        onChange={(e) => setCodeCou(e.target.value)}
+                                        placeholder="Nhập mã giảm giá..."
+                                        className="flex-1 px-2 py-1 outline-none text-sm"
+                                    />
+
+                                    <button
+                                        onClick={() => handleCoupon(previews.total)}
+                                        className="px-5 py-3 bg-primary text-white text-sm font-medium 
+                     hover:opacity-70 active:scale-95 transition-all cursor-pointer"
+                                    >
+                                        Áp dụng
+                                    </button>
+                                </div>
+
+                                <p className="text-xs text-gray-500 my-2">
+                                    Ví dụ: SALE10,SALE20,SALE50
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            {dataCou && <div className="my-3 p-3 border rounded-lg bg-green-50 text-sm">
+                                <p className="font-semibold text-green-700">Áp dụng mã thành công</p>
+
+                                <div className="mt-2 space-y-1 text-gray-700">
+                                    <p>Giá trị: {dataCou.discountValue}{dataCou.discountType === "percent" ? "%" : "đ"}</p>
+                                    <p>Số tiền giảm: {formatBigNumber(Math.ceil(dataCou.discountAmount), true)}</p>
+                                    <p className="font-medium text-black">
+                                        Tổng sau giảm: {formatBigNumber(Math.ceil(dataCou.totalFinal), true)}
+                                    </p>
+                                </div>
+                            </div>}
+                        </div>
                         <div className="h-1 bg-linear-to-r from-transparent via-primary to-transparent mb-6"></div>
                         <div className="bg-secondary rounded-lg p-4 mb-6">
                             <div className="flex justify-between items-center">
                                 <span className="text-xl font-bold text-white">Tổng cộng:</span>
                                 <span className="text-2xl font-bold text-primary">
-                                    {formatBigNumber(previews.total, true)}
+                                    {formatBigNumber(Math.ceil(dataCou.totalFinal ? dataCou.totalFinal : previews.total), true)}
                                 </span>
                             </div>
                         </div>

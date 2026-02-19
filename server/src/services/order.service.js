@@ -1,5 +1,6 @@
 import { BadRequest, Unauthorized } from "../core/error.response.js";
 import cartModel from "../models/cart.model.js";
+import couponModel from "../models/coupon.model.js";
 import orderModel from "../models/order.model.js";
 import productModel from "../models/product.model.js";
 
@@ -91,7 +92,7 @@ class OrderService {
         if (!userId) {
             throw new BadRequest("Thiếu thông tin người dùng");
         }
-        if (!coupon) {
+        if (!code) {
             throw new BadRequest("Thiếu mã giảm giá");
         }
         const now = new Date();
@@ -112,7 +113,12 @@ class OrderService {
             discountAmount = cou.discountValue;
         }
         const totalFinal = totalPrice - discountAmount;
-        return totalFinal;
+        return {
+            discountType: cou.discountType,
+            discountValue: cou.discountValue,
+            discountAmount,
+            totalFinal
+        };
     }
     async createOrder(userId, orderData) {
         const now = new Date();
@@ -136,7 +142,7 @@ class OrderService {
         }
         let subtotal = 0;
         const processedItems = [];
-
+        let coo = null;
         for (const item of items) {
             const product = await productModel.findById(item.productId);
             if (!product) {
@@ -155,8 +161,18 @@ class OrderService {
             } else {
                 itemTotal = item.unitPrice * item.quantity;
             }
+            if (coupon) {
+                const cou = await couponModel.findOne({ code: coupon, isActive: true });
+                coo = cou._id
+                let discountAmount = 0;
+                if (cou.discountType === "percent") {
+                    discountAmount = itemTotal * (cou.discountValue / 100);
+                } else {
+                    discountAmount = cou.discountValue;
+                }
+                itemTotal = itemTotal - discountAmount;
+            }
             subtotal += itemTotal;
-
             processedItems.push({
                 productId: item.productId,
                 sku: item.sku || "",
@@ -189,7 +205,7 @@ class OrderService {
             tax,
             total,
             currency: "VND",
-            coupon: coupon || null,
+            coupon: coo || null,
             paymentMethod,
             paymentStatus: "PENDING",
             status: "PENDING",

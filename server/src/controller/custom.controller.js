@@ -37,8 +37,8 @@ class CustomController extends BaseController {
         try {
             const userId = req.user.id
             const id = req.params.id
-            const { shippingAddress, paymentMethod, paymentStatus, quantity } = req.body
-            const data = await customService.updateCustom(userId, id, shippingAddress, paymentMethod, paymentStatus, quantity)
+            const { shippingAddress, paymentMethod, paymentStatus, codeCou, quantity } = req.body
+            const data = await customService.updateCustom(userId, id, shippingAddress, paymentMethod, paymentStatus, codeCou, quantity)
             return this.ok(res, data, "Thành công")
         } catch (error) {
             return this.handleErr(res, error)

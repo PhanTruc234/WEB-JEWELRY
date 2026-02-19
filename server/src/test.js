@@ -133,3 +133,30 @@
 //     console.log(h)
 // }
 // console.log(e)
+// function removeDuplicates(nums) {
+//     let a = []
+//     for (let i = 0; i < nums.length; i++) {
+//         if (!a.includes(nums[i])) {
+//             a.push(nums[i]);
+//         }
+//     }
+//     return a.length
+// };
+// console.log(removeElement([3, 2, 2, 3], 3))
+function removeDuplicates(nums) {
+    let count = 1;
+    let b = []
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+            if (nums[i] === nums[j]) {
+                count++;
+            }
+        }
+        if (count >= 1 && count <= 3) {
+            b.push(nums[i]);
+        }
+        count = 1;
+    }
+    return b.length
+};
+console.log(removeDuplicates())

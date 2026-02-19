@@ -14,7 +14,7 @@ export const middleware = (schema, type = "body") => {
             if (error instanceof ZodError) {
                 return res.status(400).json({
                     message: "Validation failed",
-                    errors: error.errors.map(e => ({
+                    errors: error.issues.map(e => ({
                         path: e.path.join("."),
                         msg: e.message
                     })),

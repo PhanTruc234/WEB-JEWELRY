@@ -18,8 +18,8 @@ export const CustomStore = create(() => ({
         const res = await CustomService.updateStatus(id, status)
         return res;
     },
-    updateCustom: async (id, shippingAddress, paymentMethod, paymentStatus, quantity = 1) => {
-        const res = await CustomService.updateCustom(id, shippingAddress, paymentMethod, paymentStatus, quantity)
+    updateCustom: async (id, shippingAddress, paymentMethod, paymentStatus, codeCou, quantity = 1) => {
+        const res = await CustomService.updateCustom(id, shippingAddress, paymentMethod, paymentStatus, codeCou, quantity)
         return res;
     },
     previewDeign: async (id, material, gem, quantity) => {

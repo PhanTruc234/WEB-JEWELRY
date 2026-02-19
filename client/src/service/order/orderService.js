@@ -1,5 +1,5 @@
 
-import { API_CREATE_ORDER, API_GET_ORDERS_BY_USER_ID, API_ORDER, API_PREVIEW_ORDER, API_UPDATE_ORDER_STATUS } from "@/api/api"
+import { API_CREATE_ORDER, API_GET_ORDERS_BY_USER_ID, API_ORDER, API_PREVIEW_ORDER, API_UPDATE_ORDER_STATUS, API_USE_COUPON } from "@/api/api"
 import axiosClient from "../axiosClient"
 
 export const orderService = {
@@ -21,6 +21,17 @@ export const orderService = {
             return res;
         } catch (error) {
             throw error;
+        }
+    },
+    useCoupon: async (code, totalPrice) => {
+        console.log(code, totalPrice, "pyyupyupyo")
+        try {
+            const res = await axiosClient.post(API_USE_COUPON, { code, totalPrice })
+            if (res.status === 200) {
+                return res;
+            }
+        } catch (error) {
+            throw error
         }
     },
     createOrder: async (payload) => {

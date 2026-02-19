@@ -7,7 +7,7 @@ export const CouponStore = create(() => ({
         return couponNew
     },
     updateCoupon: async (id, payload) => {
-        const couponEdit = await CouponService.updateCoupon(payload)
+        const couponEdit = await CouponService.updateCoupon(id, payload)
         return couponEdit
     },
     deleteCoupon: async (id) => {

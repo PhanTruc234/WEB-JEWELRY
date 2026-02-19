@@ -32,9 +32,9 @@ export const CustomService = {
             throw error
         }
     },
-    updateCustom: async (id, shippingAddress, paymentMethod, paymentStatus, quantity) => {
+    updateCustom: async (id, shippingAddress, paymentMethod, paymentStatus, codeCou, quantity) => {
         try {
-            const res = await axiosClient.put(`${API_UPDATE_CUSTOM}/${id}`, { shippingAddress, paymentMethod, paymentStatus, quantity })
+            const res = await axiosClient.put(`${API_UPDATE_CUSTOM}/${id}`, { shippingAddress, paymentMethod, paymentStatus, codeCou, quantity })
             if (res.status === 200) {
                 return res;
             }
