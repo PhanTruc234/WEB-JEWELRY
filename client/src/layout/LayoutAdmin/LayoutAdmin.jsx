@@ -1,21 +1,27 @@
 import { UserAuthStore } from "@/store/userAuthStore";
 import {
     Anvil,
-    ChartBarStacked,
-    ChartColumnBig,
-    ChartColumnStacked,
+    Layers,
+    // ChartColumnBig,
+    // ChartColumnStacked,
+    GitBranch,
     ChevronDown,
-    ClipboardList,
-    Codesandbox,
+    FilePenLine,
+    BadgeCheck,
     Gem,
     House,
     ListIndentDecrease,
+    Headset,
     ListIndentIncrease,
     ListOrdered,
+    ClipboardCheck,
+    Package,
+    Receipt,
     LogOut,
     MessageSquareMore,
     MessageSquareText,
-    PackageSearch,
+    Star,
+    FolderTree,
     Settings,
     ShoppingBag,
     ShoppingCart,
@@ -37,6 +43,7 @@ export const LayoutAdmin = () => {
     const [isDropDown2, setIsDropDown2] = useState(false)
     const [isDropDown3, setIsDropDown3] = useState(false)
     const [isDropDown4, setIsDropDown4] = useState(false)
+    const [isDropDown5, setIsDropDown5] = useState(false)
     const [isActive, setIsActive] = useState(false)
     const hasUnread = ChatNotifyStore(state => state.hasUnread);
     console.log(hasUnread, "hasUnreadhasUnreadhasUnread")
@@ -88,14 +95,14 @@ export const LayoutAdmin = () => {
                     </div>
                     <Link to={"/admin/dashboard"} className="flex items-center gap-2 cursor-pointer  hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out">
                         <House className="size-5" />
-                        {isOpen && <span>Doanh thu</span>}
+                        {isOpen && <span>Dashboard</span>}
                     </Link>
 
                     <div>
                         <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown(!isDropDown)} >
                             <div className="flex items-center gap-2">
-                                <PackageSearch className="size-5" />
-                                {isOpen && <p>Quản lý sản phẩm</p>}
+                                <FolderTree className="size-5" />
+                                {isOpen && <p>Quản lý danh mục</p>}
                             </div>
                             {isOpen && <ChevronDown className="size-5 cursor-pointer" />}
                         </div>
@@ -103,41 +110,70 @@ export const LayoutAdmin = () => {
                             <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown ? "max-h-125" : "max-h-0"
                                 }`}>
                                 <Link to={"/admin/product-manage/category"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <ChartBarStacked className="size-5" />
-                                    Danh mục
-                                </Link>
-                                <Link
-                                    to={"/admin/product-manage/subcategory"}
-                                    className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out"
-                                >
-                                    <ChartColumnStacked className="size-5" />
-                                    Danh mục con
+                                    <Layers className="size-5" />
+                                    Loại sản phẩm
                                 </Link>
                                 <Link to={"/admin/product-manage/brand"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <Codesandbox className="size-5" />
+                                    <BadgeCheck className="size-5" />
                                     Thương hiệu
                                 </Link>
-                                <Link to={"/admin/product-manage/products"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                <Link to={"/admin/material-manage/material"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <Anvil className="size-5" />
+                                    Quản lý vật liệu
+                                </Link>
+                                <Link to={"/admin/material-manage/gem"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Gem className="size-5" />
-                                    Danh sách sản phẩm
+                                    Quản lý đá quý
                                 </Link>
                             </div>
                         )}
                     </div>
-
                     <div>
                         <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown2(!isDropDown2)} >
                             <div className="flex gap-2 items-center">
                                 <ListOrdered className="size-5" />
-                                {isOpen && <p>Quản lý đơn hàng</p>}
+                                {isOpen && <p>Quản lý sản phẩm</p>}
                             </div>
                             {isOpen && <ChevronDown className="size-5" />}
                         </div>
                         {isOpen && (
                             <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown2 ? "max-h-125" : "max-h-0"
                                 }`}>
-                                <Link to={"/admin/order-manage/orders"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                <Link to={"/admin/product-manage/products"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <ShoppingBag className="size-5" />
+                                    Danh sách sản phẩm
+                                </Link>
+                                <Link
+                                    to={"/admin/product-manage/subcategory"}
+                                    className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out"
+                                >
+                                    <GitBranch className="size-5" />
+                                    Quản lý biến thể
+                                </Link>
+                                <Link to={"/admin/user-manage/reviews"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <Star className="size-5" />
+                                    Đánh giá
+                                </Link>
+                                {/* <Link to={"/admin/order-manage/cart"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <ShoppingCart className="size-5" />
+                                    Cart
+                                </Link> */}
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown3(!isDropDown3)} >
+                            <div className="flex gap-2 items-center">
+                                <Receipt className="size-5" />
+                                {isOpen && <p>Quản lý đơn hàng</p>}
+                            </div>
+                            {isOpen && <ChevronDown className="size-5" />}
+                        </div>
+                        {isOpen && (
+                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown3 ? "max-h-125" : "max-h-0"
+                                }`}>
+                                <Link to={"/admin/order-manage/orders"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
+                                    <ClipboardCheck className="size-5" />
                                     Đơn hàng
                                 </Link>
                                 {/* <Link to={"/admin/order-manage/cart"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
@@ -149,9 +185,9 @@ export const LayoutAdmin = () => {
                     </div>
 
                     <div>
-                        <div className="relative flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown3(!isDropDown3)}>
+                        <div className="relative flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown4(!isDropDown4)}>
                             <div className="flex gap-2 items-center">
-                                <User className="size-5" />
+                                <Users className="size-5" />
                                 {isOpen && <p>Quản lý người dùng</p>}
                                 {hasUnread && (
                                     <span className="absolute right-23 top-0 w-2.5 h-2.5 bg-red-500 rounded-full z-999" />
@@ -160,16 +196,29 @@ export const LayoutAdmin = () => {
                             {isOpen && <ChevronDown className="size-5" />}
                         </div>
                         {isOpen && (
-                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown3 ? "max-h-125" : "max-h-0"
+                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown4 ? "max-h-125" : "max-h-0"
                                 }`}>
                                 <Link to={"/admin/user-manage/users"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <Users className="size-5" />
                                     Người dùng
                                 </Link>
-                                <Link to={"/admin/user-manage/reviews"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <MessageSquareText className="size-5" />
-                                    Đánh giá
-                                </Link>
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <div className="relative flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown5(!isDropDown5)}>
+                            <div className="flex gap-2 items-center">
+                                <Headset className="size-5" />
+                                {isOpen && <p>Chăm sóc & Hỗ trợ khách hàng</p>}
+                                {hasUnread && (
+                                    <span className="absolute right-23 top-0 w-2.5 h-2.5 bg-red-500 rounded-full z-999" />
+                                )}
+                            </div>
+                            {isOpen && <ChevronDown className="size-5" />}
+                        </div>
+                        {isOpen && (
+                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown5 ? "max-h-125" : "max-h-0"
+                                }`}>
                                 <Link to={"/admin/chat"} className="relative flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
                                     <MessageSquareMore className="size-5" />
                                     Nhắn tin
@@ -178,30 +227,8 @@ export const LayoutAdmin = () => {
                                     )}
                                 </Link>
                                 <Link to={"/admin/user-manage/require"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <ClipboardList className="size-5" />
-                                    Yêu cầu
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-between cursor-pointer hover:bg-secondary px-4 py-2 transition-all duration-500 ease-in-out" onClick={() => setIsDropDown4(!isDropDown4)}>
-                            <div className="flex gap-2 items-center">
-                                <ChartColumnBig className="size-5" />
-                                {isOpen && <p>Vật liệu và Đá quý</p>}
-                            </div>
-                            {isOpen && <ChevronDown className="size-5" />}
-                        </div>
-                        {isOpen && (
-                            <div className={`pl-6 mt-2 space-y-2 overflow-hidden transition-all duration-500 ${isDropDown4 ? "max-h-125" : "max-h-0"
-                                }`}>
-                                <Link to={"/admin/material-manage/material"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <Anvil className="size-5" />
-                                    Quản lý vật liệu
-                                </Link>
-                                <Link to={"/admin/material-manage/gem"} className="flex items-center gap-2 hover:bg-secondary p-2 transition-all duration-500 ease-in-out">
-                                    <Gem className="size-5" />
-                                    Quản lý đá quý
+                                    <FilePenLine className="size-5" />
+                                    Yêu cầu thiết kế
                                 </Link>
                             </div>
                         )}
