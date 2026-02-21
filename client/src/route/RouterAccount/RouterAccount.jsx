@@ -27,6 +27,7 @@ import { Custom } from '@/page/Account/Custom/Custom'
 import { Preview3DPage } from '@/page/Account/Custom/Preview3D'
 import { DesignPage } from '@/page/Account/Custom/DesignPage'
 import { DesignRequire } from '@/page/Account/Profile/DesignRequire'
+import { SaleItemList } from '@/page/Account/SaleItem/SaleItemList'
 
 export const RouterAccount = () => {
     return (
@@ -37,6 +38,7 @@ export const RouterAccount = () => {
                 <Route path='collections' element={<Collections />} />
                 <Route path='collections/:slug' element={<FilterProduct />} />
                 <Route path='compare' element={<Compare />} />
+                <Route path='sale' element={<SaleItemList />} />
                 <Route path='product/detail/:id' element={<DetailProduct />} />
                 <Route path='cart' element={<Cart />} />
                 <Route path='chat-customer' element={<CustomerChat />} />

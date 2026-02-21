@@ -2,6 +2,7 @@ import { useGetListProduct } from '@/hooks/Product/useGetListProduct'
 import { ProductStore } from '@/store/productStore/ProductStore'
 import { UserAuthStore } from '@/store/userAuthStore'
 import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router'
 
 export const SaleItem = () => {
     const { getOnTime } = ProductStore()
@@ -77,6 +78,9 @@ export const SaleItem = () => {
                         <button className='btn hover:bg-primary transition-all duration-500 cursor-pointer bg-white text-secondary'>
                             Mua hàng giảm giá
                         </button>
+                        <Link to={"/sale"} className='btn hover:bg-primary transition-all duration-500 cursor-pointer bg-white text-secondary ml-4'>
+                            Xem thêm
+                        </Link>
                     </div>
                 </div>
             </div>

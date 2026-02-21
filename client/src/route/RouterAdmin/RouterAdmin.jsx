@@ -16,12 +16,13 @@ import { Requirement } from '@/page/Admin/Requierement/Requirement'
 import { OrderListPage } from '@/page/Admin/Order/OrderListPage'
 import { UserPage } from '@/page/Admin/User/UserPage'
 import { Review } from '@/page/Admin/Review/Review'
+import { DashboardPage } from '@/page/Admin/Dashboard/Dashboard'
 export const RouterAdmin = () => {
     return (
         <Routes>
             <Route element={<ProtectAdminRouter />}>
                 <Route element={<LayoutAdmin />}>
-                    <Route path="dashboard" element={<div>dashboard</div>} />
+                    <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="product-manage/category" element={<CategoryPage />} />
                     <Route path="product-manage/subcategory" element={<SubcategoryPage />} />
                     <Route path="product-manage/brand" element={<BrandPage />} />

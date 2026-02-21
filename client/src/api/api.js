@@ -104,3 +104,5 @@ export const API_PAYMENT_CUSTOM = "/api/payment/custom"
 export const API_GET_REVIEW = "/api/review"
 export const API_CREATE_REVIEW = "/api/review"
 export const API_GET_ALL_VIEW = "/api/review/all"
+
+export const API_DASHBOARD = "/api/dashboard"
