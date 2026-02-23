@@ -3,6 +3,7 @@ import cartModel from "../models/cart.model.js";
 import couponModel from "../models/coupon.model.js";
 import orderModel from "../models/order.model.js";
 import productModel from "../models/product.model.js";
+import userModel from "../models/user.model.js";
 
 class OrderService {
     async getAllOrder(page, limit, status) {
@@ -195,7 +196,7 @@ class OrderService {
             const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
             return `ORD-${time}-${rand}`;
         };
-
+        const emailUser = await userModel.findById(userId)
         const newOrder = await orderModel.create({
             userId,
             orderCode: generateOrderCode(),
@@ -223,7 +224,7 @@ class OrderService {
             { $set: { items: [] } }
         );
 
-        return newOrder;
+        return { newOrder, emailUser: emailUser.email };
     }
 
     async getOrderById(orderId) {

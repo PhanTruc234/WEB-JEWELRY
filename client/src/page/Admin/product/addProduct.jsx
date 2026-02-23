@@ -122,7 +122,7 @@ export const AddProduct = ({ id }) => {
         page: 1,
         limit: 9999,
     });
-    const { createProduct, uploadImgProduct, deleteImgProTem, getProductById, updateProduct, deleteImgProduct } = ProductStore()
+    const { createProduct, uploadImgProduct, deleteImgProTem, getProductById, updateProduct, deleteImgProduct, getProductByIdToEdit } = ProductStore()
     const navigate = useNavigate()
     const [cateId, setCateId] = useState("")
     const [brandId, setBrandId] = useState("")
@@ -204,6 +204,7 @@ export const AddProduct = ({ id }) => {
             console.log(id, "sckskcskcksn")
             console.log(">>> imgUp", imgUp)
             console.log(brandId, cateId, subcateId, "jdncjncjdnj")
+            console.log(data, "cmdvdmvdmv")
             const editProduct = await updateProduct(id, { ...data, brandId: brandId, categoryId: cateId, subCategoryId: subcateId, images: imgUp })
             console.log(editProduct, "editProducteditProduct")
             if (editProduct.status === 200) {
@@ -260,7 +261,7 @@ export const AddProduct = ({ id }) => {
     useEffect(() => {
         if (id) {
             const handleProductId = async () => {
-                const dataId = await getProductById(id);
+                const dataId = await getProductByIdToEdit(id);
                 if (dataId.status === 200) {
                     const item = dataId.data.data
                     console.log(">>> dataId", item)

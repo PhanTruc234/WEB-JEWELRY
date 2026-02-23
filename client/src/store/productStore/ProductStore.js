@@ -10,6 +10,10 @@ export const ProductStore = create(() => ({
         const dataById = await ProductService.getProductById(id)
         return dataById
     },
+    getProductByIdToEdit: async (id) => {
+        const dataById = await ProductService.getProductByIdToEdit(id)
+        return dataById
+    },
     getOnTime: async (params) => {
         console.log(params, "vfvfbfbvfvfb")
         const data = await ProductService.getOntime(params)

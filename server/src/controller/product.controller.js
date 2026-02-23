@@ -49,6 +49,15 @@ class ProductController extends BaseController {
             return this.handleErr(res, error);
         }
     }
+    getProductByIdToEdit = async (req, res) => {
+        try {
+            const { id } = req.params
+            const productById = await productService.getProductByIdToEdit(id);
+            return this.ok(res, productById, "Lấy thành công");
+        } catch (error) {
+            return this.handleErr(res, error);
+        }
+    }
     createProduct = async (req, res) => {
         try {
             const { name, brandId, categoryId, subCategoryId, promotion, variants, images, description, isFeatured, isNewProduct } = req.body;

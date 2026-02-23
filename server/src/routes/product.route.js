@@ -23,6 +23,7 @@ const upload = multer({ storage });
 route.get("/", productController.getAllProduct);
 route.get('/date-time', productController.getOntime);
 route.get("/:id", middleware(objectIdSchema, "params"), productController.getProductById);
+route.get("/edit/:id", middleware(objectIdSchema, "params"), productController.getProductByIdToEdit);
 route.post("/", checkRole("admin"), middleware(createProductShema, "body"), productController.createProduct);
 route.put("/:id", checkRole("admin"), middleware(objectIdSchema, "params"), middleware(updateProductSchema, "body"), productController.updateProduct);
 route.post("/upload", checkRole("admin"), upload.array('product-images', 10), productController.uploadImgProduct)

@@ -11,6 +11,7 @@ import { provincesService } from "@/service/Provinces/provincesService"
 import { paymentStore } from "@/store/paymentStore/paymentStore"
 import { CustomStore } from "@/store/customStore/CustomStore"
 import { toast } from "sonner"
+import { useNavigate } from "react-router"
 const ShippingSchema = z.object({
     name: z.string().min(1, "Vui lòng nhập họ và tên"),
     phone: z.string().min(10, "Số điện thoại không hợp lệ").max(15, "Số điện thoại không hợp lệ"),
@@ -42,6 +43,7 @@ export const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState("CASH")
     const [codeCou, setCodeCou] = useState("")
     const [dataCou, setDataCou] = useState(null)
+    const navigate = useNavigate()
     const handleCheckout = async (data) => {
         const { name, phone, address } = data
         console.log(name, phone, address, cityName, wardName, "checkoutdata")
@@ -90,7 +92,8 @@ export const Checkout = () => {
 
                 window.location.href = checkoutUrl
             } else {
-                alert("Đơn hàng đã được tạo. Vui lòng kiểm tra email để xác nhận.")
+                alert("Đơn hàng đã được tạo. Vui lòng kiểm tra email")
+                navigate("/")
             }
         } catch (error) {
             console.log("Lỗi thanh toán", error)
@@ -433,7 +436,7 @@ export const Checkout = () => {
                             <div className="flex justify-between items-center">
                                 <span className="text-xl font-bold text-white">Tổng cộng:</span>
                                 <span className="text-2xl font-bold text-primary">
-                                    {formatBigNumber(dataCou.totalFinal ? dataCou.totalFinal : previewCustom.total, true)}
+                                    {formatBigNumber(Math.ceil(dataCou?.totalFinal ? dataCou?.totalFinal : previewCustom?.total), true)}
                                 </span>
                             </div>
                         </div>
@@ -563,7 +566,7 @@ export const Checkout = () => {
                             <div className="flex justify-between items-center">
                                 <span className="text-xl font-bold text-white">Tổng cộng:</span>
                                 <span className="text-2xl font-bold text-primary">
-                                    {formatBigNumber(Math.ceil(dataCou.totalFinal ? dataCou.totalFinal : previews.total), true)}
+                                    {formatBigNumber(Math.ceil(dataCou?.totalFinal ? dataCou?.totalFinal : previews?.total), true)}
                                 </span>
                             </div>
                         </div>

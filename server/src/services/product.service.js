@@ -112,14 +112,14 @@ class ProductService {
 
                         const mergedType = variant.options.map(op => op.type).join("+");
                         const mergedValue = variant.options.map(op => op.value).join("+");
-
+                        const totalQuantity = variant.options.reduce((acc, total) => acc + total.stockQuantity, 0)
                         variant.options = [{
                             sku: variant.options[0].sku,
                             type: mergedType,
                             value: mergedValue,
                             originalPrice: totalOriginal,
                             finalPrice: totalFinal,
-                            stockQuantity: Math.min(...variant.options.map(o => o.stockQuantity)),
+                            stockQuantity: totalQuantity,
                         }];
                     }
                 });
@@ -222,6 +222,29 @@ class ProductService {
                 }];
             }
         });
+        return data;
+    }
+    async getProductByIdToEdit(id) {
+        if (!id) {
+            throw new BadRequest("Thiếu thông tin");
+        }
+        const data = await productModel.findById(id).populate("brandId")
+            .populate("categoryId")
+            .populate("subCategoryId").lean();
+        const now = new Date();
+        if (
+            data.promotion?.isActive &&
+            data.promotion.endAt &&
+            new Date(data.promotion.endAt) <= now
+        ) {
+            data.promotion.isActive = false;
+            data.promotion.discount = 0;
+            data.variants.forEach(variant => {
+                variant.options.forEach(option => {
+                    option.finalPrice = option.originalPrice;
+                });
+            });
+        }
         return data;
     }
     async createProduct(data) {

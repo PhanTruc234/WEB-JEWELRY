@@ -1,7 +1,8 @@
 import { payos } from "../config/payos.config.js";
-import { NotFound } from "../core/error.response.js";
+import { BadRequest, NotFound } from "../core/error.response.js";
 import customModel from "../models/custom.model.js";
 import orderModel from "../models/order.model.js";
+import userModel from "../models/user.model.js";
 
 class PaymentService {
     async createPaymentCustom(id) {
@@ -62,6 +63,10 @@ class PaymentService {
         if (!cus) {
             throw new Error("Order not found");
         }
+        const user = await userModel.findById(cus.userId)
+        if (!user) {
+            throw new NotFound("Không tìm thấy người dùng")
+        }
         let paymentStatus = "PENDING";
         let isPaid = false;
         if (code === "00" && !cancel && (status === "PAID" || status === "CONFIRMED" || status === "SUCCESS")) {
@@ -71,15 +76,14 @@ class PaymentService {
             paymentStatus = "FAILED";
             isPaid = false;
         }
-        await customModel.findByIdAndUpdate(cus._id, {
+        const cusOrder = await customModel.findByIdAndUpdate(cus._id, {
             paymentStatus,
             isPaid,
             paidAt: isPaid ? new Date() : undefined,
-        });
+        }, { new: true });
         return {
-            success: isPaid,
-            message: isPaid ? "Thanh toán thành công" : "Thanh toán thất bại hoặc bị huỷ",
-            paymentStatus,
+            emailUser: user.email,
+            cusOrder
         };
     }
     async handlePaymentCallback(params) {
@@ -94,7 +98,10 @@ class PaymentService {
             if (!order) {
                 throw new Error("Order not found");
             }
-
+            const user = await userModel.findById(order.userId)
+            if (!user) {
+                throw new NotFound("Không tìm thấy người dùng")
+            }
             let paymentStatus = "PENDING";
             let isPaid = false;
             if (code === "00" && !cancel && (status === "PAID" || status === "CONFIRMED" || status === "SUCCESS")) {
@@ -104,19 +111,18 @@ class PaymentService {
                 paymentStatus = "FAILED";
                 isPaid = false;
             }
-            await orderModel.findByIdAndUpdate(order._id, {
+            const orderSuc = await orderModel.findByIdAndUpdate(order._id, {
                 paymentStatus,
                 isPaid,
                 paidAt: isPaid ? new Date() : undefined,
-            });
+            }, { new: true });
 
             console.log(`Order ${orderCode} payment callback processed: ${paymentStatus}`);
 
             return {
-                success: isPaid,
-                message: isPaid ? "Thanh toán thành công" : "Thanh toán thất bại hoặc bị huỷ",
-                paymentStatus,
-            };
+                emailUser: user.email,
+                orderSuc
+            }
         } catch (error) {
             console.error("Payment callback error:", error);
             return {

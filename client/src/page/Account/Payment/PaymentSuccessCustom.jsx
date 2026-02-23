@@ -24,7 +24,7 @@ export const PaymentSuccessCustom = () => {
         axiosClient.post(`api/payment/success/custom${location.search}`)
             .then((res) => {
                 console.log(res, "resresres")
-                const paymentStatus = res.data?.paymentStatus
+                const paymentStatus = res.data?.data?.cusOrder?.paymentStatus
                 if (code === "00" && paymentStatus === "PAID") {
                     setIsProcessing(false)
                     setShowSuccess(true)

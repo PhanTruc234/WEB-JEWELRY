@@ -12,9 +12,11 @@ export const PaymentSuccess = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search)
+        console.log(params, "paramsparamsparamsparams")
         const code = params.get("code")
         const orderCode = params.get("orderCode")
-
+        console.log(code, "bkgbkgbk")
+        console.log(orderCode, "orderCodeorderCodeorderCode")
         if (!orderCode) {
             toast.error("Không tìm thấy mã đơn hàng")
             navigate("/payment-failed", { replace: true })
@@ -24,7 +26,8 @@ export const PaymentSuccess = () => {
         axiosClient.post(`api/payment/success${location.search}`)
             .then((res) => {
                 console.log(res, "resresres")
-                const paymentStatus = res.data?.paymentStatus
+                const paymentStatus = res.data?.data?.orderSuc?.paymentStatus
+                console.log(paymentStatus, "paymentStatuspaymentStatus")
                 if (code === "00" && paymentStatus === "PAID") {
                     setIsProcessing(false)
                     setShowSuccess(true)

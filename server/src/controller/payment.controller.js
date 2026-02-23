@@ -1,4 +1,5 @@
 
+import { sendEmail } from "../config/sendEmail.js";
 import paymentService from "../services/payment.service.js";
 import BaseController from "./base.controller.js";
 
@@ -33,11 +34,8 @@ class PaymentController extends BaseController {
                 status,
                 orderCode,
             });
-            return res.status(200).json({
-                success: result.success,
-                message: result.message,
-                paymentStatus: result.paymentStatus,
-            });
+            await sendEmail(result.emailUser, result.cusOrder)
+            return this.ok(res, result, "Thành Công")
         } catch (error) {
             console.error("Payment callback error:", error);
             return this.handleErr(res, error);
@@ -54,12 +52,8 @@ class PaymentController extends BaseController {
                 status,
                 orderCode,
             });
-
-            return res.status(200).json({
-                success: result.success,
-                message: result.message,
-                paymentStatus: result.paymentStatus,
-            });
+            await sendEmail(result.emailUser, result.orderSuc)
+            return this.ok(res, result, "Thành công")
         } catch (error) {
             console.error("Payment callback error:", error);
             return this.handleErr(res, error);

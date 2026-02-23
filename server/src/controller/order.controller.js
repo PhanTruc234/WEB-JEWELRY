@@ -1,3 +1,4 @@
+import { sendEmail } from "../config/sendEmail.js";
 import orderService from "../services/order.service.js";
 import BaseController from "./base.controller.js";
 
@@ -40,7 +41,10 @@ class OrderController extends BaseController {
             const userId = req.user.id;
             const { items, shippingAddress, paymentMethod = "CASH", coupon, notes } = req.body;
             const data = await orderService.createOrder(userId, { items, shippingAddress, paymentMethod, coupon, notes });
-            return this.created(res, data, "Tạo đơn hàng thành công");
+            if (data.newOrder.paymentMethod === "CASH") {
+                await sendEmail(data.emailUser, data.newOrder)
+            }
+            return this.created(res, data.newOrder, "Tạo đơn hàng thành công");
         } catch (error) {
             return this.handleErr(res, error);
         }
