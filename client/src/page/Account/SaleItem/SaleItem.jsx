@@ -2,7 +2,6 @@ import { useGetListProduct } from '@/hooks/Product/useGetListProduct'
 import { ProductStore } from '@/store/productStore/ProductStore'
 import { UserAuthStore } from '@/store/userAuthStore'
 import React, { useEffect, useRef, useState } from 'react'
-
 export const SaleItem = () => {
     const { getOnTime } = ProductStore()
     const [dataOnTime, setDataOnTime] = useState({})
